@@ -1,18 +1,24 @@
-import { Outlet } from "react-router-dom";
-import DashboardSidebar from "../components/dashboardcomponents/DashboardSidebar";
-import DashboardHeader from "../components/dashboardcomponents/DashboardHeader";
+// DashboardLayout.jsx or your main layout component
 
-export default function DashboardLayout() {
+import DashboardHeader from "../components/dashboardcomponents/DashboardHeader";
+import DashboardSidebar from "../components/dashboardcomponents/DashboardSidebar";
+
+
+
+export default function DashboardLayout({ children }) {
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Desktop Sidebar - Hidden on mobile */}
+      {/* Desktop Sidebar - শুধুমাত্র desktop এ দেখাবে */}
       <DashboardSidebar />
-
-      <div className="flex-1 flex flex-col overflow-hidden w-full lg:w-auto">
+      
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Header - এতে MobileSidebar আছে mobile এর জন্য */}
         <DashboardHeader />
-
-        <main className="flex-1 overflow-auto p-3 sm:p-4 lg:p-6 border-2">
-          <Outlet />
+        
+        {/* Page Content */}
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-4 sm:p-6">
+          {children}
         </main>
       </div>
     </div>
