@@ -11,16 +11,12 @@ import ResetPassword from "../pages/auth/ResetPassword";
 
 // Dashboard Pages
 import DashboardOverview from "../pages/dashboardpages/DashboardOverview/DashboardOverview";
-import Profile from "../pages/dashboardpages/personalinformation/Profile";
-import EditProfile from "../pages/dashboardpages/personalinformation/Editprofile";
-import TermsAndConditions from "../pages/dashboardpages/terms/TermsAndConditions";
-import EditTermsAndConditions from "../pages/dashboardpages/terms/EditTermsAndConditions";
-import PrivacyPolicy from "../pages/dashboardpages/privacypolicy/PrivacyPolicy";
-import EditPrivacyPolicy from "../pages/dashboardpages/privacypolicy/EditPrivacyPolicy";
-import AboutUs from "../pages/dashboardpages/about/AboutUs";
-import EditAbout from "../pages/dashboardpages/about/EditAbout";
 import AllNotifications from "../pages/dashboardpages/notification/AllNotifications";
 import AllUsers from "../pages/dashboardpages/user/AllUsers";
+// import Payments from "../pages/dashboardpages/payments/Payments";
+// import Subscriptions from "../pages/dashboardpages/subscriptions/Subscriptions";
+// import PromoCodes from "../pages/dashboardpages/promocodes/PromoCodes";
+// import Support from "../pages/dashboardpages/support/Support";
 
 const routes = createBrowserRouter([
   {
@@ -48,18 +44,12 @@ const routes = createBrowserRouter([
     element: <DashboardLayout />,
     children: [
       { index: true, element: <DashboardOverview /> },
-      { path: "notificatons", element: <AllNotifications /> },
+      { path: "notifications", element: <AllNotifications /> },
       { path: "users", element: <AllUsers /> },
-
-      // Settings
-      { path: "settings/profile", element: <Profile /> },
-      { path: "settings/editpersonal", element: <EditProfile /> },
-      { path: "settings/terms", element: <TermsAndConditions /> },
-      { path: "settings/editterms", element: <EditTermsAndConditions /> },
-      { path: "settings/privacy", element: <PrivacyPolicy /> },
-      { path: "settings/editprivacy", element: <EditPrivacyPolicy /> },
-      { path: "settings/about", element: <AboutUs /> },
-      { path: "settings/editabout", element: <EditAbout /> },
+      // { path: "payments", element: <Payments /> },
+      // { path: "subscriptions", element: <Subscriptions /> },
+      // { path: "promo-codes", element: <PromoCodes /> },
+      // { path: "support", element: <Support /> },
     ],
   },
 ]);
