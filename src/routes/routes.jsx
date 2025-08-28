@@ -13,7 +13,8 @@ import ResetPassword from "../pages/auth/ResetPassword";
 import DashboardOverview from "../pages/dashboardpages/DashboardOverview/DashboardOverview";
 import AllNotifications from "../pages/dashboardpages/notification/AllNotifications";
 import AllUsers from "../pages/dashboardpages/user/AllUsers";
-// import Payments from "../pages/dashboardpages/payments/Payments";
+import Payments from "../pages/dashboardpages/payment/Payments";
+
 // import Subscriptions from "../pages/dashboardpages/subscriptions/Subscriptions";
 // import PromoCodes from "../pages/dashboardpages/promocodes/PromoCodes";
 // import Support from "../pages/dashboardpages/support/Support";
@@ -46,7 +47,7 @@ const routes = createBrowserRouter([
       { index: true, element: <DashboardOverview /> },
       { path: "notifications", element: <AllNotifications /> },
       { path: "users", element: <AllUsers /> },
-      // { path: "payments", element: <Payments /> },
+      { path: "payments", element: <Payments /> },
       // { path: "subscriptions", element: <Subscriptions /> },
       // { path: "promo-codes", element: <PromoCodes /> },
       // { path: "support", element: <Support /> },
