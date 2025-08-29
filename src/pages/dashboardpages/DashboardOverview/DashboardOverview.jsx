@@ -1,7 +1,8 @@
 import React from "react";
-import Analytics from "../../../components/dashboardcomponents/dashboardoverview/Analytics";
+
 import RevenueChart from "../../../components/dashboardcomponents/dashboardoverview/RevenueChart";
 import { SupportTracker } from "../../../components/dashboardcomponents/dashboardoverview/SupportTracker";
+import Analytics from "../../../components/dashboardcomponents/dashboardoverview/Analytics";
 
 const DashboardOverview = () => {
   return (

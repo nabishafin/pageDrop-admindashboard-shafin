@@ -14,8 +14,8 @@ import DashboardOverview from "../pages/dashboardpages/DashboardOverview/Dashboa
 import AllNotifications from "../pages/dashboardpages/notification/AllNotifications";
 import AllUsers from "../pages/dashboardpages/user/AllUsers";
 import Payments from "../pages/dashboardpages/payment/Payments";
+import Subscriptions from "../pages/dashboardpages/suscribtation/Subscriptions";
 
-// import Subscriptions from "../pages/dashboardpages/subscriptions/Subscriptions";
 // import PromoCodes from "../pages/dashboardpages/promocodes/PromoCodes";
 // import Support from "../pages/dashboardpages/support/Support";
 
@@ -48,7 +48,7 @@ const routes = createBrowserRouter([
       { path: "notifications", element: <AllNotifications /> },
       { path: "users", element: <AllUsers /> },
       { path: "payments", element: <Payments /> },
-      // { path: "subscriptions", element: <Subscriptions /> },
+      { path: "subscriptions", element: <Subscriptions /> },
       // { path: "promo-codes", element: <PromoCodes /> },
       // { path: "support", element: <Support /> },
     ],
