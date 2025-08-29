@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SubscriptionPlans from "../../../components/dashboardcomponents/subscriptions/SubscriptionPlans";
+import SubscriptionsTab from "../../../components/dashboardcomponents/subscriptions/subscriptionsTab";
 
 const initialPlans = [
   {
@@ -51,11 +52,13 @@ export default function SubscriptionTabs() {
             <TabsTrigger
               value="plans"
               className="border-b-2 border-transparent 
-               data-[state=active]:border-blue-500 
-               bg-transparent hover:bg-transparent 
-               data-[state=active]:bg-transparent 
-               rounded-none pb-3 
-               data-[state=active]:text-blue-500 mr-8 border-none"
+             data-[state=active]:border-blue-500 
+             bg-transparent hover:bg-transparent 
+             data-[state=active]:bg-transparent 
+             rounded-md pb-3  /* এখানে rounded-none -> rounded-md */
+             data-[state=active]:text-blue-500 
+             mr-8 border-0 shadow-none outline-none
+             focus-visible:ring-0 focus-visible:ring-offset-0"
             >
               Subscription Plans
             </TabsTrigger>
@@ -63,12 +66,13 @@ export default function SubscriptionTabs() {
             <TabsTrigger
               value="analytics"
               className="border-b-2 border-transparent 
-               data-[state=active]:border-blue-500 
-               bg-transparent hover:bg-transparent 
-               data-[state=active]:bg-transparent 
-               rounded-none pb-3 
-               data-[state=active]:text-blue-500
-               border-none"
+             data-[state=active]:border-blue-500 
+             bg-transparent hover:bg-transparent 
+             data-[state=active]:bg-transparent 
+             rounded-md pb-3  /* rounded-none -> rounded-md */
+             data-[state=active]:text-blue-500
+             border-0 shadow-none outline-none
+             focus-visible:ring-0 focus-visible:ring-offset-0"
             >
               Analytics
             </TabsTrigger>
@@ -80,7 +84,7 @@ export default function SubscriptionTabs() {
         </TabsContent>
 
         <TabsContent value="analytics" className="space-y-6 w-full">
-          <h2>aksdfjaisjfijasfij</h2>
+          <SubscriptionsTab />
         </TabsContent>
       </Tabs>
     </div>

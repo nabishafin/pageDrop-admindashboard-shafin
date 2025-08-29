@@ -89,14 +89,6 @@ export default function DashboardHeader() {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-4">
-          <div className="flex items-center border-[1px] border-gray-400 rounded-full px-4 py-2">
-            <Search className="h-5 w-5 text-gray-500" />
-            <input
-              type="text"
-              placeholder="Search"
-              className="ml-2 outline-none text-gray-500 placeholder-gray-400 bg-transparent"
-            />
-          </div>
           {/* Notifications */}
           <Link to={"/dashboard/notifications"}>
             <Button
