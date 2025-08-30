@@ -120,7 +120,11 @@ export default function EditPlanModal({ plan, isOpen, onClose, onSave }) {
           </div>
         )}
         <DialogFooter>
-          <Button type="submit" onClick={handleSave}>
+          <Button
+            className="bg-[#4FB2F3] hover:bg-[#4FB2F3]"
+            type="submit"
+            onClick={handleSave}
+          >
             Save changes
           </Button>
         </DialogFooter>

@@ -123,7 +123,7 @@ export function SupportTrackerChart() {
                   tick={{ fontSize: 12, fill: "#6b7280" }}
                 />
                 <YAxis hide />
-                <Bar dataKey="tickets" fill="#3b82f6" radius={[2, 2, 0, 0]} />
+                <Bar dataKey="tickets" fill="#4FB2F3" radius={[2, 2, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

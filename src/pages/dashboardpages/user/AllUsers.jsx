@@ -343,7 +343,7 @@ export default function AdminPage() {
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-4 w-4 " />
             Previous
           </Button>
           <div className="flex items-center gap-1">
@@ -355,7 +355,7 @@ export default function AdminPage() {
                   variant={currentPage === pageNum ? "default" : "outline"}
                   size="sm"
                   onClick={() => setCurrentPage(pageNum)}
-                  className="w-8 h-8 p-0"
+                  className="w-8 h-8 p-0 bg-[#4FB2F3] hover:bg-[#4FB2F3]"
                 >
                   {pageNum}
                 </Button>
@@ -368,7 +368,7 @@ export default function AdminPage() {
                   variant={currentPage === totalPages ? "default" : "outline"}
                   size="sm"
                   onClick={() => setCurrentPage(totalPages)}
-                  className="w-8 h-8 p-0"
+                  className="w-8 h-8 p-0 bg-[#4FB2F3] hover:bg-[#4FB2F3]"
                 >
                   {totalPages}
                 </Button>

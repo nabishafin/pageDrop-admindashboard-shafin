@@ -61,25 +61,43 @@ export function RecentSubscriptionsTable() {
             variant={filterType === "all" ? "default" : "outline"}
             size="sm"
             onClick={() => setFilterType("all")}
+            className={
+              filterType === "all"
+                ? "bg-sky-500 hover:bg-sky-600 text-white"
+                : "bg-transparent hover:bg-sky-100 text-sky-600"
+            }
           >
             All
           </Button>
+
           <Button
             variant={filterType === "monthly" ? "default" : "outline"}
             size="sm"
             onClick={() => setFilterType("monthly")}
+            className={
+              filterType === "monthly"
+                ? "bg-sky-500 hover:bg-sky-600 text-white"
+                : "bg-transparent hover:bg-sky-100 text-sky-600"
+            }
           >
             Monthly
           </Button>
+
           <Button
             variant={filterType === "yearly" ? "default" : "outline"}
             size="sm"
             onClick={() => setFilterType("yearly")}
+            className={
+              filterType === "yearly"
+                ? "bg-sky-500 hover:bg-sky-600 text-white"
+                : "bg-transparent hover:bg-sky-100 text-sky-600"
+            }
           >
             Yearly
           </Button>
         </div>
       </CardHeader>
+
       <CardContent>
         <div className="overflow-x-auto">
           <table className="w-full text-center">

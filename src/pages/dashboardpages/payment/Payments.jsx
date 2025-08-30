@@ -478,7 +478,7 @@ export default function PaymentsPage() {
                   variant={currentPage === pageNum ? "default" : "outline"}
                   size="sm"
                   onClick={() => setCurrentPage(pageNum)}
-                  className="w-8 h-8 p-0"
+                  className="w-8 h-8 p-0 bg-[#4FB2F3] hover:bg-[#4FB2F3]"
                 >
                   {pageNum}
                 </Button>
@@ -491,7 +491,7 @@ export default function PaymentsPage() {
                   variant={currentPage === totalPages ? "default" : "outline"}
                   size="sm"
                   onClick={() => setCurrentPage(totalPages)}
-                  className="w-8 h-8 p-0"
+                  className="w-8 h-8 p-0 bg-[#4FB2F3] hover:bg-[#4FB2F3]"
                 >
                   {totalPages}
                 </Button>
