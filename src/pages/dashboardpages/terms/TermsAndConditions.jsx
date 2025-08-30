@@ -52,7 +52,7 @@ const TermsAndConditions = () => {
         <Link to="/dashboard/settings/editterms">
           <Button className="bg-[#4FB2F3] hover:bg-[#4FB2F3] text-white rounded-full flex items-center space-x-1 shadow-md">
             <Edit className="h-4 w-4" />
-            <span>Update</span>
+            <span>Update Terms and Conditions</span>
           </Button>
         </Link>
       </div>

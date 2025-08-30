@@ -12,7 +12,9 @@ export default function PlanCard({ plan, onEdit }) {
   return (
     <Card className="border border-gray-200">
       <CardHeader className="pb-4">
-        <CardTitle className="text-lg font-medium">{plan.name}</CardTitle>
+        <CardTitle className="text-lg text-[#4FB2F3] font-medium">
+          {plan.name}
+        </CardTitle>
         <div className="text-2xl font-bold">
           €{plan.price.toFixed(2)}
           <span className="text-sm font-normal text-gray-500">
@@ -41,7 +43,7 @@ export default function PlanCard({ plan, onEdit }) {
       <CardFooter className="pt-4">
         <Button
           variant="ghost"
-          className="w-full text-blue-500 hover:text-blue-600 hover:bg-transparent hover:border-blue-500 border border-transparent font-medium"
+          className="w-full text-[#4FB2F3] hover:text-[#4FB2F3] border border-transparent font-medium"
           onClick={onEdit}
         >
           Edit Plan
