@@ -43,7 +43,7 @@ export default function PlanCard({ plan, onEdit }) {
       <CardFooter className="pt-4">
         <Button
           variant="ghost"
-          className="w-full text-[#4FB2F3] hover:text-[#4FB2F3] border border-transparent font-medium"
+          className="w-full bg-[#4FB2F3] text-white  hover:bg-[#3DA1D7] border border-transparent font-medium"
           onClick={onEdit}
         >
           Edit Plan

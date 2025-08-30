@@ -106,7 +106,7 @@ export default function FaqManagement() {
         <h1 className="text-3xl font-bold text-gray-800">FAQ Management</h1>
         <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors shadow-md">
+            <Button className="bg-[#4FB2F3] hover:bg-[#3DA1D7] text-white px-4 py-2 rounded-lg transition-colors shadow-md">
               <Plus className="w-4 h-4 mr-2" />
               Add FAQ
             </Button>
@@ -159,7 +159,7 @@ export default function FaqManagement() {
                   Cancel
                 </Button>
                 <Button
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                  className="bg-[#4FB2F3] text-white"
                   onClick={handleAddFaq}
                 >
                   Submit
@@ -294,7 +294,7 @@ export default function FaqManagement() {
                 Cancel
               </Button>
               <Button
-                className="bg-blue-600 hover:bg-blue-700 text-white"
+                className="bg-[#4FB2F3] text-white"
                 onClick={handleEditFaq}
               >
                 Update
