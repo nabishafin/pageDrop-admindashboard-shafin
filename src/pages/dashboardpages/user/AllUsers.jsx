@@ -100,7 +100,7 @@ export default function AdminPage() {
   const [customStartDate, setCustomStartDate] = useState("");
   const [customEndDate, setCustomEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const usersPerPage = 14;
+  const usersPerPage = 11;
 
   // Filter users based on all criteria
   const filteredUsers = useMemo(() => {

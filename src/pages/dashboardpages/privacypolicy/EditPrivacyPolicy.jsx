@@ -1,214 +1,106 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  ChevronLeft,
-  Bold,
-  Italic,
-  Underline,
-  Strikethrough,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  List,
-  ListOrdered,
-  Link,
-  ImageIcon,
-} from "lucide-react";
+import React, { useState, useRef } from "react";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import JoditEditor from "jodit-react";
 
 const EditPrivacyPolicy = () => {
-  const [content, setContent] = useState(
-    `Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci...`
-  );
-  const [fontSize, setFontSize] = useState("16");
+  const navigate = useNavigate();
+  const editor = useRef(null);
+  const [content, setContent] = useState("");
+  const [isMounted, setIsMounted] = useState(true); // demo purpose
 
-  const handleSaveChanges = () => {
-    console.log("Saving Privacy Policy content:", content);
-    alert("Privacy Policy content saved successfully!");
-  };
-
-  const insertText = (before, after = "") => {
-    const newContent = content + before + after;
-    setContent(newContent);
-  };
-
-  const formatButtons = [
-    { icon: Bold, label: "Bold", action: () => insertText("**Bold Text**") },
-    {
-      icon: Italic,
-      label: "Italic",
-      action: () => insertText("*Italic Text*"),
+  // Editor Config (white/light theme)
+  const config = {
+    readonly: false,
+    height: 600,
+    theme: "light",
+    toolbarAdaptive: false,
+    removeButtons: ["source", "fullsize", "about", "print", "file"],
+    style: {
+      background: "#ffffff",
+      color: "#000000",
     },
-    {
-      icon: Underline,
-      label: "Underline",
-      action: () => insertText("<u>Underlined</u>"),
-    },
-    {
-      icon: Strikethrough,
-      label: "Strikethrough",
-      action: () => insertText("~~Strikethrough~~"),
-    },
-  ];
-
-  const alignButtons = [
-    { icon: AlignLeft, label: "Align Left" },
-    { icon: AlignCenter, label: "Align Center" },
-    { icon: AlignRight, label: "Align Right" },
-  ];
-
-  const listButtons = [
-    {
-      icon: List,
-      label: "Bullet List",
-      action: () => insertText("\n• List item"),
-    },
-    {
-      icon: ListOrdered,
-      label: "Numbered List",
-      action: () => insertText("\n1. List item"),
-    },
-  ];
-
-  const insertButtons = [
-    {
-      icon: Link,
-      label: "Insert Link",
-      action: () => {
-        const url = prompt("Enter URL:");
-        if (url) insertText(`[Link Text](${url})`);
+    controls: {
+      font: {
+        list: {
+          "Arial, Helvetica, sans-serif": "Arial",
+          "Georgia, serif": "Georgia",
+          "Impact, Charcoal, sans-serif": "Impact",
+          "Tahoma, Geneva, sans-serif": "Tahoma",
+          "'Times New Roman', Times, serif": "Times New Roman",
+          "Verdana, Geneva, sans-serif": "Verdana",
+        },
       },
     },
-    {
-      icon: ImageIcon,
-      label: "Insert Image",
-      action: () => {
-        const url = prompt("Enter image URL:");
-        if (url) insertText(`![Image](${url})`);
-      },
-    },
-  ];
+  };
+
+  const handleUpdate = async () => {
+    if (!content.trim()) {
+      alert("Content cannot be empty");
+      return;
+    }
+    alert("Updated successfully!");
+    navigate(-1);
+  };
+
+  if (!isMounted) {
+    return <div className="text-gray-700 p-4">Loading editor...</div>;
+  }
 
   return (
-    <div className="bg-gray-100">
+    <div className="bg-white text-black flex flex-col rounded-lg ">
       {/* Header */}
-      <div className="bg-[#017783] text-white p-4 flex items-center gap-3">
-        <ChevronLeft className="h-6 w-6" />
-        <h1 className="text-lg font-medium">Edit Privacy Policy</h1>
+      <div className="flex items-center p-4  border-gray-300 sticky top-0 bg-white z-10 rounded-lg">
+        <button onClick={() => navigate(-1)} className="mr-3">
+          <ArrowLeft className="w-6 h-6 hover:text-blue-500 transition-colors" />
+        </button>
+        <h1 className="text-lg font-semibold tracking-wide">
+          Edit Privacy Policy
+        </h1>
       </div>
 
       {/* Main Content */}
-      <div className="">
-        <div className="mx-auto">
-          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm">
-            {/* Toolbar */}
-            <div className="border-b border-gray-200 p-3 bg-gray-50">
-              <div className="flex items-center gap-2 flex-wrap">
-                {/* Font Size Selector */}
-                <Select value={fontSize} onValueChange={setFontSize}>
-                  <SelectTrigger className="w-16 h-8 text-sm">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {["12", "14", "16", "18", "20", "24"].map((size) => (
-                      <SelectItem key={size} value={size}>
-                        {size}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {/* Format Buttons */}
-                <div className="w-px h-6 bg-gray-300 mx-1" />
-                {formatButtons.map(({ icon: Icon, label, action }) => (
-                  <Button
-                    key={label}
-                    variant="ghost"
-                    size="sm"
-                    onClick={action}
-                    className="h-8 w-8 p-0 hover:bg-gray-200"
-                    title={label}
-                  >
-                    <Icon className="h-4 w-4" />
-                  </Button>
-                ))}
-
-                {/* Alignment Buttons (visual only) */}
-                <div className="w-px h-6 bg-gray-300 mx-1" />
-                {alignButtons.map(({ icon: Icon, label }) => (
-                  <Button
-                    key={label}
-                    variant="ghost"
-                    size="sm"
-                    className="h-8 w-8 p-0 hover:bg-gray-200"
-                    title={label}
-                  >
-                    <Icon className="h-4 w-4" />
-                  </Button>
-                ))}
-
-                {/* List Buttons */}
-                <div className="w-px h-6 bg-gray-300 mx-1" />
-                {listButtons.map(({ icon: Icon, label, action }) => (
-                  <Button
-                    key={label}
-                    variant="ghost"
-                    size="sm"
-                    onClick={action}
-                    className="h-8 w-8 p-0 hover:bg-gray-200"
-                    title={label}
-                  >
-                    <Icon className="h-4 w-4" />
-                  </Button>
-                ))}
-
-                {/* Insert Buttons */}
-                <div className="w-px h-6 bg-gray-300 mx-1" />
-                {insertButtons.map(({ icon: Icon, label, action }) => (
-                  <Button
-                    key={label}
-                    variant="ghost"
-                    size="sm"
-                    onClick={action}
-                    className="h-8 w-8 p-0 hover:bg-gray-200"
-                    title={label}
-                  >
-                    <Icon className="h-4 w-4" />
-                  </Button>
-                ))}
-              </div>
-            </div>
-
-            {/* Textarea */}
-            <div className="relative">
-              <Textarea
+      <div className="flex-1 flex flex-col p-4">
+        {/* Editor Container */}
+        <div className="flex-grow mb-4">
+          <div className="bg-white rounded-lg border border-gray-300 shadow-sm overflow-hidden">
+            {isMounted && (
+              <JoditEditor
+                ref={editor}
                 value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="Start typing..."
-                className="h-[500px] border-0 resize-none focus:ring-0 focus:outline-none text-sm leading-relaxed overflow-y-auto"
-                style={{ fontSize: `${fontSize}px` }}
+                config={config}
+                onBlur={(newContent) => setContent(newContent)}
               />
-            </div>
-
-            {/* Save Button */}
-            <div className="p-4 border-t border-gray-200">
-              <Button
-                onClick={handleSaveChanges}
-                className="bg-[#017783] hover:bg-[#015a63] text-white px-8 py-2 rounded-md"
-              >
-                Save Changes
-              </Button>
-            </div>
+            )}
           </div>
         </div>
+
+        {/* Update Button */}
+        <div className="bg-white border-t border-gray-300 pt-4">
+          <button
+            onClick={handleUpdate}
+            className="w-full bg-[#4FB2F3] hover:bg-[#4FB2F3] text-white px-8 py-3 rounded-lg font-medium shadow-md   transition-colors"
+          >
+            Update
+          </button>
+        </div>
       </div>
+
+      {/* Jodit CSS */}
+      <style jsx global>{`
+        .jodit-container,
+        .jodit-workplace {
+          background: #ffffff !important;
+          color: #000000 !important;
+        }
+        .jodit-toolbar__box {
+          background: #f9f9f9 !important;
+          border-bottom: 1px solid #ccc !important;
+        }
+        .jodit-icon {
+          color: #000000 !important;
+        }
+      `}</style>
     </div>
   );
 };

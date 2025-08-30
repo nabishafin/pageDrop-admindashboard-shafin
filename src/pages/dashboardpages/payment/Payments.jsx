@@ -205,8 +205,7 @@ export default function PaymentsPage() {
   const [customDateFrom, setCustomDateFrom] = useState();
   const [customDateTo, setCustomDateTo] = useState();
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 14;
-
+  const itemsPerPage = 11;
   const filteredPayments = useMemo(() => {
     return mockPayments.filter((payment) => {
       const matchesSearch =
