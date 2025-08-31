@@ -92,7 +92,7 @@ const mockUsers = [
   })),
 ];
 
-export default function AdminPage() {
+export default function AllUsers() {
   const [searchTerm, setSearchTerm] = useState("");
   const [subscriptionFilter, setSubscriptionFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");

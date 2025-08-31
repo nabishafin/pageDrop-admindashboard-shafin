@@ -260,11 +260,11 @@ export function CouponTable() {
                       variant={
                         coupon.status === "Active" ? "default" : "destructive"
                       }
-                      className={
+                      className={`rounded-full ${
                         coupon.status === "Active"
-                          ? "bg-green-100 text-green-800 hover:bg-green-100 rounded-full"
-                          : ""
-                      }
+                          ? "bg-green-100 text-green-800 hover:bg-green-100"
+                          : "bg-red-100 text-red-500 hover:bg-red-100"
+                      }`}
                     >
                       {coupon.status}
                     </Badge>

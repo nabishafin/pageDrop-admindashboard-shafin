@@ -100,7 +100,7 @@ const RevenueChart = () => {
             <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
             <XAxis dataKey="month" stroke="#6B7280" fontSize={12} />
             <YAxis
-              stroke="#6B7280"
+              stroke="#1593E5"
               fontSize={12}
               tickFormatter={(value) => `৳${value / 1000}k`}
             />

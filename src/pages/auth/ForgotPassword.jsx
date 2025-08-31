@@ -7,7 +7,7 @@ import logo from "../../assets/logo.png";
 
 const ForgotPassword = () => {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
+    <div className="min-h-screen flex items-center justify-center p-6">
       <div className="w-full max-w-6xl flex items-center justify-center gap-10">
         {/* Logo Section */}
         <div className="hidden lg:flex items-center justify-center flex-1">

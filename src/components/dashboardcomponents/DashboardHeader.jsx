@@ -73,7 +73,7 @@ export default function DashboardHeader() {
                 <Star className="inline mr-1 text-gray-500 text-sm mb-1" />{" "}
                 Dashboard /{" "}
               </span>
-              <span className="hidden sm:inline text-[15px] text-gray-800">
+              <span className="hidden sm:inline text-[15px] text-[#1593E5]">
                 {currentPageName}
               </span>
 
