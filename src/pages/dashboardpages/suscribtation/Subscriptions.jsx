@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SubscriptionPlans from "../../../components/dashboardcomponents/subscriptions/SubscriptionPlans";
-import SubscriptionsTab from "../../../components/dashboardcomponents/subscriptions/subscriptionsTab";
+import SubscriptionsTab from "@/components/dashboardcomponents/subscriptions/SubscriptionsTab";
 
 const initialPlans = [
   {
@@ -69,7 +69,7 @@ export default function SubscriptionTabs() {
              data-[state=active]:border-blue-500 
              bg-transparent hover:bg-transparent 
              data-[state=active]:bg-transparent 
-             rounded-md pb-3  /* rounded-none -> rounded-md */
+             rounded-md pb-3  
              data-[state=active]:text-blue-500
              border-0 shadow-none outline-none
              focus-visible:ring-0 focus-visible:ring-offset-0"
