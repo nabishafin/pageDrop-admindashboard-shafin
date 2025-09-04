@@ -89,23 +89,7 @@ export default function EditPlanModal({ plan, isOpen, onClose, onSave }) {
                 className="col-span-3"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="users" className="text-right">
-                Active Users
-              </Label>
-              <Input
-                id="users"
-                type="number"
-                value={editingPlan.activeUsers}
-                onChange={(e) =>
-                  updateEditingPlan(
-                    "activeUsers",
-                    Number.parseInt(e.target.value)
-                  )
-                }
-                className="col-span-3"
-              />
-            </div>
+
             <div className="space-y-2">
               <Label>Features</Label>
               {editingPlan.features.map((feature, index) => (

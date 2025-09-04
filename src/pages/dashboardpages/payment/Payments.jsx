@@ -298,7 +298,7 @@ export default function PaymentsPage() {
     <div className=" mx-auto  space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+          <h1 className="text-3xl font-bold">Payments</h1>
         </div>
       </div>
 

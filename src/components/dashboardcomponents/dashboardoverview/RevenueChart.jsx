@@ -13,9 +13,9 @@ import {
 } from "recharts";
 
 const RevenueChart = () => {
-  const [viewType, setViewType] = useState("area");
+  const [viewType, setViewType] = useState("area"); // 'line' or 'area'
 
-  // Sample data based on the chart you showed
+  // Sample data
   const monthlyData = [
     { month: "Jan", lastYear: 15000, thisYear: 12000 },
     { month: "Feb", lastYear: 8000, thisYear: 9500 },
@@ -31,7 +31,7 @@ const RevenueChart = () => {
     { month: "Dec", lastYear: 25000, thisYear: 27000 },
   ];
 
-  // Custom tooltip to format currency
+  // Custom tooltip
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
@@ -62,8 +62,8 @@ const RevenueChart = () => {
                 <stop offset="95%" stopColor="#9CA3AF" stopOpacity={0} />
               </linearGradient>
               <linearGradient id="thisYearGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
+                <stop offset="5%" stopColor="#1593E5" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#1593E5" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
@@ -86,7 +86,7 @@ const RevenueChart = () => {
             <Area
               type="monotone"
               dataKey="thisYear"
-              stroke="#3B82F6"
+              stroke="#1593E5"
               strokeWidth={3}
               fill="url(#thisYearGradient)"
               name="This Year"
@@ -117,9 +117,9 @@ const RevenueChart = () => {
             <Line
               type="monotone"
               dataKey="thisYear"
-              stroke="#3B82F6"
+              stroke="#1593E5"
               strokeWidth={3}
-              dot={{ fill: "#3B82F6", strokeWidth: 2, r: 5 }}
+              dot={{ fill: "#1593E5", strokeWidth: 2, r: 5 }}
               name="This Year"
             />
           </LineChart>

@@ -111,7 +111,7 @@ export default function Suppor() {
   const [tickets, setTickets] = useState(mockTickets);
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const ticketsPerPage = 8;
+  const ticketsPerPage = 9;
 
   const filteredTickets = useMemo(() => {
     return tickets.filter((ticket) => {
@@ -390,8 +390,7 @@ export default function Suppor() {
             <TableHeader>
               <TableRow>
                 <TableHead className="text-center">Support Token</TableHead>
-                <TableHead className="text-center">Subject</TableHead>
-                <TableHead className="text-center">Description</TableHead>
+                <TableHead className="text-start">Subject</TableHead>
                 <TableHead className="text-center">Report Date</TableHead>
                 <TableHead className="text-center">User ID</TableHead>
                 <TableHead className="text-center">Status</TableHead>
@@ -405,12 +404,8 @@ export default function Suppor() {
                   <TableCell className="font-medium text-center text-[#1593E5]">
                     {ticket.id}
                   </TableCell>
-                  <TableCell className="text-center">
-                    {ticket.subject}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {ticket.description}
-                  </TableCell>
+                  <TableCell className="text-start">{ticket.subject}</TableCell>
+
                   <TableCell className="text-center">
                     {ticket.reportDate}
                   </TableCell>

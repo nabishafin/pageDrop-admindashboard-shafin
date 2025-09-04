@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import logo from "../../assets/LegierGlobalIcon.jpg";
-import { Link } from "react-router-dom";
+import { Link, Links } from "react-router-dom";
 
 const SignInPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -102,12 +102,14 @@ const SignInPage = () => {
                 </div>
 
                 {/* Sign In Button */}
-                <Button
-                  type="submit"
-                  className="w-full h-11 bg-gradient-to-b from-[#E32B6B] to-[#FB4A3A] hover:bg-red-800 text-white font-medium"
-                >
-                  Sign In
-                </Button>
+                <Link to={"/dashboard"}>
+                  <Button
+                    type="submit"
+                    className="w-full h-11 bg-[#E32B6B] hover:bg-[#E32B6B] text-white font-medium"
+                  >
+                    Sign In
+                  </Button>
+                </Link>
               </form>
             </CardContent>
           </Card>

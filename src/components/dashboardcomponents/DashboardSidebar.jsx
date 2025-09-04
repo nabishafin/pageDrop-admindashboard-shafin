@@ -148,7 +148,7 @@ function SidebarNav({ onLinkClick, isMobile = false }) {
 
       {/* Logout button at the bottom */}
       <div className="mt-auto p-2 sm:p-4 border-t border-gray-200">
-        <Link to="/logout" onClick={onLinkClick}>
+        <Link to="/" onClick={onLinkClick}>
           <Button
             variant="ghost"
             className={cn(

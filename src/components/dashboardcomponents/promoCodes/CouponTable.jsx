@@ -145,7 +145,7 @@ export function CouponTable() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState("All");
-  const couponsPerPage = 8;
+  const couponsPerPage = 7;
 
   const handleViewCoupon = (coupon) => {
     setSelectedCoupon(coupon);

@@ -179,10 +179,10 @@ export default function FaqManagement() {
                   <th className="w-16 text-center font-semibold py-4 px-4 text-gray-700">
                     SL
                   </th>
-                  <th className="text-center font-semibold py-4 px-4 text-gray-700">
+                  <th className="text-start font-semibold py-4 px-4 text-gray-700">
                     Questions
                   </th>
-                  <th className="text-center font-semibold py-4 px-4 text-gray-700">
+                  <th className="text-start font-semibold py-4 px-4 text-gray-700">
                     Answers
                   </th>
                   <th className="w-40 text-center font-semibold py-4 px-4 text-gray-700">
@@ -201,12 +201,15 @@ export default function FaqManagement() {
                     <td className="text-center py-4 px-4 text-gray-700 font-medium">
                       {index + 1}
                     </td>
-                    <td className="font-medium text-center py-4 px-4 text-gray-800">
+                    <td className="font-medium text-start py-4 px-4 text-gray-800">
                       {faq.question}
                     </td>
-                    <td className="text-center py-4 px-4 text-gray-600 whitespace-pre-wrap break-words">
-                      {faq.answer}
+                    <td className="text-start py-4 px-4 text-gray-600 whitespace-pre-wrap break-words">
+                      {faq.answer.length > 80
+                        ? faq.answer.slice(0, 80) + "..."
+                        : faq.answer}
                     </td>
+
                     <td className="text-center py-4 px-4">
                       <div className="flex gap-2 justify-center">
                         <Button

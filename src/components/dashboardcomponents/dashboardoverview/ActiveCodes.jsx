@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Ticket } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const activeCodes = [
   {
@@ -40,9 +41,15 @@ export function ActiveCodes() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between py-2 pb-1">
         <CardTitle className="text-sm font-medium">Active Codes</CardTitle>
-        <Button variant="link" size="sm" className="text-blue-600 p-0 text-xs">
-          View all
-        </Button>
+        <Link to="/dashboard/promo-codes">
+          <Button
+            variant="link"
+            size="sm"
+            className="text-[#1593E5] p-0 text-xs"
+          >
+            View all
+          </Button>
+        </Link>
       </CardHeader>
       <CardContent>
         <div>
