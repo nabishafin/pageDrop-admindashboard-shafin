@@ -240,7 +240,7 @@ const ResetPassword = () => {
                   </p>
                   <Button
                     onClick={handleBackToSignIn}
-                    className="w-full h-11 bg-gradient-to-b from-[#E32B6B] to-[#FB4A3A]  text-white font-medium"
+                    className="w-full h-11 bg-gradient-to-r from-[#E32B6B] to-[#FB4A3A]  text-white font-medium"
                   >
                     Back to Sign In
                   </Button>

@@ -81,9 +81,9 @@ export function SupportTrackerChart() {
         <div className="text-sm text-muted-foreground mb-2">Last 7 Days</div>
         <div className="text-3xl font-bold mb-6">327</div>
 
-        <div className="flex gap-6">
+        <div className="flex gap-6 ">
           {/* Stats on the left */}
-          <div className="flex-shrink-0 w-32">
+          <div className="flex-shrink-0 w-32 ">
             <div className="text-xs text-muted-foreground mb-2">
               Open & Unresolved support ticket
             </div>
@@ -113,7 +113,7 @@ export function SupportTrackerChart() {
           </div>
 
           {/* Chart on the right */}
-          <div className="flex-1 h-40">
+          <div className="flex-1 h-50">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData}>
                 <XAxis
@@ -123,7 +123,12 @@ export function SupportTrackerChart() {
                   tick={{ fontSize: 12, fill: "#6b7280" }}
                 />
                 <YAxis hide />
-                <Bar dataKey="tickets" fill="#4FB2F3" radius={[2, 2, 0, 0]} />
+                <Bar
+                  dataKey="tickets"
+                  fill="#4FB2F3"
+                  radius={[2, 2, 0, 0]}
+                  barSize={40} // Set bar size to 4 for thinner bars
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>

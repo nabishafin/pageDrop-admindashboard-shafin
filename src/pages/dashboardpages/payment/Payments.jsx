@@ -275,22 +275,22 @@ export default function PaymentsPage() {
   const getSubscriptionBadgeColor = (subscription) => {
     switch (subscription.toLowerCase()) {
       case "monthly":
-        return "bg-orange-100 text-[#F3934F] hover:bg-orange-200 rounded-full";
+        return "border-[1px] border-orange-400 text-orange-400 bg-white rounded-full"; // Brighter and more distinct
       case "yearly":
-        return "bg-blue-100 text-blue-600 hover:bg-blue-200 rounded-full";
+        return "border-[1px] border-blue-400 text-blue-400 bg-white rounded-full"; // Changed to blue for distinction
       default:
-        return "bg-gray-50 text-gray-300 hover:bg-gray-200 border-[1px] rounded-full";
+        return "border-[1px] border-gray-500 text-gray-500 bg-white rounded-full";
     }
   };
 
   const getStatusBadgeColor = (status) => {
     switch (status.toLowerCase()) {
       case "paid":
-        return "border-[1px] bg-green-300 text-white rounded-full";
+        return "border-[1px] border-green-500 text-green-500 bg-white rounded-full";
       case "renewed":
-        return "bg-[#D9EFFC] text-[#1593E5] hover:bg-blue-200 rounded-full";
+        return "border-[1px] border-[#1593E5] text-[#1593E5] bg-white rounded-full";
       default:
-        return "bg-gray-100 text-gray-400 hover:bg-gray-200 border-[1px] rounded-full";
+        return "border-[1px] border-gray-400 text-gray-400 hover:bg-gray-200 rounded-full";
     }
   };
 

@@ -149,7 +149,7 @@ const OTPVerification = () => {
                 <Button
                   type="submit"
                   disabled={isLoading || otp.join("").length !== 5}
-                  className="w-full h-12 text-[16px] bg-gradient-to-b from-[#E32B6B] to-[#FB4A3A]  disabled:opacity-50 text-white font-semibold transition-all duration-200"
+                  className="w-full h-12 text-[16px] bg-gradient-to-r from-[#E32B6B] to-[#FB4A3A]  disabled:opacity-50 text-white font-semibold transition-all duration-200"
                 >
                   {isLoading ? "Verifying..." : "Verify Email"}
                 </Button>

@@ -24,7 +24,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Search, Filter, ChevronLeft, ChevronRight, Eye } from "lucide-react";
+import { Search, Eye, ChevronLeft, ChevronRight } from "lucide-react";
 
 const mockTickets = [
   {
@@ -77,31 +77,90 @@ const mockTickets = [
     solvedDate: "10 Jul, 2025",
     status: "Resolved",
   },
-  // Add more mock tickets
-  ...Array.from({ length: 25 }, (_, i) => ({
-    id: `STA-9837${9 + i}`,
-    subject:
-      i % 3 === 0
-        ? "App crash problem"
-        : i % 3 === 1
-        ? "Login issue"
-        : "Payment failed",
-    description:
-      i % 3 === 0
-        ? "crash problem"
-        : i % 3 === 1
-        ? "login error"
-        : "payment error",
-    reportDate: `${10 + (i % 20)} Jul, 2025`,
-    userId: `1955${7 + i}`,
-    subscription:
-      i % 4 === 0 ? "Unresolved" : i % 4 === 1 ? "Open" : "Resolved",
-    solvedDate: i % 4 === 3 ? `${11 + (i % 20)} Jul, 2025` : null,
-    status: i % 4 === 0 ? "Unresolved" : i % 4 === 1 ? "Open" : "Resolved",
-  })),
+  {
+    id: "STA-98375",
+    subject: "Login issue",
+    description: "Cannot login to account",
+    reportDate: "6 Jul, 2025",
+    userId: "19553",
+    subscription: "Open",
+    solvedDate: null,
+    status: "Open",
+  },
+  {
+    id: "STA-98376",
+    subject: "Payment failed",
+    description: "Payment processing error",
+    reportDate: "7 Jul, 2025",
+    userId: "19554",
+    subscription: "Resolved",
+    solvedDate: "8 Jul, 2025",
+    status: "Resolved",
+  },
+  {
+    id: "STA-98377",
+    subject: "Feature request",
+    description: "Need dark mode",
+    reportDate: "8 Jul, 2025",
+    userId: "19555",
+    subscription: "Open",
+    solvedDate: null,
+    status: "Open",
+  },
+  {
+    id: "STA-98378",
+    subject: "Bug report",
+    description: "UI alignment issue",
+    reportDate: "9 Jul, 2025",
+    userId: "19556",
+    subscription: "Resolved",
+    solvedDate: "10 Jul, 2025",
+    status: "Resolved",
+  },
+  {
+    id: "STA-98375",
+    subject: "Login issue",
+    description: "Cannot login to account",
+    reportDate: "6 Jul, 2025",
+    userId: "19553",
+    subscription: "Open",
+    solvedDate: null,
+    status: "Open",
+  },
+  {
+    id: "STA-98376",
+    subject: "Payment failed",
+    description: "Payment processing error",
+    reportDate: "7 Jul, 2025",
+    userId: "19554",
+    subscription: "Resolved",
+    solvedDate: "8 Jul, 2025",
+    status: "Resolved",
+  },
+  {
+    id: "STA-98377",
+    subject: "Feature request",
+    description: "Need dark mode",
+    reportDate: "8 Jul, 2025",
+    userId: "19555",
+    subscription: "Open",
+    solvedDate: null,
+    status: "Open",
+  },
+  {
+    id: "STA-98378",
+    subject: "Bug report",
+    description: "UI alignment issue",
+    reportDate: "9 Jul, 2025",
+    userId: "19556",
+    subscription: "Resolved",
+    solvedDate: "10 Jul, 2025",
+    status: "Resolved",
+  },
+  // Add more mock tickets if needed
 ];
 
-export default function Suppor() {
+export default function Support() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [timeFilter, setTimeFilter] = useState("all");
@@ -112,6 +171,29 @@ export default function Suppor() {
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const ticketsPerPage = 9;
+
+  const parseTicketDate = (dateStr) => {
+    const [day, month, year] = dateStr.split(" ");
+    const monthMap = {
+      Jan: 0,
+      Feb: 1,
+      Mar: 2,
+      Apr: 3,
+      May: 4,
+      Jun: 5,
+      Jul: 6,
+      Aug: 7,
+      Sep: 8,
+      Oct: 9,
+      Nov: 10,
+      Dec: 11,
+    };
+    return new Date(
+      Number.parseInt(year),
+      monthMap[month.replace(",", "")],
+      Number.parseInt(day)
+    );
+  };
 
   const filteredTickets = useMemo(() => {
     return tickets.filter((ticket) => {
@@ -128,30 +210,6 @@ export default function Suppor() {
 
       let matchesTime = true;
       if (timeFilter !== "all") {
-        // Parse date from "5 Jul, 2025" format
-        const parseTicketDate = (dateStr) => {
-          const [day, month, year] = dateStr.split(" ");
-          const monthMap = {
-            Jan: 0,
-            Feb: 1,
-            Mar: 2,
-            Apr: 3,
-            May: 4,
-            Jun: 5,
-            Jul: 6,
-            Aug: 7,
-            Sep: 8,
-            Oct: 9,
-            Nov: 10,
-            Dec: 11,
-          };
-          return new Date(
-            Number.parseInt(year),
-            monthMap[month.replace(",", "")],
-            Number.parseInt(day)
-          );
-        };
-
         const ticketDate = parseTicketDate(ticket.reportDate);
         const now = new Date();
 
@@ -180,29 +238,6 @@ export default function Suppor() {
       }
 
       if (customStartDate && customEndDate && timeFilter === "all") {
-        const parseTicketDate = (dateStr) => {
-          const [day, month, year] = dateStr.split(" ");
-          const monthMap = {
-            Jan: 0,
-            Feb: 1,
-            Mar: 2,
-            Apr: 3,
-            May: 4,
-            Jun: 5,
-            Jul: 6,
-            Aug: 7,
-            Sep: 8,
-            Oct: 9,
-            Nov: 10,
-            Dec: 11,
-          };
-          return new Date(
-            Number.parseInt(year),
-            monthMap[month.replace(",", "")],
-            Number.parseInt(day)
-          );
-        };
-
         const ticketDate = parseTicketDate(ticket.reportDate);
         const startDate = new Date(customStartDate);
         const endDate = new Date(customEndDate);
@@ -245,11 +280,11 @@ export default function Suppor() {
   const getStatusBadgeStyle = (status) => {
     switch (status) {
       case "Resolved":
-        return "bg-blue-100 text-blue-600 hover:bg-blue-200 rounded-full";
+        return "border-[1px] border-blue-500 text-blue-500 0 rounded-full bg-white";
       case "Open":
-        return "bg-orange-100 text-orange-600 hover:bg-orange-200 rounded-full";
+        return "border-[1px] border-orange-500 text-orange-500 bg-white rounded-full";
       case "Unresolved":
-        return "bg-red-100 text-red-600 hover:bg-red-200 rounded-full";
+        return "border-[1px] border-red-500 text-red-500 bg-white rounded-full";
       default:
         return "rounded-full";
     }
@@ -312,7 +347,7 @@ export default function Suppor() {
 
       {/* Search and Filters */}
       <Card className="rounded-lg">
-        <CardContent className="">
+        <CardContent>
           <div className="flex flex-col gap-4">
             {/* Search */}
             <div className="relative">
@@ -405,7 +440,6 @@ export default function Suppor() {
                     {ticket.id}
                   </TableCell>
                   <TableCell className="text-start">{ticket.subject}</TableCell>
-
                   <TableCell className="text-center">
                     {ticket.reportDate}
                   </TableCell>
@@ -429,17 +463,17 @@ export default function Suppor() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="Unresolved">
-                          <Badge className="bg-red-100 text-red-600 rounded-full">
+                          <Badge className="bg-white text-red-500 rounded-full border-red-500 ">
                             Unresolved
                           </Badge>
                         </SelectItem>
                         <SelectItem value="Open">
-                          <Badge className="bg-orange-100 text-orange-600 rounded-full">
+                          <Badge className="bg-white text-orange-500 rounded-full border-orange-500">
                             Open
                           </Badge>
                         </SelectItem>
                         <SelectItem value="Resolved">
-                          <Badge className="bg-blue-100 text-blue-600 rounded-full">
+                          <Badge className="bg-white text-blue-500 border-blue-500 rounded-full">
                             Resolved
                           </Badge>
                         </SelectItem>
@@ -454,9 +488,9 @@ export default function Suppor() {
                       variant="outline"
                       size="sm"
                       onClick={() => handleViewTicket(ticket)}
-                      className=" border-none bg-none shadow-none"
+                      className="border-none bg-none shadow-none"
                     >
-                      <Eye className="" />
+                      <Eye />
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -471,7 +505,7 @@ export default function Suppor() {
         <div className="text-sm text-muted-foreground">
           Showing {startIndex + 1} to{" "}
           {Math.min(startIndex + ticketsPerPage, filteredTickets.length)} of{" "}
-          {filteredTickets.length} tickets
+          {filteredTickets.length} items
         </div>
         <div className="flex items-center gap-2">
           <Button
@@ -492,11 +526,7 @@ export default function Suppor() {
                   variant={currentPage === pageNum ? "default" : "outline"}
                   size="sm"
                   onClick={() => setCurrentPage(pageNum)}
-                  className={`w-8 h-8 p-0 ${
-                    currentPage === pageNum
-                      ? "bg-[#4FB2F3] hover:bg-[#4FB2F3] text-white"
-                      : ""
-                  }`}
+                  className="w-8 h-8 p-0 bg-[#4FB2F3] hover:bg-[#4FB2F3]"
                 >
                   {pageNum}
                 </Button>
@@ -509,11 +539,7 @@ export default function Suppor() {
                   variant={currentPage === totalPages ? "default" : "outline"}
                   size="sm"
                   onClick={() => setCurrentPage(totalPages)}
-                  className={`w-8 h-8 p-0 ${
-                    currentPage === totalPages
-                      ? "bg-[#4FB2F3] hover:bg-[#4FB2F3] text-white"
-                      : ""
-                  }`}
+                  className="w-8 h-8 p-0 bg-[#4FB2F3] hover:bg-[#4FB2F3]"
                 >
                   {totalPages}
                 </Button>

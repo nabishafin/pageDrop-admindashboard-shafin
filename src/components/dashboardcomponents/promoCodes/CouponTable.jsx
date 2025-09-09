@@ -262,8 +262,8 @@ export function CouponTable() {
                       }
                       className={`rounded-full ${
                         coupon.status === "Active"
-                          ? "bg-green-100 text-green-800 hover:bg-green-100"
-                          : "bg-red-100 text-red-500 hover:bg-red-100"
+                          ? "border-[1px] border-green-500 text-green-500 hover:bg-green-100 bg-white"
+                          : "border-[1px] border-red-500 text-red-500 bg-white"
                       }`}
                     >
                       {coupon.status}

@@ -23,10 +23,9 @@ import TermsAndConditions from "@/pages/dashboardpages/terms/TermsAndConditions"
 import PrivacyPolicy from "@/pages/dashboardpages/privacypolicy/PrivacyPolicy";
 import EditTermsAndConditions from "@/pages/dashboardpages/terms/EditTermsAndConditions";
 import EditPrivacyPolicy from "@/pages/dashboardpages/privacypolicy/EditPrivacyPolicy";
+import NotFoundPage from "@/components/dashboardcomponents/NotFoundPage";
 
-// import ResetPasswordSetting from "@/pages/dashboardpages/settings/ResetPasswordSetting";
-// import TermsAndConditions from "@/pages/dashboardpages/settings/TermsAndConditions";
-// import PrivacyPolicy from "@/pages/dashboardpages/settings/PrivacyPolicy";
+// 404 Page
 
 const routes = createBrowserRouter([
   {
@@ -69,6 +68,11 @@ const routes = createBrowserRouter([
       { path: "settings/privacy", element: <PrivacyPolicy /> },
       { path: "settings/editprivacy", element: <EditPrivacyPolicy /> },
     ],
+  },
+  // 404 Catch-all route
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
 ]);
 

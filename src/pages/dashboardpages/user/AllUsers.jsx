@@ -302,8 +302,8 @@ export default function AllUsers() {
                       variant={getSubscriptionBadgeVariant(user.subscription)}
                       className={
                         user.subscription === "Monthly"
-                          ? "bg-[#D9EFFC] text-[#1593E5] hover:bg-blue-200 rounded-full"
-                          : "bg-orange-100 text-[#F3934F] hover:bg-orange-200 rounded-full"
+                          ? "border-[1px] border-[#1593E5] text-[#1593E5] bg-white  rounded-full"
+                          : "border-[1px] border-[#F3934F] text-[#F3934F] bg-white  rounded-full"
                       }
                     >
                       {user.subscription}
@@ -315,8 +315,8 @@ export default function AllUsers() {
                       variant={getStatusBadgeVariant(user.status)}
                       className={
                         user.status === "Active"
-                          ? " border-[1px] bg-green-300 text-white rounded-full"
-                          : " border-[1px] bg-red-300 text-white rounded-full"
+                          ? " border-[1px] border-green-500 bg-white  text-green-500 rounded-full"
+                          : " border-[1px] border-red-500 bg-white text-red-500 rounded-full"
                       }
                     >
                       {user.status}

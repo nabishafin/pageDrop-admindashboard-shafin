@@ -70,8 +70,12 @@ function LogoSection({ name = "Dance Attix", title = "Admin Panel" }) {
   );
 }
 
-// Sidebar Navigation List
-function SidebarNav({ onLinkClick, isMobile = false }) {
+// Sidebar Navigation List with Admin, Email, and Logo above Logout
+function SidebarNav({
+  onLinkClick,
+  isMobile = false,
+  email = "admin@example.com",
+}) {
   const location = useLocation();
   const [openSettings, setOpenSettings] = useState(false);
 
@@ -146,14 +150,21 @@ function SidebarNav({ onLinkClick, isMobile = false }) {
         </li>
       </ul>
 
-      {/* Logout button at the bottom */}
-      <div className="mt-auto p-2 sm:p-4 border-t border-gray-200">
+      {/* Admin, Email, and Logo Section above Logout */}
+      <div className="mt-auto p-2 sm:p-4 border-t border-gray-200 flex flex-col items-center">
+        <div className="flex items-center gap-2 mb-2">
+          <h2 className="text-sm sm:text-base font-semibold text-gray-800">
+            Admin
+          </h2>
+        </div>
+        <p className="text-xs sm:text-sm text-gray-600">{email}</p>{" "}
+        {/* User email */}
         <Link to="/" onClick={onLinkClick}>
           <Button
             variant="ghost"
             className={cn(
               "w-full justify-start gap-2 h-8 sm:h-10 text-sm sm:text-base",
-              "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              "text-red-600 hover:bg-gray-50 hover:text-red-700" // Red text color for logout
             )}
           >
             <LogOut className="h-3 w-3 sm:h-4 sm:w-4" />

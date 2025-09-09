@@ -133,8 +133,8 @@ export function RecentSubscriptionsTable() {
                       }
                       className={
                         item.type === "monthly"
-                          ? "bg-blue-100 text-blue-800 hover:bg-blue-100 rounded-full"
-                          : "bg-orange-100 text-orange-800 hover:bg-orange-100 rounded-full"
+                          ? "border-[1px] border-blue-500 text-blue-500 rounded-full bg-white"
+                          : "border-[1px] border-orange-500 text-orange-500  rounded-full"
                       }
                     >
                       {item.subscription}
@@ -146,7 +146,7 @@ export function RecentSubscriptionsTable() {
                   <td className="py-3 px-4">
                     <Badge
                       variant="outline"
-                      className="bg-green-100 text-green-700 rounded-full border-none"
+                      className="border-[1px] border-green-500 text-green-500 rounded-full bg-white"
                     >
                       {item.status}
                     </Badge>

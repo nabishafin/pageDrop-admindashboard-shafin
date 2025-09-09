@@ -60,7 +60,7 @@ const ForgotPassword = () => {
                 </div>
 
                 {/* Submit Button */}
-                <Button className="w-full h-12 text-[16px] bg-gradient-to-b from-[#E32B6B] to-[#FB4A3A]  text-white font-semibold transition-all duration-200">
+                <Button className="w-full h-12 text-[16px] bg-gradient-to-r from-[#E32B6B] to-[#FB4A3A]  text-white font-semibold transition-all duration-200">
                   Send OTP
                 </Button>
               </form>

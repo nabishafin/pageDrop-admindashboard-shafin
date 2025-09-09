@@ -105,7 +105,7 @@ const SignInPage = () => {
                 <Link to={"/dashboard"}>
                   <Button
                     type="submit"
-                    className="w-full h-11 bg-[#E32B6B] hover:bg-[#E32B6B] text-white font-medium"
+                    className="w-full h-11 bg-gradient-to-r from-[#E32B6B] to-[#FB4A3A] text-white font-medium"
                   >
                     Sign In
                   </Button>
