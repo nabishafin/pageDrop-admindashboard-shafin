@@ -1,7 +1,4 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Key, Eye, EyeOff } from "lucide-react";
 
 export default function ResetPasswordSetting() {
@@ -24,27 +21,27 @@ export default function ResetPasswordSetting() {
   };
 
   return (
-    <div className="flex justify-center items-center">
-      <Card className="w-full max-w-md mt-30 bg-white shadow-lg">
-        <CardHeader className="text-center border-b border-dotted border-gray-300 pb-4">
-          <CardTitle className="text-xl font-medium text-[#4FB2F3]">
+    <div className="flex justify-center items-center min-h-screen ">
+      <div className="w-full max-w-md mt-10 bg-white shadow-lg rounded-lg">
+        <div className="text-center  pb-4">
+          <h2 className="text-xl font-medium text-[#4FB2F3] mt-8">
             Reset Password
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-6 space-y-4">
+          </h2>
+        </div>
+        <div className="p-6 space-y-4">
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Old Password Field */}
             <div className="relative">
-              <div className="flex items-center space-x-3 bg-gray-50 rounded-lg px-3 py-3 border border-gray-200">
+              <div className="flex items-center space-x-3 bg-gray-50 rounded-lg px-3 py-3  ">
                 <Key className="h-5 w-5 text-gray-500" />
-                <Input
+                <input
                   type={showOldPassword ? "text" : "password"}
                   placeholder="Enter old password"
                   value={formData.oldPassword}
                   onChange={(e) =>
                     handleInputChange("oldPassword", e.target.value)
                   }
-                  className="border-0 bg-transparent p-0 focus-visible:ring-0 placeholder:text-gray-500"
+                  className="border-0 bg-transparent p-0 focus-visible:ring-0 placeholder:text-gray-500 w-full"
                 />
                 <button
                   type="button"
@@ -62,16 +59,16 @@ export default function ResetPasswordSetting() {
 
             {/* New Password Field */}
             <div className="relative">
-              <div className="flex items-center space-x-3  rounded-lg px-3 py-3 border ">
+              <div className="flex items-center space-x-3 bg-gray-50 rounded-lg px-3 py-3 border border-gray-200">
                 <Key className="h-5 w-5 text-gray-500" />
-                <Input
+                <input
                   type={showNewPassword ? "text" : "password"}
                   placeholder="Enter new Password"
                   value={formData.newPassword}
                   onChange={(e) =>
                     handleInputChange("newPassword", e.target.value)
                   }
-                  className="border-0 bg-transparent p-0 focus-visible:ring-0 placeholder:text-gray-500"
+                  className="border-0 bg-transparent p-0 focus-visible:ring-0 placeholder:text-gray-500 w-full"
                 />
                 <button
                   type="button"
@@ -91,14 +88,14 @@ export default function ResetPasswordSetting() {
             <div className="relative">
               <div className="flex items-center space-x-3 bg-gray-50 rounded-lg px-3 py-3 border border-gray-200">
                 <Key className="h-5 w-5 text-gray-500" />
-                <Input
+                <input
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="Re-enter new Password"
                   value={formData.confirmPassword}
                   onChange={(e) =>
                     handleInputChange("confirmPassword", e.target.value)
                   }
-                  className="border-0 bg-transparent p-0 focus-visible:ring-0 placeholder:text-gray-500"
+                  className="border-0 bg-transparent p-0 focus-visible:ring-0 placeholder:text-gray-500 w-full"
                 />
                 <button
                   type="button"
@@ -125,15 +122,15 @@ export default function ResetPasswordSetting() {
             </div>
 
             {/* Submit Button */}
-            <Button
+            <button
               type="submit"
-              className="w-full bg-[#4FB2F3] hover:bg-[#3a9eda] text-white py-5 rounded-full font-medium"
+              className="w-full bg-[#4FB2F3] hover:bg-[#3a9eda] text-white py-2 rounded-full font-medium"
             >
               Save Changes
-            </Button>
+            </button>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

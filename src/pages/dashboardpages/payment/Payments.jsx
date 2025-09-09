@@ -275,9 +275,9 @@ export default function PaymentsPage() {
   const getSubscriptionBadgeColor = (subscription) => {
     switch (subscription.toLowerCase()) {
       case "monthly":
-        return "bg-blue-50 text-blue-300 hover:bg-blue-200 border-[1px] rounded-full";
+        return "bg-orange-100 text-[#F3934F] hover:bg-orange-200 rounded-full";
       case "yearly":
-        return "bg-orange-50 text-orange-300 hover:bg-orange-200 border-[1px] rounded-full";
+        return "bg-blue-100 text-blue-600 hover:bg-blue-200 rounded-full";
       default:
         return "bg-gray-50 text-gray-300 hover:bg-gray-200 border-[1px] rounded-full";
     }
@@ -286,9 +286,9 @@ export default function PaymentsPage() {
   const getStatusBadgeColor = (status) => {
     switch (status.toLowerCase()) {
       case "paid":
-        return "bg-green-100 text-green-400 hover:bg-green-200 border-[1px] rounded-full";
+        return "border-[1px] bg-green-300 text-white rounded-full";
       case "renewed":
-        return "bg-blue-100 text-blue-400 hover:bg-blue-200 border-[1px] rounded-full";
+        return "bg-[#D9EFFC] text-[#1593E5] hover:bg-blue-200 rounded-full";
       default:
         return "bg-gray-100 text-gray-400 hover:bg-gray-200 border-[1px] rounded-full";
     }

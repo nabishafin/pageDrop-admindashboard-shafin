@@ -34,7 +34,7 @@ const SignInPage = () => {
                 <div className="space-y-2">
                   <Label
                     htmlFor="username"
-                    className="text-sm font-medium text-gray-700"
+                    className="text-sm font-medium text-gray-900"
                   >
                     User name
                   </Label>
@@ -50,7 +50,7 @@ const SignInPage = () => {
                 <div className="space-y-2">
                   <Label
                     htmlFor="password"
-                    className="text-sm font-medium text-gray-700"
+                    className="text-sm font-medium text-gray-900"
                   >
                     Password
                   </Label>
@@ -64,7 +64,7 @@ const SignInPage = () => {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-900"
                     >
                       {showPassword ? (
                         <EyeOff className="h-4 w-4" />
@@ -86,7 +86,7 @@ const SignInPage = () => {
                     />
                     <Label
                       htmlFor="remember"
-                      className="text-sm font-medium text-gray-700 cursor-pointer"
+                      className="text-sm font-medium text-gray-900 cursor-pointer"
                     >
                       Remember me
                     </Label>

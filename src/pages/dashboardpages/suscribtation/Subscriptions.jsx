@@ -48,17 +48,17 @@ export default function SubscriptionTabs() {
     <div className="">
       <Tabs defaultValue="plans" className="w-full">
         <div className="w-1/2">
-          <TabsList className="inline-flex mb-6 bg-transparent p-0 h-auto border-b border-gray-200 w-auto">
+          <TabsList className="inline-flex mb-6 bg-transparent p-0 h-auto w-auto">
             <TabsTrigger
               value="plans"
               className="border-b-2 border-transparent 
-             data-[state=active]:border-blue-500 
-             bg-transparent hover:bg-transparent 
-             data-[state=active]:bg-transparent 
-             rounded-md pb-3  /* এখানে rounded-none -> rounded-md */
-             data-[state=active]:text-blue-500 
-             mr-8 border-0 shadow-none outline-none
-             focus-visible:ring-0 focus-visible:ring-offset-0"
+      data-[state=active]:border-blue-500 
+      bg-transparent hover:bg-transparent 
+      data-[state=active]:bg-transparent 
+      rounded-md pb-3
+      data-[state=active]:text-blue-500 
+      mr-4 border-0 shadow-sm transition-all duration-300 ease-in-out
+      focus-visible:ring-0 focus-visible:ring-offset-0"
             >
               Subscription Plans
             </TabsTrigger>
@@ -66,13 +66,13 @@ export default function SubscriptionTabs() {
             <TabsTrigger
               value="analytics"
               className="border-b-2 border-transparent 
-             data-[state=active]:border-blue-500 
-             bg-transparent hover:bg-transparent 
-             data-[state=active]:bg-transparent 
-             rounded-md pb-3  
-             data-[state=active]:text-blue-500
-             border-0 shadow-none outline-none
-             focus-visible:ring-0 focus-visible:ring-offset-0"
+      data-[state=active]:border-[#4FB2F3] 
+      bg-transparent hover:bg-transparent 
+      data-[state=active]:bg-transparent 
+      rounded-md pb-3  
+      data-[state=active]:text-[#4FB2F3]
+      border-0 shadow-sm transition-all duration-300 ease-in-out
+      focus-visible:ring-0 focus-visible:ring-offset-0"
             >
               Analytics
             </TabsTrigger>

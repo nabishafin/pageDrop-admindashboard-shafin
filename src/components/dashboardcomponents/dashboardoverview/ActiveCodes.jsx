@@ -39,7 +39,7 @@ const activeCodes = [
 export function ActiveCodes() {
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between py-2 pb-1">
+      <CardHeader className="flex flex-row items-center justify-between py-2 pb-1 ">
         <CardTitle className="text-sm font-medium">Active Codes</CardTitle>
         <Link to="/dashboard/promo-codes">
           <Button
@@ -56,7 +56,7 @@ export function ActiveCodes() {
           {activeCodes.map((item, index) => (
             <div
               key={index}
-              className="flex items-center justify-between px-1 py-1 rounded-md"
+              className="flex items-center justify-between px-[5px] py-[6px] rounded-md border-[1px]  border-gray-200 my-2"
             >
               <div className="flex items-center gap-2">
                 <div className="w-10 h-10 bg-[#D9EFFC] rounded-full flex items-center justify-center">

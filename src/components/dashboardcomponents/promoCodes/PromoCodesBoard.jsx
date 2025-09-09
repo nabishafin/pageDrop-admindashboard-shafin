@@ -535,10 +535,10 @@ export default function Home() {
                     key={index}
                     className="flex justify-between items-center py-2"
                   >
-                    <span className="text-sm text-[#1593E5] font-medium">
+                    <span className="text-sm text-black font-medium">
                       {item.label}
                     </span>
-                    <span className="text-sm font-semibold text-[#1593E5] text-right">
+                    <span className="text-sm font-semibold text-black text-right">
                       {item.value}
                     </span>
                   </div>

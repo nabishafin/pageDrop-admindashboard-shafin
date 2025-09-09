@@ -203,13 +203,13 @@ export default function AllUsers() {
             </div>
 
             {/* Filters Row */}
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-4 ">
               {/* Subscription Filter */}
               <Select
                 value={subscriptionFilter}
                 onValueChange={setSubscriptionFilter}
               >
-                <SelectTrigger className="w-[150px]">
+                <SelectTrigger className="w-[160px]">
                   <SelectValue placeholder="Subscription" />
                 </SelectTrigger>
                 <SelectContent>
@@ -275,7 +275,7 @@ export default function AllUsers() {
               <TableRow>
                 <TableHead className="text-center">User ID</TableHead>
                 <TableHead className="text-center">User name</TableHead>
-                <TableHead className="text-center">Contact</TableHead>
+                <TableHead className="text-center">Email</TableHead>
                 <TableHead className="text-center">Contact</TableHead>
                 <TableHead className="text-center">Joined</TableHead>
                 <TableHead className="text-center">Start Date</TableHead>
@@ -315,8 +315,8 @@ export default function AllUsers() {
                       variant={getStatusBadgeVariant(user.status)}
                       className={
                         user.status === "Active"
-                          ? "bg-white border-[1px] border-green-300 text-green-300 rounded-full"
-                          : "bg-white border-[1px] b border-red-300 text-red-300 rounded-full"
+                          ? " border-[1px] bg-green-300 text-white rounded-full"
+                          : " border-[1px] bg-red-300 text-white rounded-full"
                       }
                     >
                       {user.status}
