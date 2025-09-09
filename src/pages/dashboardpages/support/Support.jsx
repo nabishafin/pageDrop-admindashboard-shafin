@@ -280,11 +280,11 @@ export default function Support() {
   const getStatusBadgeStyle = (status) => {
     switch (status) {
       case "Resolved":
-        return "border-[1px] border-blue-500 text-blue-500 0 rounded-full bg-white";
+        return "border-[1px] border-blue-500 text-blue-500 0 rounded-full bg-white px-3";
       case "Open":
-        return "border-[1px] border-orange-500 text-orange-500 bg-white rounded-full";
+        return "border-[1px] border-orange-500 text-orange-500 bg-white rounded-full px-6";
       case "Unresolved":
-        return "border-[1px] border-red-500 text-red-500 bg-white rounded-full";
+        return "border-[1px] border-red-500 text-red-500 bg-white rounded-full ";
       default:
         return "rounded-full";
     }
@@ -468,12 +468,12 @@ export default function Support() {
                           </Badge>
                         </SelectItem>
                         <SelectItem value="Open">
-                          <Badge className="bg-white text-orange-500 rounded-full border-orange-500">
+                          <Badge className="bg-white text-orange-500 rounded-full border-orange-500 px-6">
                             Open
                           </Badge>
                         </SelectItem>
                         <SelectItem value="Resolved">
-                          <Badge className="bg-white text-blue-500 border-blue-500 rounded-full">
+                          <Badge className="bg-white text-blue-500 border-blue-500 rounded-full px-4">
                             Resolved
                           </Badge>
                         </SelectItem>

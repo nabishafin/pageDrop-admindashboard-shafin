@@ -262,7 +262,7 @@ export function CouponTable() {
                       }
                       className={`rounded-full ${
                         coupon.status === "Active"
-                          ? "border-[1px] border-green-500 text-green-500 hover:bg-green-100 bg-white"
+                          ? "border-[1px] border-green-500 text-green-500 hover:bg-green-100 bg-white px-3"
                           : "border-[1px] border-red-500 text-red-500 bg-white"
                       }`}
                     >

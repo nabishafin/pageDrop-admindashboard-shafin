@@ -51,28 +51,22 @@ export default function SubscriptionTabs() {
           <TabsList className="inline-flex mb-6 bg-transparent p-0 h-auto w-auto">
             <TabsTrigger
               value="plans"
-              className="border-b-2 border-transparent 
-      data-[state=active]:border-blue-500 
-      bg-transparent hover:bg-transparent 
-      data-[state=active]:bg-transparent 
-      rounded-md pb-3
-      data-[state=active]:text-blue-500 
-      mr-4 border-0 shadow-sm transition-all duration-300 ease-in-out
-      focus-visible:ring-0 focus-visible:ring-offset-0"
+              className=" 
+    data-[state=active]:text-[#4FB2F3] 
+    mr-2 border-0 shadow-sm transition-all duration-300 ease-in-out
+    focus-visible:ring-0 focus-visible:ring-offset-0
+    flex items-center justify-center p-2" // Add flexbox utilities
             >
               Subscription Plans
             </TabsTrigger>
 
             <TabsTrigger
               value="analytics"
-              className="border-b-2 border-transparent 
-      data-[state=active]:border-[#4FB2F3] 
-      bg-transparent hover:bg-transparent 
-      data-[state=active]:bg-transparent 
-      rounded-md pb-3  
-      data-[state=active]:text-[#4FB2F3]
-      border-0 shadow-sm transition-all duration-300 ease-in-out
-      focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="
+    data-[state=active]:text-[#4FB2F3]
+    border-0 shadow-sm transition-all duration-300 ease-in-out
+    focus-visible:ring-0 focus-visible:ring-offset-0
+    flex items-center justify-center  p-2" // Add flexbox utilities
             >
               Analytics
             </TabsTrigger>

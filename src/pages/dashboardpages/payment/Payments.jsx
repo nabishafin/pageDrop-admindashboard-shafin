@@ -277,7 +277,7 @@ export default function PaymentsPage() {
       case "monthly":
         return "border-[1px] border-orange-400 text-orange-400 bg-white rounded-full"; // Brighter and more distinct
       case "yearly":
-        return "border-[1px] border-blue-400 text-blue-400 bg-white rounded-full"; // Changed to blue for distinction
+        return "border-[1px] border-blue-400 text-blue-400 bg-white rounded-full px-4"; // Changed to blue for distinction
       default:
         return "border-[1px] border-gray-500 text-gray-500 bg-white rounded-full";
     }
@@ -286,7 +286,7 @@ export default function PaymentsPage() {
   const getStatusBadgeColor = (status) => {
     switch (status.toLowerCase()) {
       case "paid":
-        return "border-[1px] border-green-500 text-green-500 bg-white rounded-full";
+        return "border-[1px] border-green-500 text-green-500 bg-white rounded-full px-6";
       case "renewed":
         return "border-[1px] border-[#1593E5] text-[#1593E5] bg-white rounded-full";
       default:

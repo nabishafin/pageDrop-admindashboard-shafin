@@ -134,7 +134,7 @@ export function RecentSubscriptionsTable() {
                       className={
                         item.type === "monthly"
                           ? "border-[1px] border-blue-500 text-blue-500 rounded-full bg-white"
-                          : "border-[1px] border-orange-500 text-orange-500  rounded-full"
+                          : "border-[1px] border-orange-500 text-orange-500  rounded-full px-4 bg-white"
                       }
                     >
                       {item.subscription}
