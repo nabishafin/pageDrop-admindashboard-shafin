@@ -6,11 +6,36 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import logo from "../../assets/LegierGlobalIcon.jpg";
-import { Link, Links } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../../redux/features/auth/authApi";
+import { useDispatch } from "react-redux";
+import { setLogin } from "../../redux/slices/authSlice";
 
 const SignInPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [login, { isLoading }] = useLoginMutation();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await login({ email, password }).unwrap();
+      if (res.success) {
+        const { user, token, refreshToken } = res.data;
+        dispatch(setLogin({ user, token, refreshToken }));
+        localStorage.setItem("token", token);
+        localStorage.setItem("refreshToken", refreshToken);
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      alert("Failed to login: " + error.data.message);
+    }
+  };
 
   return (
     <div className="min-h-screen  flex items-center justify-center p-4 ">
@@ -29,20 +54,22 @@ const SignInPage = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={handleSubmit}>
                 {/* Username/Email Field */}
                 <div className="space-y-2">
                   <Label
-                    htmlFor="username"
+                    htmlFor="email"
                     className="text-sm font-medium text-gray-900"
                   >
-                    User name
+                    Email
                   </Label>
                   <Input
-                    id="username"
-                    type="text"
-                    placeholder="Enter your username"
+                    id="email"
+                    type="email"
+                    placeholder="Enter your email"
                     className="h-11 border-gray-300 focus:border-red-900 focus:ring-red-900"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
 
@@ -60,6 +87,8 @@ const SignInPage = () => {
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
                       className="h-11 pr-10 border-gray-300 focus:border-[#E32B6B] focus:ring-[#E32B6B]"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                     <button
                       type="button"
@@ -102,14 +131,13 @@ const SignInPage = () => {
                 </div>
 
                 {/* Sign In Button */}
-                <Link to={"/dashboard"}>
-                  <Button
-                    type="submit"
-                    className="w-full h-11 bg-gradient-to-r from-[#E32B6B] to-[#FB4A3A] text-white font-medium"
-                  >
-                    Sign In
-                  </Button>
-                </Link>
+                <Button
+                  type="submit"
+                  className="w-full h-11 bg-gradient-to-r from-[#E32B6B] to-[#FB4A3A] text-white font-medium"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Signing In..." : "Sign In"}
+                </Button>
               </form>
             </CardContent>
           </Card>
