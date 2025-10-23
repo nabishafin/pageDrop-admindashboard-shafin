@@ -16,6 +16,7 @@ const SignInPage = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -23,26 +24,45 @@ const SignInPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage(""); // Clear previous errors
+
+    // Basic validation
+    if (!email || !password) {
+      setErrorMessage("Please fill in all fields");
+      return;
+    }
+
     try {
       const res = await login({ email, password }).unwrap();
-      if (res.success) {
-        const { user, token, refreshToken } = res.data;
+      if (res.code === 200) {
+        const user = res.data.attributes.user;
+        const token = res.data.attributes.tokens.access.token;
+        const refreshToken = res.data.attributes.tokens.refresh.token;
         dispatch(setLogin({ user, token, refreshToken }));
         localStorage.setItem("token", token);
         localStorage.setItem("refreshToken", refreshToken);
         navigate("/dashboard");
       }
     } catch (error) {
-      alert("Failed to login: " + error.data.message);
+      console.error("Login error:", error);
+
+      // Handle different error structures
+      const message =
+        error?.data?.message ||
+        error?.error ||
+        error?.message ||
+        "Login failed. Please try again.";
+
+      setErrorMessage(message);
     }
   };
 
   return (
-    <div className="min-h-screen  flex items-center justify-center p-4 ">
+    <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-5xl flex items-center justify-center gap-20">
         {/* Logo Section */}
-        <div className="hidden lg:flex items-center justify-center flex-1  pr-5 ">
-          <img src={logo} alt="" className="h-96 " />
+        <div className="hidden lg:flex items-center justify-center flex-1 pr-5">
+          <img src={logo} alt="" className="h-96" />
         </div>
 
         {/* Sign In Form */}
@@ -54,6 +74,13 @@ const SignInPage = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
+              {/* Error Message */}
+              {errorMessage && (
+                <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
+                  {errorMessage}
+                </div>
+              )}
+
               <form className="space-y-4" onSubmit={handleSubmit}>
                 {/* Username/Email Field */}
                 <div className="space-y-2">
@@ -70,6 +97,7 @@ const SignInPage = () => {
                     className="h-11 border-gray-300 focus:border-red-900 focus:ring-red-900"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    required
                   />
                 </div>
 
@@ -89,6 +117,7 @@ const SignInPage = () => {
                       className="h-11 pr-10 border-gray-300 focus:border-[#E32B6B] focus:ring-[#E32B6B]"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      required
                     />
                     <button
                       type="button"

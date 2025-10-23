@@ -24,6 +24,7 @@ import PrivacyPolicy from "@/pages/dashboardpages/privacypolicy/PrivacyPolicy";
 import EditTermsAndConditions from "@/pages/dashboardpages/terms/EditTermsAndConditions";
 import EditPrivacyPolicy from "@/pages/dashboardpages/privacypolicy/EditPrivacyPolicy";
 import NotFoundPage from "@/components/dashboardcomponents/NotFoundPage";
+import PrivateRoute from "./PrivateRoute";
 
 // 404 Page
 
@@ -49,24 +50,32 @@ const routes = createBrowserRouter([
     element: <ResetPassword />,
   },
   {
-    path: "/dashboard",
-    element: <DashboardLayout />,
+    element: <PrivateRoute />,
     children: [
-      { index: true, element: <DashboardOverview /> },
-      { path: "notifications", element: <AllNotifications /> },
-      { path: "users", element: <AllUsers /> },
-      { path: "payments", element: <Payments /> },
-      { path: "subscriptions", element: <Subscriptions /> },
-      { path: "promo-codes", element: <PromoCodes /> },
-      { path: "support", element: <Support /> },
+      {
+        path: "/dashboard",
+        element: <DashboardLayout />,
+        children: [
+          { index: true, element: <DashboardOverview /> },
+          { path: "notifications", element: <AllNotifications /> },
+          { path: "users", element: <AllUsers /> },
+          { path: "payments", element: <Payments /> },
+          { path: "subscriptions", element: <Subscriptions /> },
+          { path: "promo-codes", element: <PromoCodes /> },
+          { path: "support", element: <Support /> },
 
-      // // ✅ Settings Dropdown Routes
-      { path: "settings/faq", element: <FAQ /> },
-      { path: "settings/reset-password", element: <ResetPasswordSetting /> },
-      { path: "settings/terms", element: <TermsAndConditions /> },
-      { path: "settings/editterms", element: <EditTermsAndConditions /> },
-      { path: "settings/privacy", element: <PrivacyPolicy /> },
-      { path: "settings/editprivacy", element: <EditPrivacyPolicy /> },
+          // // ✅ Settings Dropdown Routes
+          { path: "settings/faq", element: <FAQ /> },
+          {
+            path: "settings/reset-password",
+            element: <ResetPasswordSetting />,
+          },
+          { path: "settings/terms", element: <TermsAndConditions /> },
+          { path: "settings/editterms", element: <EditTermsAndConditions /> },
+          { path: "settings/privacy", element: <PrivacyPolicy /> },
+          { path: "settings/editprivacy", element: <EditPrivacyPolicy /> },
+        ],
+      },
     ],
   },
   // 404 Catch-all route
