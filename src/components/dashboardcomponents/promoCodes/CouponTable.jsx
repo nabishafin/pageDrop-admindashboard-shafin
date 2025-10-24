@@ -35,17 +35,27 @@ import {
 import { useGetAllCouponsQuery, useDeleteCouponMutation } from "@/redux/features/promocodes/promocodesApi";
 
 export function CouponTable() {
-  const { data: couponsData, isLoading, error } = useGetAllCouponsQuery();
-  const [deleteCoupon] = useDeleteCouponMutation();
   const [selectedCoupon, setSelectedCoupon] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
-  const couponsPerPage = 7;
+  const couponsPerPage = 10;
+
+  const { data: couponsData, isLoading, error } = useGetAllCouponsQuery({
+    page: currentPage,
+    limit: couponsPerPage,
+    search: searchTerm,
+    status: statusFilter,
+  });
+
+  const [deleteCoupon] = useDeleteCouponMutation();
+
   console.log("Coupons Data:", couponsData);
   // Extract coupons from API response or use empty array as fallback
   const coupons = couponsData?.coupons || [];
+  const totalPages = couponsData?.totalPages || 1;
+  const totalCoupons = couponsData?.totalCoupons || 0;
 
   const handleViewCoupon = (coupon) => {
     setSelectedCoupon(coupon);
@@ -89,26 +99,6 @@ export function CouponTable() {
     }
     return `${coupon.discountValue}`;
   };
-
-  // Filter coupons based on search and status
-  const filteredCoupons = coupons.filter((coupon) => {
-    // Search filter
-    const matchesSearch =
-      coupon.campaignName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      coupon.couponCode?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      coupon.targetAudience?.toLowerCase().includes(searchTerm.toLowerCase());
-
-    // Status filter
-    const matchesStatus =
-      statusFilter === "All" || getStatus(coupon) === statusFilter;
-
-    return matchesSearch && matchesStatus;
-  });
-
-  const totalPages = Math.ceil(filteredCoupons.length / couponsPerPage);
-  const startIndex = (currentPage - 1) * couponsPerPage;
-  const endIndex = startIndex + couponsPerPage;
-  const currentCoupons = filteredCoupons.slice(startIndex, endIndex);
 
   const handleStatusFilter = (status) => {
     setStatusFilter(status);
@@ -218,7 +208,7 @@ export function CouponTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {currentCoupons.length === 0 ? (
+            {coupons.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={7}
@@ -228,7 +218,7 @@ export function CouponTable() {
                 </TableCell>
               </TableRow>
             ) : (
-              currentCoupons.map((coupon) => {
+              coupons.map((coupon) => {
                 const status = getStatus(coupon);
                 const usagePercentage = getUsagePercentage(
                   coupon.usageCount,
@@ -319,12 +309,12 @@ export function CouponTable() {
       </div>
 
       {/* Pagination */}
-      {filteredCoupons.length > 0 && (
+      {totalCoupons > 0 && (
         <div className="flex items-center justify-between">
           <div className="text-sm text-muted-foreground">
-            Showing {startIndex + 1} to{" "}
-            {Math.min(startIndex + couponsPerPage, filteredCoupons.length)} of{" "}
-            {filteredCoupons.length} coupons
+            Showing {(currentPage - 1) * couponsPerPage + 1} to{" "}
+            {Math.min(currentPage * couponsPerPage, totalCoupons)} of{" "}
+            {totalCoupons} coupons
           </div>
           <div className="flex items-center gap-2">
             <Button
@@ -337,7 +327,7 @@ export function CouponTable() {
               Previous
             </Button>
             <div className="flex items-center gap-1">
-              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              {Array.from({ length: totalPages }, (_, i) => {
                 const pageNum = i + 1;
                 return (
                   <Button
@@ -355,23 +345,6 @@ export function CouponTable() {
                   </Button>
                 );
               })}
-              {totalPages > 5 && (
-                <>
-                  <span className="text-muted-foreground">...</span>
-                  <Button
-                    variant={currentPage === totalPages ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setCurrentPage(totalPages)}
-                    className={`w-8 h-8 p-0 ${
-                      currentPage === totalPages
-                        ? "bg-[#4FB2F3] hover:bg-[#4FB2F3]"
-                        : ""
-                    }`}
-                  >
-                    {totalPages}
-                  </Button>
-                </>
-              )}
             </div>
             <Button
               variant="outline"
@@ -457,18 +430,16 @@ export function CouponTable() {
                     <span className="font-medium">
                       <Badge
                         variant={
-                          getStatus(selectedCoupon) === "Active"
-                            ? "default"
-                            : "destructive"
-                        }
-                        className={`rounded-full ${
-                          getStatus(selectedCoupon) === "Active"
-                            ? "border-[1px] border-green-500 text-green-500 hover:bg-green-100 bg-white px-3"
-                            : "border-[1px] border-red-500 text-red-500 bg-white"
-                        }`}
-                      >
-                        {getStatus(selectedCoupon)}
-                      </Badge>
+                            status === "Active" ? "default" : "destructive"
+                          }
+                          className={`rounded-full ${
+                            status === "Active"
+                              ? "border-[1px] border-green-500 text-green-500 hover:bg-green-100 bg-white px-3"
+                              : "border-[1px] border-red-500 text-red-500 bg-white"
+                          }`}
+                        >
+                          {status}
+                        </Badge>
                     </span>
                   </div>
                 </div>
