@@ -9,16 +9,12 @@ import {
   Legend,
 } from "recharts";
 
-const chartData = [
-  { month: "Jan", Basic: 1000, Premium: 1200 },
-  { month: "Feb", Basic: 1100, Premium: 1300 },
-  { month: "Mar", Basic: 1200, Premium: 1400 },
-  { month: "Apr", Basic: 1150, Premium: 1450 },
-  { month: "May", Basic: 1300, Premium: 1500 },
-  { month: "Jun", Basic: 1400, Premium: 1550 },
-];
+export function SubscriptionGrowthChart({ chartData }) {
+  const transformedData = chartData?.data?.monthly.map(item => ({
+      month: item.month,
+      monthly: item.count
+  }));
 
-export function SubscriptionGrowthChart() {
   return (
     <Card>
       <CardHeader>
@@ -29,7 +25,7 @@ export function SubscriptionGrowthChart() {
       <CardContent>
         <div className="h-80 w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData}>
+            <LineChart data={transformedData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
               <XAxis
                 dataKey="month"
@@ -46,14 +42,7 @@ export function SubscriptionGrowthChart() {
               />
               <Line
                 type="monotone"
-                dataKey="Basic"
-                stroke="#f59e0b"
-                strokeWidth={2}
-                dot={{ fill: "#f59e0b", strokeWidth: 2, r: 4 }}
-              />
-              <Line
-                type="monotone"
-                dataKey="Premium"
+                dataKey="monthly"
                 stroke="#3b82f6"
                 strokeWidth={2}
                 dot={{ fill: "#3b82f6", strokeWidth: 2, r: 4 }}

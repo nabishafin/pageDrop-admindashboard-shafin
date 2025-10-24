@@ -1,47 +1,47 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import SubscriptionPlans from "../../../components/dashboardcomponents/subscriptions/SubscriptionPlans";
 import SubscriptionsTab from "@/components/dashboardcomponents/subscriptions/SubscriptionsTab";
-
-const initialPlans = [
-  {
-    id: "monthly",
-    name: "Monthly Plan",
-    price: 5.8,
-    period: "month",
-    features: [
-      "Unlimited access",
-      "Unlimited access",
-      "Unlimited access",
-      "Unlimited access",
-      "Unlimited access",
-    ],
-    activeUsers: 2111,
-    isPopular: true,
-  },
-  {
-    id: "yearly",
-    name: "Yearly Plan",
-    price: 5.8,
-    period: "year",
-    features: [
-      "Unlimited access",
-      "Unlimited access",
-      "Unlimited access",
-      "Unlimited access",
-      "Unlimited access",
-    ],
-    activeUsers: 2111,
-  },
-];
+import {
+  useGetSubscriptionPlansQuery,
+  useUpdateSubscriptionPlanMutation,
+} from "@/redux/features/suscribtation/suscribtationApi";
+import SubscriptionPlans from "@/components/dashboardcomponents/subscriptions/SubscriptionPlans";
 
 export default function SubscriptionTabs() {
-  const [plans, setPlans] = useState(initialPlans);
+  // ✅ Fetch data first
+  const {
+    data: subscriptionPlans,
+    isLoading,
+    error,
+  } = useGetSubscriptionPlansQuery();
+  const [updateSubscriptionPlan] = useUpdateSubscriptionPlanMutation();
 
-  const updatePlan = (updatedPlan) => {
-    setPlans(
-      plans.map((plan) => (plan.id === updatedPlan.id ? updatedPlan : plan))
-    );
+  // ✅ Initialize state after data is available (fallback empty array)
+  const [plans, setPlans] = useState([]);
+
+  // ✅ Sync fetched plans when loaded
+  useEffect(() => {
+    if (subscriptionPlans && subscriptionPlans.data) {
+      setPlans(subscriptionPlans.data);
+    }
+  }, [subscriptionPlans]);
+
+  const updatePlan = async (updatedPlan) => {
+    try {
+      // Call the API to update the plan
+      const result = await updateSubscriptionPlan({
+        _id: updatedPlan._id, // or updatedPlan._id depending on your API
+        ...updatedPlan,
+      }).unwrap();
+
+      // Update local state with the response from API
+      setPlans((prev) =>
+        prev.map((plan) => (plan._id === updatedPlan._id ? result : plan))
+      );
+    } catch (error) {
+      console.error("Failed to update plan:", error);
+      // You might want to show an error message to the user here
+    }
   };
 
   return (
@@ -51,22 +51,14 @@ export default function SubscriptionTabs() {
           <TabsList className="inline-flex mb-6 bg-transparent p-0 h-auto w-auto">
             <TabsTrigger
               value="plans"
-              className=" 
-    data-[state=active]:text-[#4FB2F3] 
-    mr-2 border-0 shadow-sm transition-all duration-300 ease-in-out
-    focus-visible:ring-0 focus-visible:ring-offset-0
-    flex items-center justify-center p-2" // Add flexbox utilities
+              className="data-[state=active]:text-[#4FB2F3] mr-2 border-0 shadow-sm transition-all duration-300 ease-in-out focus-visible:ring-0 focus-visible:ring-offset-0 flex items-center justify-center p-2"
             >
               Subscription Plans
             </TabsTrigger>
 
             <TabsTrigger
               value="analytics"
-              className="
-    data-[state=active]:text-[#4FB2F3]
-    border-0 shadow-sm transition-all duration-300 ease-in-out
-    focus-visible:ring-0 focus-visible:ring-offset-0
-    flex items-center justify-center  p-2" // Add flexbox utilities
+              className="data-[state=active]:text-[#4FB2F3] border-0 shadow-sm transition-all duration-300 ease-in-out focus-visible:ring-0 focus-visible:ring-offset-0 flex items-center justify-center p-2"
             >
               Analytics
             </TabsTrigger>

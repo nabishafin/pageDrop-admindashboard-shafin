@@ -4,51 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const subscriptionData = [
-  {
-    user: "Amazon",
-    subscription: "Monthly",
-    registration: "5/27/15",
-    status: "Active",
-    type: "monthly",
-  },
-  {
-    user: "Apple",
-    subscription: "Yearly",
-    registration: "6/21/19",
-    status: "Active",
-    type: "yearly",
-  },
-  {
-    user: "Google",
-    subscription: "Monthly",
-    registration: "8/21/15",
-    status: "Active",
-    type: "monthly",
-  },
-  {
-    user: "Netflix",
-    subscription: "Yearly",
-    registration: "6/21/12",
-    status: "Active",
-    type: "yearly",
-  },
-  {
-    user: "Intercom",
-    subscription: "Yearly",
-    registration: "8/15/17",
-    status: "Active",
-    type: "yearly",
-  },
-];
-
-export function RecentSubscriptionsTable() {
+export function RecentSubscriptionsTable({ subscriptionData }) {
   const [filterType, setFilterType] = useState("all");
 
-  const filteredData =
-    filterType === "all"
-      ? subscriptionData
-      : subscriptionData.filter((item) => item.type === filterType);
+  const filteredData = !subscriptionData
+    ? []
+    : filterType === "all"
+    ? subscriptionData
+    : subscriptionData.filter((item) => item.subscription === filterType);
 
   return (
     <Card>
@@ -129,10 +92,12 @@ export function RecentSubscriptionsTable() {
                   <td className="py-3 px-4">
                     <Badge
                       variant={
-                        item.type === "monthly" ? "default" : "secondary"
+                        item.subscription === "monthly"
+                          ? "default"
+                          : "secondary"
                       }
                       className={
-                        item.type === "monthly"
+                        item.subscription === "monthly"
                           ? "border-[1px] border-blue-500 text-blue-500 rounded-full bg-white"
                           : "border-[1px] border-orange-500 text-orange-500  rounded-full px-4 bg-white"
                       }
@@ -148,7 +113,7 @@ export function RecentSubscriptionsTable() {
                       variant="outline"
                       className="border-[1px] border-green-500 text-green-500 rounded-full bg-white"
                     >
-                      {item.status}
+                      {item.subscriptionStatus}
                     </Badge>
                   </td>
                 </tr>

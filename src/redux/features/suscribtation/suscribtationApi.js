@@ -23,8 +23,8 @@ export const subscriptionApi = baseApi.injectEndpoints({
 
     // Update subscription plan
     updateSubscriptionPlan: builder.mutation({
-      query: ({ id, ...planData }) => ({
-        url: `/users/subscription-plans/${id}`,
+      query: ({ _id, ...planData }) => ({
+        url: `/users/subscription-plans/${_id}`,
         method: "PUT",
         body: planData,
       }),
