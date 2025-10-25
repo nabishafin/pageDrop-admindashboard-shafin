@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -11,36 +11,22 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Trash2, Edit, Eye, Plus } from "lucide-react";
+import { Trash2, Edit, Eye, Plus, Loader2 } from "lucide-react";
+import {
+  useGetFaqsQuery,
+  useAddFaqMutation,
+  useEditFaqMutation,
+  useDeleteFaqMutation,
+} from "../../../redux/features/faq/faqApi";
+
 
 export default function FaqManagement() {
-  const [faqs, setFaqs] = useState([
-    {
-      id: 1,
-      question: "How to apply for a campaign?",
-      answer:
-        "You can apply for a campaign by visiting our campaign page and filling out the application form. Make sure to provide all required information and submit your portfolio.",
-    },
-    {
-      id: 2,
-      question: "What is the eligibility?",
-      answer:
-        "Eligibility depends on campaign requirements. Please review the details before applying.",
-    },
-    {
-      id: 3,
-      question: "When will I get a response?",
-      answer:
-        "Our team usually reviews applications within 7–10 business days and will contact you by email.",
-    },
-    {
-      id: 4,
-      question: "Can I apply for multiple campaigns?",
-      answer:
-        "Yes, you can apply for multiple campaigns as long as you meet the criteria for each campaign.",
-    },
-  ]);
+  const { data, isLoading, isError } = useGetFaqsQuery();
+  const [addFaq] = useAddFaqMutation();
+  const [updateFaq] = useEditFaqMutation();
+  const [deleteFaq] = useDeleteFaqMutation();
 
+  const [faqs, setFaqs] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -48,37 +34,32 @@ export default function FaqManagement() {
   const [selectedFaq, setSelectedFaq] = useState(null);
   const [formData, setFormData] = useState({ question: "", answer: "" });
 
-  const handleAddFaq = () => {
+  useEffect(() => {
+    if (data) {
+      setFaqs(data);
+    }
+  }, [data]);
+
+  const handleAddFaq = async () => {
     if (formData.question && formData.answer) {
-      const newFaq = {
-        id: Math.max(0, ...faqs.map((f) => f.id)) + 1,
-        question: formData.question,
-        answer: formData.answer,
-      };
-      setFaqs([...faqs, newFaq]);
+      await addFaq(formData);
       setFormData({ question: "", answer: "" });
       setIsAddModalOpen(false);
     }
   };
 
-  const handleEditFaq = () => {
+  const handleEditFaq = async () => {
     if (selectedFaq && formData.question && formData.answer) {
-      setFaqs(
-        faqs.map((faq) =>
-          faq.id === selectedFaq.id
-            ? { ...faq, question: formData.question, answer: formData.answer }
-            : faq
-        )
-      );
+      await updateFaq({ id: selectedFaq._id, ...formData });
       setFormData({ question: "", answer: "" });
       setIsEditModalOpen(false);
       setSelectedFaq(null);
     }
   };
 
-  const handleDeleteFaq = () => {
+  const handleDeleteFaq = async () => {
     if (selectedFaq) {
-      setFaqs(faqs.filter((faq) => faq.id !== selectedFaq.id));
+      await deleteFaq(selectedFaq._id);
       setIsDeleteModalOpen(false);
       setSelectedFaq(null);
     }
@@ -172,77 +153,87 @@ export default function FaqManagement() {
 
       <Card className="rounded-lg shadow-md border-0">
         <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-100 border-b border-gray-200">
-                <tr>
-                  <th className="w-16 text-center font-semibold py-4 px-4 text-gray-700">
-                    SL
-                  </th>
-                  <th className="text-start font-semibold py-4 px-4 text-gray-700">
-                    Questions
-                  </th>
-                  <th className="text-start font-semibold py-4 px-4 text-gray-700">
-                    Answers
-                  </th>
-                  <th className="w-40 text-center font-semibold py-4 px-4 text-gray-700">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {faqs.map((faq, index) => (
-                  <tr
-                    key={faq.id}
-                    className={`border-b border-gray-100 ${
-                      index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                    }`}
-                  >
-                    <td className="text-center py-4 px-4 text-gray-700 font-medium">
-                      {index + 1}
-                    </td>
-                    <td className="font-medium text-start py-4 px-4 text-gray-800">
-                      {faq.question}
-                    </td>
-                    <td className="text-start py-4 px-4 text-gray-600 whitespace-pre-wrap break-words">
-                      {faq.answer.length > 80
-                        ? faq.answer.slice(0, 80) + "..."
-                        : faq.answer}
-                    </td>
-
-                    <td className="text-center py-4 px-4">
-                      <div className="flex gap-2 justify-center">
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="text-blue-500 hover:bg-blue-100 bg-transparent w-9 h-9 p-0 rounded-full"
-                          onClick={() => openViewModal(faq)}
-                        >
-                          <Eye className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="text-green-500 hover:bg-green-100 bg-transparent w-9 h-9 p-0 rounded-full"
-                          onClick={() => openEditModal(faq)}
-                        >
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="text-red-500 hover:bg-red-100 bg-transparent w-9 h-9 p-0 rounded-full"
-                          onClick={() => openDeleteModal(faq)}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </td>
+          {isLoading ? (
+            <div className="flex justify-center items-center h-64">
+              <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
+            </div>
+          ) : isError ? (
+            <div className="text-center py-8 text-red-500">
+              Error loading FAQs.
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-100 border-b border-gray-200">
+                  <tr>
+                    <th className="w-16 text-center font-semibold py-4 px-4 text-gray-700">
+                      SL
+                    </th>
+                    <th className="text-start font-semibold py-4 px-4 text-gray-700">
+                      Questions
+                    </th>
+                    <th className="text-start font-semibold py-4 px-4 text-gray-700">
+                      Answers
+                    </th>
+                    <th className="w-40 text-center font-semibold py-4 px-4 text-gray-700">
+                      Action
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {faqs.map((faq, index) => (
+                    <tr
+                      key={faq._id}
+                      className={`border-b border-gray-100 ${
+                        index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                      }`}
+                    >
+                      <td className="text-center py-4 px-4 text-gray-700 font-medium">
+                        {index + 1}
+                      </td>
+                      <td className="font-medium text-start py-4 px-4 text-gray-800">
+                        {faq.question}
+                      </td>
+                      <td className="text-start py-4 px-4 text-gray-600 whitespace-pre-wrap break-words">
+                        {faq.answer.length > 80
+                          ? faq.answer.slice(0, 80) + "..."
+                          : faq.answer}
+                      </td>
+
+                      <td className="text-center py-4 px-4">
+                        <div className="flex gap-2 justify-center">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-blue-500 hover:bg-blue-100 bg-transparent w-9 h-9 p-0 rounded-full"
+                            onClick={() => openViewModal(faq)}
+                          >
+                            <Eye className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-green-500 hover:bg-green-100 bg-transparent w-9 h-9 p-0 rounded-full"
+                            onClick={() => openEditModal(faq)}
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-red-500 hover:bg-red-100 bg-transparent w-9 h-9 p-0 rounded-full"
+                            onClick={() => openDeleteModal(faq)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </CardContent>
       </Card>
 

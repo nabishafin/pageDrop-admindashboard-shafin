@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { setLogin, logout } from "../slices/authSlice";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000/api";
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://jersey-emissions-vbulletin-william.trycloudflare.com/api/v1";
 
 // Create a base query with automatic token refresh
 const baseQuery = fetchBaseQuery({
@@ -106,7 +106,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["auth", "dashboardStats", "admin-users", "earnings-overview"],
+  tagTypes: ["auth", "dashboardStats", "admin-users", "earnings-overview", "Faqs"],
   endpoints: () => ({}),
   // Global configuration for refetch behavior
   keepUnusedDataFor: 0, // Don't keep unused data in cache

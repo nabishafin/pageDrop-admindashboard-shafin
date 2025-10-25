@@ -43,9 +43,7 @@ const PromoCodesStats = () => {
               <CardTitle className="text-sm font-medium text-red-500">
                 Error
               </CardTitle>
-              <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
-                <Loader2 className="w-4 h-4 text-red-500 animate-spin" />
-              </div>
+
             </CardHeader>
             <CardContent className="flex justify-between">
               <div className="text-2xl font-bold text-red-500">N/A</div>
