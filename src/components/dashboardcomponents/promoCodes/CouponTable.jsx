@@ -430,16 +430,18 @@ export function CouponTable() {
                     <span className="font-medium">
                       <Badge
                         variant={
-                            status === "Active" ? "default" : "destructive"
-                          }
-                          className={`rounded-full ${
-                            status === "Active"
-                              ? "border-[1px] border-green-500 text-green-500 hover:bg-green-100 bg-white px-3"
-                              : "border-[1px] border-red-500 text-red-500 bg-white"
-                          }`}
-                        >
-                          {status}
-                        </Badge>
+                          getStatus(selectedCoupon) === "Active"
+                            ? "default"
+                            : "destructive"
+                        }
+                        className={`rounded-full ${
+                          getStatus(selectedCoupon) === "Active"
+                            ? "border-[1px] border-green-500 text-green-500 hover:bg-green-100 bg-white px-3"
+                            : "border-[1px] border-red-500 text-red-500 bg-white"
+                        }`}
+                      >
+                        {getStatus(selectedCoupon)}
+                      </Badge>
                     </span>
                   </div>
                 </div>

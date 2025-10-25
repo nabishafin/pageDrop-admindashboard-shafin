@@ -4,7 +4,7 @@ export const promocodesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // ✅ Get all promo codes
     getAllCoupons: builder.query({
-      query: (params) => {
+      query: (params = {}) => {
         console.log("API Query Params:", params);
         const { page = 1, limit = 10, search = '', status = 'All' } = params;
         const queryParams = new URLSearchParams();
