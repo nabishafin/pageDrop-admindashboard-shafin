@@ -19,7 +19,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Search, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
-import { useGetUsersQuery } from "@/redux/features/auth/user/userApi";
+import { useGetUsersQuery } from "@/redux/features/user/userApi";
 
 export default function AllUsers() {
   const [searchTerm, setSearchTerm] = useState("");
