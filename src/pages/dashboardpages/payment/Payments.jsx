@@ -1,8 +1,8 @@
-import { useState, useMemo } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -18,266 +18,73 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Search,
-  Filter,
-  ChevronLeft,
-  ChevronRight,
-  Users,
-  CreditCard,
-  Link,
-} from "lucide-react";
-
-// Mock payment data
-const mockPayments = [
-  {
-    id: 1,
-    invoiceNumber: "50682",
-    transactionId: "TIB7854ULB",
-    paymentDate: "2025-07-05",
-    amount: 58.0,
-    paymentMethod: "Stripe",
-    userId: "19552",
-    subscription: "Monthly",
-    paymentStatus: "Paid",
-  },
-  {
-    id: 2,
-    invoiceNumber: "50683",
-    transactionId: "TIB7855ULB",
-    paymentDate: "2025-07-05",
-    amount: 58.0,
-    paymentMethod: "Stripe",
-    userId: "19553",
-    subscription: "Monthly",
-    paymentStatus: "Paid",
-  },
-  {
-    id: 3,
-    invoiceNumber: "50684",
-    transactionId: "TIB7856ULB",
-    paymentDate: "2025-07-05",
-    amount: 58.0,
-    paymentMethod: "Stripe",
-    userId: "19554",
-    subscription: "Monthly",
-    paymentStatus: "Paid",
-  },
-  {
-    id: 4,
-    invoiceNumber: "50685",
-    transactionId: "TIB7857ULB",
-    paymentDate: "2025-07-05",
-    amount: 58.0,
-    paymentMethod: "Stripe",
-    userId: "19555",
-    subscription: "Yearly",
-    paymentStatus: "Paid",
-  },
-  {
-    id: 5,
-    invoiceNumber: "50686",
-    transactionId: "TIB7858ULB",
-    paymentDate: "2025-07-05",
-    amount: 58.0,
-    paymentMethod: "Stripe",
-    userId: "19556",
-    subscription: "Yearly",
-    paymentStatus: "Renewed",
-  },
-  {
-    id: 6,
-    invoiceNumber: "50687",
-    transactionId: "TIB7859ULB",
-    paymentDate: "2025-07-05",
-    amount: 58.0,
-    paymentMethod: "Stripe",
-    userId: "19557",
-    subscription: "Yearly",
-    paymentStatus: "Paid",
-  },
-  {
-    id: 7,
-    invoiceNumber: "50688",
-    transactionId: "TIB7860ULB",
-    paymentDate: "2025-07-05",
-    amount: 58.0,
-    paymentMethod: "Stripe",
-    userId: "19558",
-    subscription: "Monthly",
-    paymentStatus: "Renewed",
-  },
-  {
-    id: 8,
-    invoiceNumber: "50689",
-    transactionId: "TIB7861ULB",
-    paymentDate: "2025-07-05",
-    amount: 58.0,
-    paymentMethod: "Stripe",
-    userId: "19559",
-    subscription: "Monthly",
-    paymentStatus: "Paid",
-  },
-  {
-    id: 9,
-    invoiceNumber: "50690",
-    transactionId: "TIB7862ULB",
-    paymentDate: "2025-07-05",
-    amount: 58.0,
-    paymentMethod: "Stripe",
-    userId: "19560",
-    subscription: "Yearly",
-    paymentStatus: "Paid",
-  },
-  {
-    id: 10,
-    invoiceNumber: "50691",
-    transactionId: "TIB7863ULB",
-    paymentDate: "2025-07-05",
-    amount: 58.0,
-    paymentMethod: "Stripe",
-    userId: "19561",
-    subscription: "Monthly",
-    paymentStatus: "Renewed",
-  },
-  {
-    id: 11,
-    invoiceNumber: "50692",
-    transactionId: "TIB7864ULB",
-    paymentDate: "2025-07-04",
-    amount: 58.0,
-    paymentMethod: "Stripe",
-    userId: "19562",
-    subscription: "Yearly",
-    paymentStatus: "Paid",
-  },
-  {
-    id: 12,
-    invoiceNumber: "50693",
-    transactionId: "TIB7865ULB",
-    paymentDate: "2025-07-04",
-    amount: 58.0,
-    paymentMethod: "Stripe",
-    userId: "19563",
-    subscription: "Monthly",
-    paymentStatus: "Paid",
-  },
-  {
-    id: 13,
-    invoiceNumber: "50694",
-    transactionId: "TIB7866ULB",
-    paymentDate: "2025-07-03",
-    amount: 58.0,
-    paymentMethod: "Stripe",
-    userId: "19564",
-    subscription: "Monthly",
-    paymentStatus: "Paid",
-  },
-  {
-    id: 14,
-    invoiceNumber: "50695",
-    transactionId: "TIB7867ULB",
-    paymentDate: "2025-07-03",
-    amount: 58.0,
-    paymentMethod: "Stripe",
-    userId: "19565",
-    subscription: "Yearly",
-    paymentStatus: "Renewed",
-  },
-  {
-    id: 15,
-    invoiceNumber: "50696",
-    transactionId: "TIB7868ULB",
-    paymentDate: "2025-07-02",
-    amount: 58.0,
-    paymentMethod: "Stripe",
-    userId: "19566",
-    subscription: "Monthly",
-    paymentStatus: "Paid",
-  },
-];
+import { Search, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { useGetAllPaymentsQuery } from "@/redux/features/payment/paymentApi";
 
 export default function PaymentsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [subscriptionFilter, setSubscriptionFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [timeFilter, setTimeFilter] = useState("all");
-  const [customDateFrom, setCustomDateFrom] = useState();
-  const [customDateTo, setCustomDateTo] = useState();
+  const [customStartDate, setCustomStartDate] = useState("");
+  const [customEndDate, setCustomEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 11;
-  const filteredPayments = useMemo(() => {
-    return mockPayments.filter((payment) => {
-      const matchesSearch =
-        payment.invoiceNumber
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        payment.transactionId
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        payment.userId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        payment.paymentMethod.toLowerCase().includes(searchTerm.toLowerCase());
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const itemsPerPage = 10;
 
-      const matchesSubscription =
-        subscriptionFilter === "all" ||
-        payment.subscription.toLowerCase() === subscriptionFilter.toLowerCase();
-      const matchesStatus =
-        statusFilter === "all" ||
-        payment.paymentStatus.toLowerCase() === statusFilter.toLowerCase();
+  // Debounce search term
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+    }, 500);
 
-      let matchesTime = true;
-      if (timeFilter !== "all") {
-        const paymentDate = new Date(payment.paymentDate);
-        const now = new Date();
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
-        switch (timeFilter) {
-          case "1day":
-            matchesTime =
-              now.getTime() - paymentDate.getTime() <= 24 * 60 * 60 * 1000;
-            break;
-          case "7days":
-            matchesTime =
-              now.getTime() - paymentDate.getTime() <= 7 * 24 * 60 * 60 * 1000;
-            break;
-          case "1month":
-            matchesTime =
-              now.getTime() - paymentDate.getTime() <= 30 * 24 * 60 * 60 * 1000;
-            break;
-          case "custom":
-            if (customDateFrom && customDateTo) {
-              matchesTime =
-                paymentDate >= customDateFrom && paymentDate <= customDateTo;
-            }
-            break;
-        }
-      }
-
-      return (
-        matchesSearch && matchesSubscription && matchesStatus && matchesTime
-      );
-    });
+  // Reset to first page when any filter changes
+  useEffect(() => {
+    setCurrentPage(1);
   }, [
-    searchTerm,
+    debouncedSearch,
     subscriptionFilter,
     statusFilter,
     timeFilter,
-    customDateFrom,
-    customDateTo,
+    customStartDate,
+    customEndDate,
   ]);
 
-  const totalPages = Math.ceil(filteredPayments.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedPayments = filteredPayments.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
+  // Build time range parameter
+  const buildTimeRange = () => {
+    if (timeFilter === "custom" && customStartDate && customEndDate) {
+      return `${customStartDate}_${customEndDate}`;
+    }
+    return timeFilter;
+  };
+
+  // API call parameters
+  const queryParams = {
+    page: currentPage,
+    limit: itemsPerPage,
+    search: debouncedSearch,
+    subscription: subscriptionFilter,
+    paymentStatus: statusFilter,
+    timeRange: buildTimeRange(),
+  };
+
+  // Fetch payments with RTK Query
+  const { data, isLoading, isFetching, error } = useGetAllPaymentsQuery(queryParams);
+
+  // Extract data from response
+  const payments = data?.data || [];
+  const totalPayments = data?.pagination?.totalItems || 0;
+  const totalPages = data?.pagination?.totalPages || 1;
 
   const getSubscriptionBadgeColor = (subscription) => {
     switch (subscription.toLowerCase()) {
       case "monthly":
-        return "border-[1px] border-orange-400 text-orange-400 bg-white rounded-full"; // Brighter and more distinct
+        return "border-[1px] border-orange-400 text-orange-400 bg-white rounded-full";
       case "yearly":
-        return "border-[1px] border-blue-400 text-blue-400 bg-white rounded-full px-4"; // Changed to blue for distinction
+        return "border-[1px] border-blue-400 text-blue-400 bg-white rounded-full px-4";
       default:
         return "border-[1px] border-gray-500 text-gray-500 bg-white rounded-full";
     }
@@ -294,6 +101,86 @@ export default function PaymentsPage() {
     }
   };
 
+  // Pagination component
+  const renderPaginationButtons = () => {
+    if (totalPages <= 1) return null;
+
+    const buttons = [];
+    const maxVisibleButtons = 5;
+    let startPage = Math.max(
+      1,
+      currentPage - Math.floor(maxVisibleButtons / 2)
+    );
+    let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
+
+    if (endPage - startPage + 1 < maxVisibleButtons) {
+      startPage = Math.max(1, endPage - maxVisibleButtons + 1);
+    }
+
+    if (startPage > 1) {
+      buttons.push(
+        <Button
+          key={1}
+          variant="outline"
+          size="sm"
+          onClick={() => setCurrentPage(1)}
+          disabled={isFetching}
+          className="w-8 h-8 p-0"
+        >
+          1
+        </Button>
+      );
+      if (startPage > 2) {
+        buttons.push(
+          <span key="ellipsis1" className="px-2 text-muted-foreground">
+            ...
+          </span>
+        );
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      buttons.push(
+        <Button
+          key={i}
+          variant={currentPage === i ? "default" : "outline"}
+          size="sm"
+          onClick={() => setCurrentPage(i)}
+          disabled={isFetching}
+          className={`w-8 h-8 p-0 ${
+            currentPage === i ? "bg-[#4FB2F3] hover:bg-[#4FB2F3]" : ""
+          }`}
+        >
+          {i}
+        </Button>
+      );
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        buttons.push(
+          <span key="ellipsis2" className="px-2 text-muted-foreground">
+            ...
+          </span>
+        );
+      }
+      buttons.push(
+        <Button
+          key={totalPages}
+          variant="outline"
+          size="sm"
+          onClick={() => setCurrentPage(totalPages)}
+          disabled={isFetching}
+          className="w-8 h-8 p-0"
+        >
+          {totalPages}
+        </Button>
+      );
+    }
+
+    return buttons;
+  };
+
   return (
     <div className=" mx-auto  space-y-4">
       <div className="flex items-center justify-between">
@@ -303,7 +190,7 @@ export default function PaymentsPage() {
       </div>
 
       <Card className="rounded-lg">
-        <CardContent className="">
+        <CardContent className="pt-6">
           <div className="flex flex-col gap-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -347,44 +234,28 @@ export default function PaymentsPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="1day">1 Day</SelectItem>
-                  <SelectItem value="7days">7 Days</SelectItem>
-                  <SelectItem value="1month">1 Month</SelectItem>
+                  <SelectItem value="day">1 Day</SelectItem>
+                  <SelectItem value="week">7 Days</SelectItem>
+                  <SelectItem value="month">1 Month</SelectItem>
                   <SelectItem value="custom">Custom</SelectItem>
                 </SelectContent>
               </Select>
 
               {timeFilter === "custom" && (
-                <>
+                <div className="flex gap-2">
                   <Input
                     type="date"
-                    value={
-                      customDateFrom
-                        ? customDateFrom.toISOString().split("T")[0]
-                        : ""
-                    }
-                    onChange={(e) =>
-                      setCustomDateFrom(
-                        e.target.value ? new Date(e.target.value) : undefined
-                      )
-                    }
+                    value={customStartDate}
+                    onChange={(e) => setCustomStartDate(e.target.value)}
                     className="w-[150px]"
                   />
                   <Input
                     type="date"
-                    value={
-                      customDateTo
-                        ? customDateTo.toISOString().split("T")[0]
-                        : ""
-                    }
-                    onChange={(e) =>
-                      setCustomDateTo(
-                        e.target.value ? new Date(e.target.value) : undefined
-                      )
-                    }
+                    value={customEndDate}
+                    onChange={(e) => setCustomEndDate(e.target.value)}
                     className="w-[150px]"
                   />
-                </>
+                </div>
               )}
             </div>
           </div>
@@ -393,123 +264,121 @@ export default function PaymentsPage() {
 
       <Card className="rounded-lg">
         <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="text-center">Invoice Number</TableHead>
-                <TableHead className="text-center">Transaction ID</TableHead>
-                <TableHead className="text-center">Payment Date</TableHead>
-                <TableHead className="text-center">Amounts</TableHead>
-                <TableHead className="text-center">Payment Method</TableHead>
-                <TableHead className="text-center">User ID</TableHead>
-                <TableHead className="text-center">Subscription</TableHead>
-                <TableHead className="text-center">Payment Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {paginatedPayments.map((payment) => (
-                <TableRow key={payment.id}>
-                  <TableCell className="font-medium text-center">
-                    {payment.invoiceNumber}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {payment.transactionId}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {payment.paymentDate}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    €{payment.amount.toFixed(2)}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {payment.paymentMethod}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {payment.userId}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    <Badge
-                      variant="secondary"
-                      className={getSubscriptionBadgeColor(
-                        payment.subscription
-                      )}
-                    >
-                      {payment.subscription}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-center">
-                    <Badge
-                      variant="secondary"
-                      className={getStatusBadgeColor(payment.paymentStatus)}
-                    >
-                      {payment.paymentStatus}
-                    </Badge>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          {isLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="h-8 w-8 animate-spin text-[#4FB2F3]" />
+              <span className="ml-2">Loading payments...</span>
+            </div>
+          ) : error ? (
+            <div className="flex items-center justify-center py-20 text-red-500">
+              Error loading payments. Please try again.
+            </div>
+          ) : payments.length === 0 ? (
+            <div className="flex items-center justify-center py-20 text-muted-foreground">
+              No payments found matching your criteria
+            </div>
+          ) : (
+            <div className="relative">
+               {isFetching && (
+                <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10 rounded-lg">
+                  <Loader2 className="h-6 w-6 animate-spin text-[#4FB2F3]" />
+                </div>
+              )}
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-center">Invoice Number</TableHead>
+                    <TableHead className="text-center">Transaction ID</TableHead>
+                    <TableHead className="text-center">Payment Date</TableHead>
+                    <TableHead className="text-center">Amounts</TableHead>
+                    <TableHead className="text-center">Payment Method</TableHead>
+                    <TableHead className="text-center">User ID</TableHead>
+                    <TableHead className="text-center">Subscription</TableHead>
+                    <TableHead className="text-center">Payment Status</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {payments.map((payment) => (
+                    <TableRow key={payment._id}>
+                      <TableCell className="font-medium text-center">
+                        {payment.invoiceNumber}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {payment.transactionID}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {new Date(payment.paymentDate).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        €{payment.amounts.toFixed(2)}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {payment.paymentMethod}
+                      </TableCell>
+                      <TableCell className="text-center">{payment.userID}</TableCell>
+                      <TableCell className="text-center">
+                        <Badge
+                          variant="secondary"
+                          className={getSubscriptionBadgeColor(
+                            payment.subscription
+                          )}
+                        >
+                          {payment.subscription}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Badge
+                          variant="secondary"
+                          className={getStatusBadgeColor(payment.paymentStatus)}
+                        >
+                          {payment.paymentStatus}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
         </CardContent>
       </Card>
 
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-muted-foreground">
-          Showing {startIndex + 1} to{" "}
-          {Math.min(startIndex + itemsPerPage, filteredPayments.length)} of{" "}
-          {filteredPayments.length} payments
-        </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-          >
-            <ChevronLeft className="h-4 w-4" />
-            Previous
-          </Button>
-          <div className="flex items-center gap-1">
-            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-              const pageNum = i + 1;
-              return (
-                <Button
-                  key={pageNum}
-                  variant={currentPage === pageNum ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setCurrentPage(pageNum)}
-                  className="w-8 h-8 p-0 bg-[#4FB2F3] hover:bg-[#4FB2F3]"
-                >
-                  {pageNum}
-                </Button>
-              );
-            })}
-            {totalPages > 5 && (
-              <>
-                <span className="text-muted-foreground">...</span>
-                <Button
-                  variant={currentPage === totalPages ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setCurrentPage(totalPages)}
-                  className="w-8 h-8 p-0 bg-[#4FB2F3] hover:bg-[#4FB2F3]"
-                >
-                  {totalPages}
-                </Button>
-              </>
-            )}
+      {!isLoading && payments.length > 0 && (
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-muted-foreground">
+            Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+            {Math.min(currentPage * itemsPerPage, totalPayments)} of {totalPayments}{" "}
+            payments
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            }
-            disabled={currentPage === totalPages}
-          >
-            Next
-            <ChevronRight className="h-4 w-4" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1 || isFetching}
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Previous
+            </Button>
+
+            <div className="flex items-center gap-1">
+              {renderPaginationButtons()}
+            </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages || isFetching}
+            >
+              Next
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
