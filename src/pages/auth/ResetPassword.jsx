@@ -81,16 +81,6 @@ const ResetPassword = () => {
       if (res) {
         toast.success("Password reset successfully!");
 
-        // Local storage থেকে সবকিছু remove করুন
-        localStorage.removeItem("resetEmail");
-        localStorage.removeItem("forgotPasswordEmail");
-        localStorage.removeItem("otpVerified");
-        localStorage.removeItem("resetToken");
-
-        // Session storage থেকেও remove করুন (যদি থাকে)
-        sessionStorage.removeItem("resetEmail");
-        sessionStorage.removeItem("forgotPasswordEmail");
-
         navigate("/signin");
       }
     } catch (err) {
