@@ -38,7 +38,7 @@ export const authApi = baseApi.injectEndpoints({
       invalidatesTags: ["auth"],
     }),
 
-    // 04. get user by token - for protected routes
+    // 04. get user by token
     getUserByToken: builder.query({
       query: () => ({ url: `/user/my-profile`, method: "GET" }),
       providesTags: ["auth"],
@@ -54,7 +54,7 @@ export const authApi = baseApi.injectEndpoints({
       invalidatesTags: ["auth"],
     }),
 
-    // 06. forgot password - IMPROVED to handle token response
+    // 06. forgot password
     forgotPassword: builder.mutation({
       query: (data) => ({
         url: `/auth/forgot-password`,
@@ -62,74 +62,58 @@ export const authApi = baseApi.injectEndpoints({
         body: data,
       }),
       invalidatesTags: ["auth"],
-      // Handle response to store reset token
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+      async onQueryStarted(arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
 
-          // Store reset password token if provided in response
-          if (data?.resetPasswordToken) {
-            localStorage.setItem("resetPasswordToken", data.resetPasswordToken);
-          } else if (data?.data?.resetPasswordToken) {
-            localStorage.setItem(
-              "resetPasswordToken",
-              data.data.resetPasswordToken
-            );
-          }
+          // store reset token
+          const token =
+            data?.resetPasswordToken || data?.data?.resetPasswordToken;
+          if (token) localStorage.setItem("resetPasswordToken", token);
 
-          // Store email for the flow
-          if (arg.email) {
-            localStorage.setItem("resetEmail", arg.email);
-          }
+          // store email
+          if (arg.email) localStorage.setItem("resetEmail", arg.email);
         } catch (error) {
-          // console.error("❌ Forgot password error:", error);
+          console.error("❌ Forgot password error:", error);
         }
       },
     }),
 
-    // 07. verify email/OTP - IMPROVED error handling
+    // 07. verify email/OTP
     verifyEmail: builder.mutation({
       query: ({ otp, email }) => {
         const isFromForgotPassword = !!email;
         const resetToken = localStorage.getItem("resetPasswordToken");
 
         if (isFromForgotPassword) {
-          // For forgot password verification
+          // for forgot password
           return {
             url: `/auth/verify-email-otp`,
             method: "POST",
-            body: { otp },
+            body: { email, otp },
             headers: resetToken
               ? { Authorization: `Bearer ${resetToken}` }
               : {},
           };
         }
 
-        // For regular email verification (signup)
+        // for regular signup verification
         return {
           url: `/auth/verify-email`,
           method: "POST",
-          body: { otp },
+          body: { email, otp },
         };
       },
       invalidatesTags: ["auth"],
-      async onQueryStarted({ email }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ email }, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-
-          // Update token if provided in verification response
-          if (email && data?.resetPasswordToken) {
-            localStorage.setItem("resetPasswordToken", data.resetPasswordToken);
-          } else if (email && data?.data?.resetPasswordToken) {
-            localStorage.setItem(
-              "resetPasswordToken",
-              data.data.resetPasswordToken
-            );
+          const token =
+            data?.resetPasswordToken || data?.data?.resetPasswordToken;
+          if (email && token) {
+            localStorage.setItem("resetPasswordToken", token);
           }
         } catch (error) {
-          // console.error("❌ Verify email error:", error);
-
-          // If token is invalid, clear it
           if (
             error?.data?.message?.includes("invalid") ||
             error?.data?.message?.includes("expired")
@@ -141,10 +125,34 @@ export const authApi = baseApi.injectEndpoints({
       },
     }),
 
-    // 10. change password (for logged-in users)
+    // 08. reset password (uses stored token)
+    resetPassword: builder.mutation({
+      query: (data) => {
+        const resetToken = localStorage.getItem("resetPasswordToken");
+        return {
+          url: `/auth/reset-password`,
+          method: "POST",
+          body: data,
+          headers: resetToken ? { Authorization: `Bearer ${resetToken}` } : {},
+        };
+      },
+      invalidatesTags: ["auth"],
+      async onQueryStarted(arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          console.log("✅ Password reset successful!");
+          localStorage.removeItem("resetPasswordToken");
+          localStorage.removeItem("resetEmail");
+        } catch (error) {
+          console.error("❌ Reset password error:", error);
+        }
+      },
+    }),
+
+    // 09. change password (for logged-in user)
     changePassword: builder.mutation({
       query: (data) => ({
-        url: `users/update-admin-password`,
+        url: `/users/update-admin-password`,
         method: "POST",
         body: data,
       }),
@@ -159,6 +167,7 @@ export const {
   useLogoutMutation,
   useForgotPasswordMutation,
   useVerifyEmailMutation,
+  useResetPasswordMutation,
   useChangePasswordMutation,
   useGetUserByTokenQuery,
   useUpdateUserMutation,
