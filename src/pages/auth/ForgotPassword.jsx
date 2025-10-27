@@ -16,19 +16,29 @@ const ForgotPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!email) {
       toast.error("Please enter your email address.");
       return;
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
     try {
       const res = await forgotPassword({ email }).unwrap();
-      if (res) {
-        toast.success("OTP sent successfully! Please check your email.");
-        navigate("/otpverification");
-      }
+      toast.success("OTP sent successfully! Please check your email.");
+      navigate("/otpverification");
     } catch (error) {
-      toast.error(error?.data?.message || "An error occurred.");
+      console.error("Forgot password error:", error);
+      const errorMessage =
+        error?.data?.message ||
+        error?.error?.data?.message ||
+        "Failed to send OTP. Please try again.";
+      toast.error(errorMessage);
     }
   };
 
@@ -36,22 +46,18 @@ const ForgotPassword = () => {
     <div className="min-h-screen flex items-center justify-center p-6">
       <Toaster richColors />
       <div className="w-full max-w-6xl flex items-center justify-center gap-10">
-        {/* Logo Section */}
         <div className="hidden lg:flex items-center justify-center flex-1">
-          <div className="border-black">
-            <img src={logo} alt="Logo" className="max-w-sm h-96" />
-          </div>
+          <img src={logo} alt="Logo" className="max-w-sm h-96" />
         </div>
 
-        {/* Forgot Password Form */}
         <div className="w-full max-w-lg mx-auto">
           <Card>
             <CardContent className="pt-8 pb-10 px-8">
-              {/* Back Button + Title */}
               <div className="flex items-center gap-3 mb-6">
                 <button
                   onClick={() => navigate("/signin")}
                   className="text-gray-600 hover:text-gray-800 transition-colors"
+                  type="button"
                 >
                   <ArrowLeft className="h-6 w-6" />
                 </button>
@@ -60,15 +66,12 @@ const ForgotPassword = () => {
                 </h1>
               </div>
 
-              {/* Description */}
               <p className="text-base text-gray-600 mb-6 leading-relaxed">
                 Please enter your email address to receive a One Time Password
                 (OTP) for resetting your password.
               </p>
 
-              {/* Form */}
               <form onSubmit={handleSubmit} className="space-y-5">
-                {/* Email Field */}
                 <div className="space-y-2">
                   <Label
                     htmlFor="email"
@@ -85,13 +88,13 @@ const ForgotPassword = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     className="h-12 text-[16px] border-gray-300 focus:border-[#2C6E3E] focus:ring-[#2C6E3E]"
                     required
+                    disabled={isLoading}
                   />
                 </div>
 
-                {/* Submit Button */}
                 <Button
                   type="submit"
-                  className="w-full h-12 text-[16px] bg-gradient-to-r from-[#E32B6B] to-[#FB4A3A] text-white font-semibold transition-all duration-200"
+                  className="w-full h-12 text-[16px] bg-gradient-to-r from-[#E32B6B] to-[#FB4A3A] text-white font-semibold transition-all duration-200 disabled:opacity-50"
                   disabled={isLoading}
                 >
                   {isLoading ? "Sending..." : "Send OTP"}

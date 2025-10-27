@@ -12,7 +12,7 @@ import {
 import { Toaster, toast } from "sonner";
 
 const OTPVerification = () => {
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [otp, setOtp] = useState(Array(6).fill(""));
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const inputRefs = useRef([]);
@@ -35,17 +35,15 @@ const OTPVerification = () => {
   };
 
   const handleKeyDown = (index, e) => {
-    if (e.key === "Backspace" && !otp[index] && index > 0) {
+    if (e.key === "Backspace" && !otp[index] && index > 0)
       inputRefs.current[index - 1]?.focus();
-    }
+
     if (e.key === "v" && (e.ctrlKey || e.metaKey)) {
       e.preventDefault();
       navigator.clipboard.readText().then((text) => {
         const digits = text.replace(/\D/g, "").slice(0, 6);
         const newOtp = [...otp];
-        for (let i = 0; i < digits.length && i < 6; i++) {
-          newOtp[i] = digits[i];
-        }
+        for (let i = 0; i < digits.length; i++) newOtp[i] = digits[i];
         setOtp(newOtp);
         inputRefs.current[Math.min(digits.length, 5)]?.focus();
       });
@@ -55,8 +53,15 @@ const OTPVerification = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const otpString = otp.join("");
+
     if (otpString.length !== 6) {
       setError("Please enter all 6 digits");
+      return;
+    }
+
+    const resetEmail = localStorage.getItem("resetEmail");
+    if (!resetEmail) {
+      toast.error("Email not found. Please go back to forgot password.");
       return;
     }
 
@@ -64,34 +69,19 @@ const OTPVerification = () => {
     setError("");
 
     try {
-      const resetEmail = localStorage.getItem("resetEmail");
-      if (!resetEmail) {
-        toast.error("Email not found. Please go back to forgot password.");
-        setIsLoading(false);
-        return;
-      }
-
-      const res = await verifyEmail({
-        otp: otpString,
-        email: resetEmail,
-      }).unwrap();
-
-      if (res) {
-        toast.success("OTP verified successfully!");
-        navigate("/resetPassword");
-      }
+      await verifyEmail({ email: resetEmail, otp: otpString }).unwrap();
+      toast.success("OTP verified successfully!");
+      navigate("/resetPassword");
     } catch (err) {
       toast.error(err?.data?.message || "Invalid OTP. Please try again.");
-      setOtp(["", "", "", "", "", ""]);
+      setOtp(Array(6).fill(""));
       inputRefs.current[0]?.focus();
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleBackToForgotPassword = () => {
-    navigate("/forgotpass");
-  };
+  const handleBackToForgotPassword = () => navigate("/forgotpass");
 
   const handleResendOTP = async () => {
     const resetEmail = localStorage.getItem("resetEmail");
@@ -99,6 +89,7 @@ const OTPVerification = () => {
       toast.error("Email not found. Please go back to forgot password.");
       return;
     }
+
     try {
       await forgotPassword({ email: resetEmail }).unwrap();
       toast.success("OTP resent successfully! Please check your email.");
@@ -114,16 +105,10 @@ const OTPVerification = () => {
     <div className="min-h-screen flex items-center justify-center p-6">
       <Toaster richColors />
       <div className="w-full max-w-5xl flex items-center justify-center gap-16">
-        {/* Left Logo Section */}
         <div className="hidden lg:flex items-center justify-center flex-1">
-          <div className="relative">
-            <div className="pr-12">
-              <img src={logo} alt="Logo" className="max-w-sm h-96" />
-            </div>
-          </div>
+          <img src={logo} alt="Logo" className="max-w-sm h-96" />
         </div>
 
-        {/* OTP Verification Form */}
         <div className="w-full max-w-md">
           <Card className="shadow-lg">
             <CardHeader className="pb-6">
