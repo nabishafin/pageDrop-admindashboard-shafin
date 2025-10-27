@@ -8,6 +8,7 @@ import logo from "../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
 import { useResetPasswordMutation } from "../../redux/features/auth/authApi";
 import { Toaster, toast } from "sonner";
+import { useSelector } from "react-redux";
 
 const ResetPassword = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +21,7 @@ const ResetPassword = () => {
 
   const navigate = useNavigate();
   const [resetPassword, { isLoading }] = useResetPasswordMutation();
+  const { email: resetEmail } = useSelector((state) => state.forgotPassword);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -60,27 +62,41 @@ const ResetPassword = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    const resetPasswordToken = localStorage.getItem("resetPasswordToken");
-    if (!resetPasswordToken) {
-      toast.error("Reset token not found. Please restart the forgot password process.");
+    if (!resetEmail) {
+      toast.error(
+        "Email not found. Please restart the forgot password process."
+      );
       navigate("/forgotpass");
       return;
     }
 
     try {
-      const res = await resetPassword({
-        newPassword: formData.newPassword,
-        confirmPassword: formData.confirmPassword,
-      }).unwrap();
+      const payload = {
+        email: resetEmail,
+        password: formData.newPassword,
+      };
+
+      const res = await resetPassword(payload).unwrap();
 
       if (res) {
         toast.success("Password reset successfully!");
-        localStorage.removeItem("resetPasswordToken");
+
+        // Local storage থেকে সবকিছু remove করুন
         localStorage.removeItem("resetEmail");
+        localStorage.removeItem("forgotPasswordEmail");
+        localStorage.removeItem("otpVerified");
+        localStorage.removeItem("resetToken");
+
+        // Session storage থেকেও remove করুন (যদি থাকে)
+        sessionStorage.removeItem("resetEmail");
+        sessionStorage.removeItem("forgotPasswordEmail");
+
         navigate("/signin");
       }
     } catch (err) {
-      toast.error(err?.data?.message || "Failed to reset password. Please try again.");
+      toast.error(
+        err?.data?.message || "Failed to reset password. Please try again."
+      );
     }
   };
 
@@ -88,14 +104,13 @@ const ResetPassword = () => {
     navigate("/otpverification");
   };
 
-
   return (
-    <div className="min-h-screen  flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4">
       <Toaster richColors />
       <div className="w-full max-w-5xl flex items-center justify-center gap-12">
         {/* Logo Section */}
         <div className="hidden lg:flex items-center justify-center flex-1">
-          <div className="relative  pr-10 ">
+          <div className="relative pr-10">
             <img src={logo} alt="" className="h-96" />
           </div>
         </div>
@@ -156,9 +171,7 @@ const ResetPassword = () => {
                     </button>
                   </div>
                   {errors.newPassword && (
-                    <p className="text-xs text-red-500">
-                      {errors.newPassword}
-                    </p>
+                    <p className="text-xs text-red-500">{errors.newPassword}</p>
                   )}
                 </div>
 
@@ -204,13 +217,6 @@ const ResetPassword = () => {
                   )}
                 </div>
 
-                {/* General Error */}
-                {errors.general && (
-                  <p className="text-sm text-red-500 text-center">
-                    {errors.general}
-                  </p>
-                )}
-
                 {/* Reset Password Button */}
                 <Button
                   type="submit"
@@ -233,4 +239,3 @@ const ResetPassword = () => {
 };
 
 export default ResetPassword;
-

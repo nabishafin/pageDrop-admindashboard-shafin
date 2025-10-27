@@ -98,19 +98,16 @@ export const authApi = baseApi.injectEndpoints({
     // 08. reset password
     resetPassword: builder.mutation({
       query: (data) => {
-        const resetToken = localStorage.getItem("resetPasswordToken");
         return {
           url: `/auth/reset-password`,
           method: "POST",
           body: data,
-          headers: resetToken ? { Authorization: `Bearer ${resetToken}` } : {},
         };
       },
       invalidatesTags: ["auth"],
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
-          localStorage.removeItem("resetPasswordToken");
           dispatch(clearResetEmail());
         } catch (error) {
           console.error("Reset password error:", error);
