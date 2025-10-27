@@ -29,7 +29,7 @@ const ForgotPassword = () => {
     }
 
     try {
-      const res = await forgotPassword({ email }).unwrap();
+      await forgotPassword({ email }).unwrap();
       toast.success("OTP sent successfully! Please check your email.");
       navigate("/otpverification");
     } catch (error) {

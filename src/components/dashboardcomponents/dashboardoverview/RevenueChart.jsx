@@ -13,7 +13,7 @@ import {
 } from "recharts";
 
 const RevenueChart = () => {
-  const [viewType, setViewType] = useState("area"); // 'line' or 'area'
+  const [viewType] = useState("area"); // 'line' or 'area'
 
   // Sample data
   const monthlyData = [

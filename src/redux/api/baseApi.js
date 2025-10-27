@@ -6,7 +6,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL || "https://jersey-emissions-vbul
 // Create a base query with automatic token refresh
 const baseQuery = fetchBaseQuery({
   baseUrl: BASE_URL,
-  prepareHeaders: (headers, { getState }) => {
+  prepareHeaders: (headers) => {
     const token = localStorage.getItem("token");
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
@@ -82,7 +82,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
         } else {
           throw new Error("Refresh failed - no data returned");
         }
-      } catch (error) {
+      } catch (error) { // eslint-disable-line no-unused-vars
         // Refresh failed, logout user
         api.dispatch(logout());
         localStorage.removeItem("token");

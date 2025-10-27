@@ -59,7 +59,7 @@ const settingsSubItems = [
 ];
 
 // Logo Section
-function LogoSection({ name = "Dance Attix", title = "Admin Panel" }) {
+function LogoSection() {
   return (
     <Link to="/dashboard">
       <div className="flex items-center p-4 sm:p-6 gap-2 justify-center">
@@ -73,7 +73,6 @@ function LogoSection({ name = "Dance Attix", title = "Admin Panel" }) {
 // Sidebar Navigation List with Admin, Email, and Logo above Logout
 function SidebarNav({
   onLinkClick,
-  isMobile = false,
   email = "admin@example.com",
 }) {
   const location = useLocation();

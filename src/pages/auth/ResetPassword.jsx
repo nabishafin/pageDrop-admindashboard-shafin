@@ -88,9 +88,6 @@ const ResetPassword = () => {
     navigate("/otpverification");
   };
 
-  const handleBackToSignIn = () => {
-    navigate("/signin");
-  };
 
   return (
     <div className="min-h-screen  flex items-center justify-center p-4">

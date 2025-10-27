@@ -35,7 +35,7 @@ export default function SubscriptionPlans({ plans, onUpdatePlan }) {
       await onUpdatePlan(updatedPlan);
       setIsEditDialogOpen(false);
       setEditingPlan(null);
-    } catch (error) {
+    } catch (error) { // eslint-disable-line no-unused-vars
       // Error handling is done in the parent component
     } finally {
       setIsLoading(false);

@@ -72,7 +72,7 @@ export default function AllUsers() {
   };
 
   // Fetch users with RTK Query
-  const { data, isLoading, isFetching, error } = useGetUsersQuery(queryParams);
+  const { data, isLoading, isFetching, error: queryError } = useGetUsersQuery(queryParams);
 
   // Extract data from response
   const users = data?.data?.users || [];
@@ -90,7 +90,7 @@ export default function AllUsers() {
         month: "short",
         year: "numeric",
       });
-    } catch (error) {
+    } catch (error) { // eslint-disable-line no-unused-vars
       return "N/A";
     }
   };
@@ -280,7 +280,7 @@ export default function AllUsers() {
               <Loader2 className="h-8 w-8 animate-spin text-[#4FB2F3]" />
               <span className="ml-2">Loading users...</span>
             </div>
-          ) : error ? (
+          ) : queryError ? (
             <div className="flex items-center justify-center py-20 text-red-500">
               Error loading users. Please try again.
             </div>

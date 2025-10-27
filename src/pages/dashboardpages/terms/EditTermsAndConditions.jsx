@@ -7,7 +7,7 @@ const EditTermsAndConditions = () => {
   const navigate = useNavigate();
   const editor = useRef(null);
   const [content, setContent] = useState("");
-  const [isMounted, setIsMounted] = useState(true); // demo purpose
+  const [isMounted] = useState(true); // demo purpose
 
   // Editor Config (white/light theme)
   const config = {

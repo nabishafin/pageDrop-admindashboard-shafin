@@ -11,8 +11,6 @@ export default function SubscriptionTabs() {
   // ✅ Fetch data first
   const {
     data: subscriptionPlans,
-    isLoading,
-    error,
   } = useGetSubscriptionPlansQuery();
   const [updateSubscriptionPlan] = useUpdateSubscriptionPlanMutation();
 
