@@ -1,4 +1,8 @@
 import baseApi from "@/redux/api/baseApi";
+import {
+  setResetEmail,
+  clearResetEmail,
+} from "@/redux/slices/forgotPasswordSlice";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -62,7 +66,7 @@ export const authApi = baseApi.injectEndpoints({
         body: data,
       }),
       invalidatesTags: ["auth"],
-      async onQueryStarted(arg, { queryFulfilled }) {
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
 
@@ -74,7 +78,7 @@ export const authApi = baseApi.injectEndpoints({
           if (token) localStorage.setItem("resetPasswordToken", token);
 
           // Store email for OTP verification
-          if (arg.email) localStorage.setItem("resetEmail", arg.email);
+          if (arg.email) dispatch(setResetEmail(arg.email));
         } catch (error) {
           console.error("Forgot password error:", error);
         }
@@ -103,11 +107,11 @@ export const authApi = baseApi.injectEndpoints({
         };
       },
       invalidatesTags: ["auth"],
-      async onQueryStarted(arg, { queryFulfilled }) {
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           localStorage.removeItem("resetPasswordToken");
-          localStorage.removeItem("resetEmail");
+          dispatch(clearResetEmail());
         } catch (error) {
           console.error("Reset password error:", error);
         }

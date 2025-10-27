@@ -11,6 +11,7 @@ import {
 } from "redux-persist";
 import sessionStorage from "redux-persist/lib/storage/session";
 import authReducer from "./slices/authSlice";
+import forgotPasswordReducer from "./slices/forgotPasswordSlice";
 import baseApi from "./api/baseApi";
 
 const persistConfig = {
@@ -24,6 +25,7 @@ const persistedReducer = persistReducer(persistConfig, authReducer);
 export const store = configureStore({
   reducer: {
     auth: persistedReducer,
+    forgotPassword: forgotPasswordReducer,
     [baseApi.reducerPath]: baseApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>

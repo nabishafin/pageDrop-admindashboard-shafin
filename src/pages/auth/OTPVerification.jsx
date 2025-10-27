@@ -10,6 +10,7 @@ import {
   useForgotPasswordMutation,
 } from "../../redux/features/auth/authApi";
 import { Toaster, toast } from "sonner";
+import { useSelector } from "react-redux";
 
 const OTPVerification = () => {
   const [otp, setOtp] = useState(Array(6).fill(""));
@@ -17,6 +18,7 @@ const OTPVerification = () => {
   const [error, setError] = useState("");
   const inputRefs = useRef([]);
   const navigate = useNavigate();
+  const { email: resetEmail } = useSelector((state) => state.forgotPassword);
 
   const [verifyEmail] = useVerifyEmailMutation();
   const [forgotPassword] = useForgotPasswordMutation();
@@ -59,7 +61,6 @@ const OTPVerification = () => {
       return;
     }
 
-    const resetEmail = localStorage.getItem("resetEmail");
     if (!resetEmail) {
       toast.error("Email not found. Please go back to forgot password.");
       return;
@@ -84,7 +85,6 @@ const OTPVerification = () => {
   const handleBackToForgotPassword = () => navigate("/forgotpass");
 
   const handleResendOTP = async () => {
-    const resetEmail = localStorage.getItem("resetEmail");
     if (!resetEmail) {
       toast.error("Email not found. Please go back to forgot password.");
       return;
