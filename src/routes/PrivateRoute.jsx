@@ -8,7 +8,14 @@ const PrivateRoute = () => {
     return <div>Loading...</div>; // Or a spinner component
   }
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/signin" />;
+  return isAuthenticated ? (
+    <Outlet />
+  ) : (
+    <Navigate
+      to="/
+  "
+    />
+  );
 };
 
 export default PrivateRoute;

@@ -96,7 +96,7 @@ export const authApi = baseApi.injectEndpoints({
         if (isFromForgotPassword) {
           // For forgot password verification
           return {
-            url: `/auth/verify-email`,
+            url: `/auth/verify-email-otp`,
             method: "POST",
             body: { otp },
             headers: resetToken
@@ -141,107 +141,6 @@ export const authApi = baseApi.injectEndpoints({
       },
     }),
 
-    // 08. resend otp - FIXED for proper token update
-    resendOtp: builder.mutation({
-      query: (email) => {
-        if (email && typeof email === "string") {
-          // For forgot password flow - resend with reset token
-          const resetToken = localStorage.getItem("resetPasswordToken");
-
-          return {
-            url: `/auth/resend-otp`,
-            method: "POST",
-            body: { email },
-            headers: resetToken
-              ? { Authorization: `Bearer ${resetToken}` }
-              : {},
-          };
-        }
-
-        // For regular signup verification
-        return {
-          url: `/auth/resend-otp`,
-          method: "POST",
-          body: {},
-        };
-      },
-      invalidatesTags: ["auth"],
-      // IMPORTANT: Handle response IMMEDIATELY to update token
-      transformResponse: (response, meta, arg) => {
-        // If this is forgot password flow and we got a new token
-        if (arg && typeof arg === "string") {
-          // Check for token in response.data.resetPasswordToken (actual backend response)
-          const newToken =
-            response?.data?.resetPasswordToken || response?.resetPasswordToken;
-
-          if (newToken) {
-            const oldToken = localStorage.getItem("resetPasswordToken");
-
-            // Update token immediately
-            localStorage.setItem("resetPasswordToken", newToken);
-          } else {
-          }
-        }
-
-        return response;
-      },
-      // BACKUP: Also handle in onQueryStarted as fallback
-      async onQueryStarted(email, { dispatch, queryFulfilled }) {
-        try {
-          const oldToken = localStorage.getItem("resetPasswordToken");
-
-          const { data } = await queryFulfilled;
-
-          // Double-check token update - Check both locations
-          if (email && typeof email === "string") {
-            const newTokenFromResponse =
-              data?.data?.resetPasswordToken || data?.resetPasswordToken;
-
-            if (newTokenFromResponse) {
-              const currentToken = localStorage.getItem("resetPasswordToken");
-
-              if (currentToken !== newTokenFromResponse) {
-                localStorage.setItem(
-                  "resetPasswordToken",
-                  newTokenFromResponse
-                );
-              }
-            } else {
-            }
-          }
-        } catch (error) {
-          // console.error("❌ Resend OTP error:", error);
-          // console.error("📋 Error details:", error?.data);
-        }
-      },
-    }),
-
-    // 09. reset password - Uses stored reset token
-    resetPassword: builder.mutation({
-      query: (data) => {
-        const resetToken = localStorage.getItem("resetPasswordToken");
-
-        return {
-          url: `/auth/reset-password`,
-          method: "POST",
-          body: data,
-          headers: resetToken ? { Authorization: `Bearer ${resetToken}` } : {},
-        };
-      },
-      invalidatesTags: ["auth"],
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-
-          // Clean up tokens after successful reset
-          localStorage.removeItem("resetPasswordToken");
-          localStorage.removeItem("resetEmail");
-        } catch (error) {
-          // console.error("❌ Reset password error:", error);
-        }
-      },
-    }),
-
     // 10. change password (for logged-in users)
     changePassword: builder.mutation({
       query: (data) => ({
@@ -260,8 +159,6 @@ export const {
   useLogoutMutation,
   useForgotPasswordMutation,
   useVerifyEmailMutation,
-  useResetPasswordMutation,
-  useResendOtpMutation,
   useChangePasswordMutation,
   useGetUserByTokenQuery,
   useUpdateUserMutation,
