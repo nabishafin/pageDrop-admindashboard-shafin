@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,133 +19,184 @@ import {
   DollarSign,
   Calendar,
   ChevronDown,
-  ChevronRight,
+  Loader2,
 } from "lucide-react";
+import { useGetAdminOverviewQuery } from "@/redux/features/adminOverview/adminOverviewApi";
 
-export default function Dashboard() {
+// Helper to format percentage change
+const formatChange = (change) => {
+  if (!change) return null;
+  const isPositive = change.percentage >= 0;
+  const colorClass =
+    change.color === "green" ? "text-green-600" : "text-red-600";
+
+  return (
+    <div className={`flex items-center text-xs ${colorClass}`}>
+      {isPositive ? (
+        <TrendingUp className="h-3 w-3 mr-1" />
+      ) : (
+        <TrendingDown className="h-3 w-3 mr-1" />
+      )}
+      {isPositive ? "+" : ""}
+      {change.percentage}%
+    </div>
+  );
+};
+
+export default function Analytics() {
+  const [timeFilter, setTimeFilter] = useState("all");
+  const [customFrom, setCustomFrom] = useState("");
+  const [customTo, setCustomTo] = useState("");
+
+  const { data, isLoading, isError, refetch } = useGetAdminOverviewQuery({
+    timeFilter:
+      timeFilter === "custom" ? `${customFrom}_${customTo}` : timeFilter,
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [timeFilter, customFrom, customTo, refetch]);
+
+  const handleFilterChange = (filter) => {
+    setTimeFilter(filter);
+  };
+
+  const overviewData = data?.data;
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="text-center py-8 text-red-500">
+        Error loading analytics data.
+      </div>
+    );
+  }
+
   return (
     <div className=" ">
-      {/* Analytics Dashboard Section */}
       <main className="">
         <div className="mb-8">
           <div className="flex items-center justify-between my-8">
             <h2 className="text-4xl font-bold">Analytics Dashboard</h2>
-            <DropdownMenu className="">
+            <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="lg">
-                  All <ChevronDown className=" ml-2" />
+                  {timeFilter === "all"
+                    ? "All"
+                    : timeFilter.charAt(0).toUpperCase() + timeFilter.slice(1)}
+                  <ChevronDown className="ml-2" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem>Day</DropdownMenuItem>
-                <DropdownMenuItem>Week</DropdownMenuItem>
-                <DropdownMenuItem>Month</DropdownMenuItem>
-                <DropdownMenuSub>
+                <DropdownMenuItem onClick={() => handleFilterChange("day")}>
+                  Day
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleFilterChange("week")}>
+                  Week
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleFilterChange("month")}>
+                  Month
+                </DropdownMenuItem>
+                {/* <DropdownMenuSub>
                   <DropdownMenuSubTrigger>Custom</DropdownMenuSubTrigger>
                   <DropdownMenuSubContent className="w-64 p-4">
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <Label
-                          htmlFor="from-date"
-                          className="text-sm font-medium"
-                        >
+                        <Label htmlFor="from-date" className="text-sm font-medium">
                           From
                         </Label>
-                        <div className="relative">
-                          <Input
-                            id="from-date"
-                            type="date"
-                            defaultValue="2025-08-03"
-                            className="w-full"
-                          />
-                        </div>
+                        <Input
+                          id="from-date"
+                          type="date"
+                          value={customFrom}
+                          onChange={(e) => setCustomFrom(e.target.value)}
+                          className="w-full"
+                        />
                       </div>
                       <div className="space-y-2">
-                        <Label
-                          htmlFor="to-date"
-                          className="text-sm font-medium"
-                        >
+                        <Label htmlFor="to-date" className="text-sm font-medium">
                           To
                         </Label>
-                        <div className="relative">
-                          <Input
-                            id="to-date"
-                            type="date"
-                            defaultValue="2025-08-03"
-                            className="w-full"
-                          />
-                        </div>
+                        <Input
+                          id="to-date"
+                          type="date"
+                          value={customTo}
+                          onChange={(e) => setCustomTo(e.target.value)}
+                          className="w-full"
+                        />
                       </div>
                     </div>
                   </DropdownMenuSubContent>
-                </DropdownMenuSub>
+                </DropdownMenuSub> */}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
 
-          {/* Metrics Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <Card className="">
-              <CardHeader className="flex flex-row items-center justify-between space-y-6 pb-2">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   Total Users
                 </CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
-              <CardContent className={"flex justify-between"}>
-                <div className="text-2xl font-bold">3,625</div>
-                <div className="flex items-center text-xs text-green-600">
-                  <TrendingUp className="h-3 w-3 mr-1" />
-                  +15.03%
+              <CardContent className="flex justify-between">
+                <div className="text-2xl font-bold">
+                  {overviewData?.totalUsers?.value || 0}
                 </div>
+                {formatChange(overviewData?.totalUsers?.change)}
               </CardContent>
             </Card>
 
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-6 pb-2">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   Active Users
                 </CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
-              <CardContent className={"flex justify-between"}>
-                <div className="text-2xl font-bold">1,025</div>
-                <div className="flex items-center text-xs text-green-600">
-                  <TrendingUp className="h-3 w-3 mr-1" />
-                  +11.01%
+              <CardContent className="flex justify-between">
+                <div className="text-2xl font-bold">
+                  {overviewData?.activeUsers?.value || 0}
                 </div>
+                {formatChange(overviewData?.activeUsers?.change)}
               </CardContent>
             </Card>
 
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-6 pb-2">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
-                  Monthly Revenue
+                  Total Revenue
                 </CardTitle>
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
-              <CardContent className={"flex justify-between"}>
-                <div className="text-2xl font-bold">$1,625</div>
-                <div className="flex items-center text-xs text-green-600">
-                  <TrendingUp className="h-3 w-3 mr-1" />
-                  +15.03%
+              <CardContent className="flex justify-between">
+                <div className="text-2xl font-bold">
+                  ${overviewData?.totalRevenue?.value || 0}
                 </div>
+                {formatChange(overviewData?.totalRevenue?.change)}
               </CardContent>
             </Card>
 
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-6 pb-2">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   Active Subscriptions
                 </CardTitle>
                 <Calendar className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
-              <CardContent className={"flex justify-between"}>
-                <div className="text-2xl font-bold">10,625</div>
-                <div className="flex items-center text-xs text-red-600">
-                  <TrendingDown className="h-3 w-3 mr-1" />
-                  -0.03%
+              <CardContent className="flex justify-between">
+                <div className="text-2xl font-bold">
+                  {overviewData?.activeSubscriptions?.value || 0}
                 </div>
+                {formatChange(overviewData?.activeSubscriptions?.change)}
               </CardContent>
             </Card>
           </div>
