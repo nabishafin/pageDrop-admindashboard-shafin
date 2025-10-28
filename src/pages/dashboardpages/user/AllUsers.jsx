@@ -32,16 +32,15 @@ export default function AllUsers() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const usersPerPage = 10;
 
-  // Debounce search term - optimized
+  // Debounce search term
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchTerm);
     }, 500);
-
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  // Reset to first page when any filter changes
+  // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [
@@ -53,7 +52,6 @@ export default function AllUsers() {
     customEndDate,
   ]);
 
-  // Build time range parameter
   const buildTimeRange = () => {
     if (timeFilter === "custom" && customStartDate && customEndDate) {
       return `${customStartDate}_${customEndDate}`;
@@ -61,7 +59,6 @@ export default function AllUsers() {
     return timeFilter;
   };
 
-  // API call parameters
   const queryParams = {
     page: currentPage,
     limit: usersPerPage,
@@ -71,15 +68,17 @@ export default function AllUsers() {
     timeRange: buildTimeRange(),
   };
 
-  // Fetch users with RTK Query
-  const { data, isLoading, isFetching, error: queryError } = useGetUsersQuery(queryParams);
+  const {
+    data,
+    isLoading,
+    isFetching,
+    error: queryError,
+  } = useGetUsersQuery(queryParams);
 
-  // Extract data from response
   const users = data?.data?.users || [];
   const totalUsers = data?.data?.totalUsers || 0;
   const totalPages = data?.data?.totalPages || 1;
 
-  // Helper functions
   const formatDate = (dateString) => {
     if (!dateString || dateString === "N/A" || dateString === "null")
       return "N/A";
@@ -90,7 +89,7 @@ export default function AllUsers() {
         month: "short",
         year: "numeric",
       });
-    } catch (error) { // eslint-disable-line no-unused-vars
+    } catch (error) {
       return "N/A";
     }
   };
@@ -105,10 +104,8 @@ export default function AllUsers() {
     return type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
   };
 
-  // Pagination component
   const renderPaginationButtons = () => {
     if (totalPages <= 1) return null;
-
     const buttons = [];
     const maxVisibleButtons = 5;
     let startPage = Math.max(
@@ -117,12 +114,10 @@ export default function AllUsers() {
     );
     let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
 
-    // Adjust start page if we're near the end
     if (endPage - startPage + 1 < maxVisibleButtons) {
       startPage = Math.max(1, endPage - maxVisibleButtons + 1);
     }
 
-    // First page
     if (startPage > 1) {
       buttons.push(
         <Button
@@ -145,7 +140,6 @@ export default function AllUsers() {
       }
     }
 
-    // Page numbers
     for (let i = startPage; i <= endPage; i++) {
       buttons.push(
         <Button
@@ -163,7 +157,6 @@ export default function AllUsers() {
       );
     }
 
-    // Last page
     if (endPage < totalPages) {
       if (endPage < totalPages - 1) {
         buttons.push(
@@ -199,7 +192,6 @@ export default function AllUsers() {
       <Card className="rounded-lg">
         <CardContent className="pt-6">
           <div className="flex flex-col gap-4">
-            {/* Search Input */}
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -210,7 +202,6 @@ export default function AllUsers() {
               />
             </div>
 
-            {/* Filter Controls */}
             <div className="flex flex-wrap gap-4">
               <Select
                 value={subscriptionFilter}
@@ -244,7 +235,7 @@ export default function AllUsers() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Time</SelectItem>
-                  <SelectItem value="Da">1 Day</SelectItem>
+                  <SelectItem value="day">1 Day</SelectItem>
                   <SelectItem value="week">7 Days</SelectItem>
                   <SelectItem value="month">1 Month</SelectItem>
                   <SelectItem value="custom">Custom</SelectItem>
@@ -286,7 +277,7 @@ export default function AllUsers() {
             </div>
           ) : users.length === 0 ? (
             <div className="flex items-center justify-center py-20 text-muted-foreground">
-              No users found matching your criteria
+              No data
             </div>
           ) : (
             <div className="relative">
@@ -312,19 +303,13 @@ export default function AllUsers() {
                   {users.map((user, index) => (
                     <TableRow key={index}>
                       <TableCell className="text-center">
-                        {user.fullName && user.fullName !== "N/A"
-                          ? user.fullName
-                          : "N/A"}
+                        {user.fullName || "N/A"}
                       </TableCell>
                       <TableCell className="text-center">
-                        {user.email && user.email !== "N/A"
-                          ? user.email
-                          : "N/A"}
+                        {user.email || "N/A"}
                       </TableCell>
                       <TableCell className="text-center">
-                        {user.phone && user.phone !== "N/A"
-                          ? user.phone
-                          : "N/A"}
+                        {user.phone || "N/A"}
                       </TableCell>
                       <TableCell className="text-center">
                         {formatDate(user.joiningDate)}
@@ -335,16 +320,13 @@ export default function AllUsers() {
                       <TableCell className="text-center">
                         <Badge
                           variant="outline"
-                          className={`
-                            rounded-full px-3 py-1
-                            ${
-                              user.subscriptionType === "monthly"
-                                ? "border-[#1593E5] text-[#1593E5]"
-                                : user.subscriptionType === "yearly"
-                                ? "border-[#F3934F] text-[#F3934F]"
-                                : "border-gray-400 text-gray-400"
-                            }
-                          `}
+                          className={`rounded-full px-3 py-1 ${
+                            user.subscriptionType === "monthly"
+                              ? "border-[#1593E5] text-[#1593E5]"
+                              : user.subscriptionType === "yearly"
+                              ? "border-[#F3934F] text-[#F3934F]"
+                              : "border-gray-400 text-gray-400"
+                          }`}
                         >
                           {getSubscriptionDisplay(user.subscriptionType)}
                         </Badge>
@@ -355,17 +337,14 @@ export default function AllUsers() {
                       <TableCell className="text-center">
                         <Badge
                           variant="outline"
-                          className={`
-                            rounded-full px-3 py-1
-                            ${
-                              user.userStatus === "active"
-                                ? "border-green-500 text-green-500"
-                                : user.userStatus === "incomplete" ||
-                                  user.userStatus === "Incomplete"
-                                ? "border-yellow-500 text-yellow-500"
-                                : "border-red-500 text-red-500"
-                            }
-                          `}
+                          className={`rounded-full px-3 py-1 ${
+                            user.userStatus === "active"
+                              ? "border-green-500 text-green-500"
+                              : user.userStatus === "incomplete" ||
+                                user.userStatus === "Incomplete"
+                              ? "border-yellow-500 text-yellow-500"
+                              : "border-red-500 text-red-500"
+                          }`}
                         >
                           {getStatusDisplay(user.userStatus)}
                         </Badge>
@@ -394,8 +373,7 @@ export default function AllUsers() {
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               disabled={currentPage === 1 || isFetching}
             >
-              <ChevronLeft className="h-4 w-4" />
-              Previous
+              <ChevronLeft className="h-4 w-4" /> Previous
             </Button>
 
             <div className="flex items-center gap-1">
@@ -410,8 +388,7 @@ export default function AllUsers() {
               }
               disabled={currentPage === totalPages || isFetching}
             >
-              Next
-              <ChevronRight className="h-4 w-4" />
+              Next <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
         </div>

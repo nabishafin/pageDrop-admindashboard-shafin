@@ -1,50 +1,35 @@
+import { useGetPrivacyPolicyQuery } from "@/redux/features/settings/settingsApi";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
-import { Link } from "react-router-dom";
 
 const PrivacyPolicy = () => {
-  const policyParagraphs = [
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
+  const { data, isLoading, isError } = useGetPrivacyPolicyQuery();
 
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-    "Lorem ipsum dolor sit amet consectetur. Fringilla a cras vitae orci. ...",
-  ];
+  const policy = data?.data;
 
   return (
     <div className="font-sans pr-5">
       {/* Header */}
       <h2 className="text-xl sm:text-2xl font-bold mb-2 text-black p-5 rounded-lg">
-        Privacy Policy
+        {policy?.title || "Privacy Policy"}
       </h2>
 
       {/* Content container */}
       <div className="relative bg-white rounded-lg p-6 max-h-[70vh] overflow-y-auto">
-        {policyParagraphs.map((paragraph, index) => (
-          <p
-            key={index}
-            className="text-gray-700 leading-relaxed text-justify mb-4"
-          >
-            {paragraph}
-          </p>
-        ))}
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : isError ? (
+          <p className="text-red-500">Failed to load privacy policy.</p>
+        ) : (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: policy?.content
+                ? policy.content.replace(/<p>/g, "").replace(/<\/p>/g, "<br />")
+                : "",
+            }}
+          />
+        )}
 
         {/* Edit Button */}
       </div>

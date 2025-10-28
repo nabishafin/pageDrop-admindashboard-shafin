@@ -1,13 +1,19 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import JoditEditor from "jodit-react";
+import { toast } from "react-toastify";
+import { useGetPrivacyPolicyQuery, useUpdatePrivacyPolicyMutation } from "@/redux/features/settings/settingsApi";
 
 const EditPrivacyPolicy = () => {
   const navigate = useNavigate();
   const editor = useRef(null);
   const [content, setContent] = useState("");
-  const [isMounted] = useState(true); // demo purpose
+  const [privacyPolicyId, setPrivacyPolicyId] = useState(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  const { data: response, isLoading, isError } = useGetPrivacyPolicyQuery();
+  const [updatePrivacyPolicy, { isLoading: isUpdating }] = useUpdatePrivacyPolicyMutation();
 
   // Editor Config (white/light theme)
   const config = {
@@ -34,13 +40,32 @@ const EditPrivacyPolicy = () => {
     },
   };
 
+  useEffect(() => {
+    setIsMounted(true);
+    if (response?.data) {
+      setContent(response.data.content);
+      setPrivacyPolicyId(response.data._id);
+    }
+  }, [response]);
+
   const handleUpdate = async () => {
     if (!content.trim()) {
-      alert("Content cannot be empty");
+      toast.error("Content cannot be empty");
       return;
     }
-    alert("Updated successfully!");
-    navigate(-1);
+    if (!privacyPolicyId) {
+      toast.error("Could not find Privacy Policy ID.");
+      return;
+    }
+    try {
+      await updatePrivacyPolicy({ id: privacyPolicyId, content }).unwrap();
+      toast.success("Privacy Policy updated successfully!");
+      navigate(-1);
+    } catch (error) {
+      toast.error(
+        error?.data?.message || "Failed to update Privacy Policy"
+      );
+    }
   };
 
   if (!isMounted) {
