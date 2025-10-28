@@ -49,7 +49,7 @@ const RevenueChart = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md mt-5">
+    <div className="bg-white p-6 rounded-lg shadow-md mt-0 border">
       <ResponsiveContainer width="100%" height={400}>
         {viewType === "area" ? (
           <AreaChart

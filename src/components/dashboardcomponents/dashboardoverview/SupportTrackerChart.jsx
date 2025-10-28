@@ -19,7 +19,7 @@ const chartData = [
   { day: "Mo", tickets: 52 },
   { day: "Tu", tickets: 38 },
   { day: "We", tickets: 41 },
-  { day: "Th", tickets: 89 },
+  { day: "Th", tickets: 10 },
   { day: "Fr", tickets: 67 },
   { day: "Sa", tickets: 43 },
 ];

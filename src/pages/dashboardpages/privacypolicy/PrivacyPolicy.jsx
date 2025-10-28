@@ -33,7 +33,7 @@ const PrivacyPolicy = () => {
       </div>
       <div className="absolute bottom-4 right-4 pr-5">
         <Link to="/dashboard/settings/editprivacy">
-          <Button className="bg-[#4FB2F3] hover:bg-[#4FB2F3] text-white rounded-full flex items-center space-x-1 shadow-md">
+          <Button className="bg-[#23769D] hover:bg-[#1f5f7e] text-white rounded-full flex items-center space-x-1 shadow-md">
             <Edit className="h-4 w-4" />
             <span>Update Privacy Policy</span>
           </Button>
@@ -50,11 +50,15 @@ const decodeHtmlEntities = (htmlString) => {
   const textarea = document.createElement("textarea");
 
   // Recursively decode until no more entities are found
-  while (decodedString.includes("&lt;") || decodedString.includes("&gt;") || decodedString.includes("&amp;")) {
+  while (
+    decodedString.includes("&lt;") ||
+    decodedString.includes("&gt;") ||
+    decodedString.includes("&amp;")
+  ) {
     textarea.innerHTML = decodedString;
     decodedString = textarea.value;
   }
-  
+
   return decodedString;
 };
 

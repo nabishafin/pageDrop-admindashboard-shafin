@@ -119,7 +119,11 @@ const EditPrivacyPolicy = () => {
           <button
             onClick={handleUpdate}
             disabled={isUpdating}
-            className="w-full bg-[#4FB2F3] hover:bg-[#3da1e3] text-white px-8 py-3 rounded-lg font-medium shadow-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className={`w-full bg-[#23769D] text-white px-8 py-3 rounded-lg font-medium transition-colors ${
+              isUpdating
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-[#1f5f7e]"
+            }`}
           >
             {isUpdating ? "Updating..." : "Update"}
           </button>
@@ -152,11 +156,15 @@ const decodeHtmlEntities = (htmlString) => {
   const textarea = document.createElement("textarea");
 
   // Recursively decode until no more entities are found
-  while (decodedString.includes("&lt;") || decodedString.includes("&gt;") || decodedString.includes("&amp;")) {
+  while (
+    decodedString.includes("&lt;") ||
+    decodedString.includes("&gt;") ||
+    decodedString.includes("&amp;")
+  ) {
     textarea.innerHTML = decodedString;
     decodedString = textarea.value;
   }
-  
+
   return decodedString;
 };
 

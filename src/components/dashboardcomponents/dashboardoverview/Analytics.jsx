@@ -27,12 +27,12 @@ export default function Dashboard() {
       {/* Analytics Dashboard Section */}
       <main className="">
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold">Analytics Dashboard</h2>
-            <DropdownMenu>
+          <div className="flex items-center justify-between my-8">
+            <h2 className="text-4xl font-bold">Analytics Dashboard</h2>
+            <DropdownMenu className="">
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm">
-                  All <ChevronDown className="h-4 w-4 ml-2" />
+                <Button variant="outline" size="lg">
+                  All <ChevronDown className=" ml-2" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
@@ -84,8 +84,8 @@ export default function Dashboard() {
 
           {/* Metrics Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <Card className="">
+              <CardHeader className="flex flex-row items-center justify-between space-y-6 pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   Total Users
                 </CardTitle>
@@ -101,7 +101,7 @@ export default function Dashboard() {
             </Card>
 
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardHeader className="flex flex-row items-center justify-between space-y-6 pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   Active Users
                 </CardTitle>
@@ -117,7 +117,7 @@ export default function Dashboard() {
             </Card>
 
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardHeader className="flex flex-row items-center justify-between space-y-6 pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   Monthly Revenue
                 </CardTitle>
@@ -133,7 +133,7 @@ export default function Dashboard() {
             </Card>
 
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardHeader className="flex flex-row items-center justify-between space-y-6 pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   Active Subscriptions
                 </CardTitle>
