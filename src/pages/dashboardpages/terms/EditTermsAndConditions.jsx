@@ -57,7 +57,7 @@ const EditTermsAndConditions = () => {
   useEffect(() => {
     setIsMounted(true);
     if (response?.data) {
-      setContent(response.data.content);
+      setContent(decodeHtmlEntities(response.data.content));
       setTermsId(response.data._id);
     }
   }, [response]);
@@ -307,6 +307,21 @@ const EditTermsAndConditions = () => {
       `}</style>
     </div>
   );
+};
+
+// Helper function to decode HTML entities
+const decodeHtmlEntities = (htmlString) => {
+  if (!htmlString) return "";
+  let decodedString = htmlString;
+  const textarea = document.createElement("textarea");
+
+  // Recursively decode until no more entities are found
+  while (decodedString.includes("&lt;") || decodedString.includes("&gt;") || decodedString.includes("&amp;")) {
+    textarea.innerHTML = decodedString;
+    decodedString = textarea.value;
+  }
+  
+  return decodedString;
 };
 
 export default EditTermsAndConditions;

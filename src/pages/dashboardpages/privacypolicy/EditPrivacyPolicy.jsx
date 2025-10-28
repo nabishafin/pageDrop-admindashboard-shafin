@@ -3,7 +3,10 @@ import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import JoditEditor from "jodit-react";
 import { toast } from "react-toastify";
-import { useGetPrivacyPolicyQuery, useUpdatePrivacyPolicyMutation } from "@/redux/features/settings/settingsApi";
+import {
+  useGetPrivacyPolicyQuery,
+  useUpdatePrivacyPolicyMutation,
+} from "@/redux/features/settings/settingsApi";
 
 const EditPrivacyPolicy = () => {
   const navigate = useNavigate();
@@ -13,7 +16,8 @@ const EditPrivacyPolicy = () => {
   const [isMounted, setIsMounted] = useState(false);
 
   const { data: response, isLoading, isError } = useGetPrivacyPolicyQuery();
-  const [updatePrivacyPolicy, { isLoading: isUpdating }] = useUpdatePrivacyPolicyMutation();
+  const [updatePrivacyPolicy, { isLoading: isUpdating }] =
+    useUpdatePrivacyPolicyMutation();
 
   // Editor Config (white/light theme)
   const config = {
@@ -43,7 +47,7 @@ const EditPrivacyPolicy = () => {
   useEffect(() => {
     setIsMounted(true);
     if (response?.data) {
-      setContent(response.data.content);
+      setContent(decodeHtmlEntities(response.data.content));
       setPrivacyPolicyId(response.data._id);
     }
   }, [response]);
@@ -62,9 +66,7 @@ const EditPrivacyPolicy = () => {
       toast.success("Privacy Policy updated successfully!");
       navigate(-1);
     } catch (error) {
-      toast.error(
-        error?.data?.message || "Failed to update Privacy Policy"
-      );
+      toast.error(error?.data?.message || "Failed to update Privacy Policy");
     }
   };
 
@@ -72,10 +74,22 @@ const EditPrivacyPolicy = () => {
     return <div className="text-gray-700 p-4">Loading editor...</div>;
   }
 
+  if (isLoading) {
+    return (
+      <div className="text-black p-4">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return <div className="text-black p-4">Error loading terms</div>;
+  }
+
   return (
-    <div className="bg-white text-black flex flex-col rounded-lg ">
+    <div className="bg-white text-black flex flex-col rounded-lg">
       {/* Header */}
-      <div className="flex items-center p-4  border-gray-300 sticky top-0 bg-white z-10 rounded-lg">
+      <div className="flex items-center p-4 border-gray-300 sticky top-0 bg-white z-10 rounded-lg">
         <button onClick={() => navigate(-1)} className="mr-3">
           <ArrowLeft className="w-6 h-6 hover:text-blue-500 transition-colors" />
         </button>
@@ -104,9 +118,10 @@ const EditPrivacyPolicy = () => {
         <div className="bg-white border-t border-gray-300 pt-4">
           <button
             onClick={handleUpdate}
-            className="w-full bg-[#4FB2F3] hover:bg-[#4FB2F3] text-white px-8 py-3 rounded-lg font-medium shadow-md   transition-colors"
+            disabled={isUpdating}
+            className="w-full bg-[#4FB2F3] hover:bg-[#3da1e3] text-white px-8 py-3 rounded-lg font-medium shadow-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Update
+            {isUpdating ? "Updating..." : "Update"}
           </button>
         </div>
       </div>
@@ -128,6 +143,21 @@ const EditPrivacyPolicy = () => {
       `}</style>
     </div>
   );
+};
+
+// Helper function to decode HTML entities
+const decodeHtmlEntities = (htmlString) => {
+  if (!htmlString) return "";
+  let decodedString = htmlString;
+  const textarea = document.createElement("textarea");
+
+  // Recursively decode until no more entities are found
+  while (decodedString.includes("&lt;") || decodedString.includes("&gt;") || decodedString.includes("&amp;")) {
+    textarea.innerHTML = decodedString;
+    decodedString = textarea.value;
+  }
+  
+  return decodedString;
 };
 
 export default EditPrivacyPolicy;

@@ -1,64 +1,59 @@
 import { useGetTermsConditionsQuery } from "@/redux/features/settings/settingsApi";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Edit } from "lucide-react";
 
 const TermsAndConditions = () => {
   const { data, isLoading, isError } = useGetTermsConditionsQuery();
 
   const terms = data?.data;
-  console.log(terms);
 
   return (
-    <div className="">
+    <div className="font-sans pr-5">
       {/* Header */}
-      <div className="px-6 py-4">
-        <h1 className="text-2xl font-bold text-black">
-          {terms?.title || "Terms & Conditions"}
-        </h1>
-      </div>
+      <h2 className="text-xl sm:text-2xl font-bold mb-2 text-black p-5 rounded-lg">
+        {terms?.title || "Terms & Conditions"}
+      </h2>
 
-      {/* Main Content */}
-      <div className="px-6 py-3 text-black relative rounded-2xl">
+      {/* Content container */}
+      <div className="relative bg-white rounded-lg p-6 max-h-[70vh] overflow-y-auto">
         {isLoading ? (
-          <div>
-            <p>Loading...</p>
-          </div>
+          <p>Loading...</p>
         ) : isError ? (
-          <p className="text-red-400">Failed to load terms</p>
+          <p className="text-red-500">Failed to load terms.</p>
         ) : (
-          <div className="min-h-screen">
-            {/* Terms HTML Content from API */}
-            <div
-              className="terms-content" // Change: prose prose-invert থেকে terms-content
-              dangerouslySetInnerHTML={{ __html: terms?.content }}
-            />
-          </div>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: decodeHtmlEntities(terms?.content),
+            }}
+          />
         )}
-
-        {/* Edit Button */}
-        <Link
-          to="/dashboard/settings/editterms"
-          className="fixed bottom-20 right-6"
-        >
-          <button className="bg-[#23769D] text-white px-6 py-3 rounded-lg font-medium flex items-center gap-2 hover:bg-[#1f5f7e] transition-colors shadow-lg">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-              />
-            </svg>
-            Edit Terms & Conditions
-          </button>
+      </div>
+      <div className="absolute bottom-4 right-4 pr-5">
+        <Link to="/dashboard/settings/editterms">
+          <Button className="bg-[#23769D] hover:bg-[#1f5f7e] text-white rounded-full flex items-center space-x-1 shadow-md">
+            <Edit className="h-4 w-4" />
+            <span>Edit Terms & Conditions</span>
+          </Button>
         </Link>
       </div>
     </div>
   );
+};
+
+// Helper function to decode HTML entities
+const decodeHtmlEntities = (htmlString) => {
+  if (!htmlString) return "";
+  let decodedString = htmlString;
+  const textarea = document.createElement("textarea");
+
+  // Recursively decode until no more entities are found
+  while (decodedString.includes("&lt;") || decodedString.includes("&gt;") || decodedString.includes("&amp;")) {
+    textarea.innerHTML = decodedString;
+    decodedString = textarea.value;
+  }
+  
+  return decodedString;
 };
 
 export default TermsAndConditions;

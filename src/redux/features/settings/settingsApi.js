@@ -33,7 +33,7 @@ export const settingsApi = baseApi.injectEndpoints({
     // ✅ 04. Update Privacy Policy
     updatePrivacyPolicy: builder.mutation({
       query: ({ id, ...data }) => ({
-        url: `/auth/update-privacy-and-policy/${id}`,
+        url: `/auth/update-privacy-and-policy/${id}`, // ✅ এটা ঠিক আছে
         method: "PUT",
         body: data,
       }),
