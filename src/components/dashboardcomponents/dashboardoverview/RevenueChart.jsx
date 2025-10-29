@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   LineChart,
   Line,
@@ -11,29 +11,9 @@ import {
   AreaChart,
   Area,
 } from "recharts";
-import { useGetAdminOverviewGraphQuery } from "@/redux/features/adminOverview/adminOverviewApi";
-import { Loader2 } from "lucide-react";
 
-const RevenueChart = () => {
+const RevenueChart = ({ data }) => {
   const [viewType] = useState("area"); // 'line' or 'area'
-
-  const { data, isLoading, isError } = useGetAdminOverviewGraphQuery();
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="text-center py-8 text-red-500">
-        Error loading revenue data.
-      </div>
-    );
-  }
 
   const monthlyData = data?.data || [];
 

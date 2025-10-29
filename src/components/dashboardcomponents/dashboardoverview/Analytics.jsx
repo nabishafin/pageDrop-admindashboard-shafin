@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,9 +18,7 @@ import {
   DollarSign,
   Calendar,
   ChevronDown,
-  Loader2,
 } from "lucide-react";
-import { useGetAdminOverviewQuery } from "@/redux/features/adminOverview/adminOverviewApi";
 
 // Helper to format percentage change
 const formatChange = (change) => {
@@ -43,42 +40,12 @@ const formatChange = (change) => {
   );
 };
 
-export default function Analytics() {
-  const [timeFilter, setTimeFilter] = useState("all");
-  const [customFrom, setCustomFrom] = useState("");
-  const [customTo, setCustomTo] = useState("");
-
-  const { data, isLoading, isError, refetch } = useGetAdminOverviewQuery({
-    timeFilter:
-      timeFilter === "custom" ? `${customFrom}_${customTo}` : timeFilter,
-  });
-
-  useEffect(() => {
-    refetch();
-  }, [timeFilter, customFrom, customTo, refetch]);
-
+export default function Analytics({ data, timeFilter, setTimeFilter, customFrom, setCustomFrom, customTo, setCustomTo }) {
   const handleFilterChange = (filter) => {
     setTimeFilter(filter);
   };
 
   const overviewData = data?.data;
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="text-center py-8 text-red-500">
-        Error loading analytics data.
-      </div>
-    );
-  }
-
   return (
     <div className=" ">
       <main className="">
