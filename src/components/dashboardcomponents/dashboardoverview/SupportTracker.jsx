@@ -1,19 +1,35 @@
 import { ActiveCodes } from "./ActiveCodes";
 import RevenueChart from "./RevenueChart";
-import { useGetAdminActiveCouponsQuery, useGetAdminOverviewGraphQuery } from "@/redux/features/adminOverview/adminOverviewApi";
+import {
+  useGetAdminActiveCouponsQuery,
+  useGetAdminOverviewGraphQuery,
+} from "@/redux/features/adminOverview/adminOverviewApi";
 import { Loader2 } from "lucide-react";
 
 export function SupportTracker() {
-  const { data: activeCouponsData, isLoading: isLoadingActiveCoupons, isError: isErrorActiveCoupons } = useGetAdminActiveCouponsQuery();
-  const { data: revenueChartData, isLoading: isLoadingRevenueChart, isError: isErrorRevenueChart } = useGetAdminOverviewGraphQuery();
+  const {
+    data: activeCouponsData,
+    isLoading: isLoadingActiveCoupons,
+    isError: isErrorActiveCoupons,
+  } = useGetAdminActiveCouponsQuery();
+  const {
+    data: revenueChartData,
+    isLoading: isLoadingRevenueChart,
+    isError: isErrorRevenueChart,
+  } = useGetAdminOverviewGraphQuery();
 
   const isLoading = isLoadingActiveCoupons || isLoadingRevenueChart;
   const isError = isErrorActiveCoupons || isErrorRevenueChart;
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
+      <div className="space-y-4 bg-white p-5 rounded-lg shadow mt-5">
+        <div className="flex items-center justify-center py-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4FB2F3] mx-auto"></div>
+            <p className="mt-2 text-sm text-muted-foreground">Loading ...</p>
+          </div>
+        </div>
       </div>
     );
   }

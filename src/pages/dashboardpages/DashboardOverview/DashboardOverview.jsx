@@ -2,14 +2,18 @@ import React, { useState, useEffect } from "react";
 import { SupportTracker } from "../../../components/dashboardcomponents/dashboardoverview/SupportTracker";
 import Analytics from "../../../components/dashboardcomponents/dashboardoverview/Analytics";
 import { useGetAdminOverviewQuery } from "@/redux/features/adminOverview/adminOverviewApi";
-import { Loader2 } from "lucide-react";
 
 const DashboardOverview = () => {
   const [timeFilter, setTimeFilter] = useState("all");
   const [customFrom, setCustomFrom] = useState("");
   const [customTo, setCustomTo] = useState("");
 
-  const { data: analyticsData, isLoading: isLoadingAnalytics, isError: isErrorAnalytics, refetch } = useGetAdminOverviewQuery({
+  const {
+    data: analyticsData,
+    isLoading: isLoadingAnalytics,
+    isError: isErrorAnalytics,
+    refetch,
+  } = useGetAdminOverviewQuery({
     timeFilter:
       timeFilter === "custom" ? `${customFrom}_${customTo}` : timeFilter,
   });
@@ -18,13 +22,18 @@ const DashboardOverview = () => {
     refetch();
   }, [timeFilter, customFrom, customTo, refetch]);
 
-  const isLoading = isLoadingAnalytics; // SupportTracker handles its own loading now
-  const isError = isErrorAnalytics; // SupportTracker handles its own error now
+  const isLoading = isLoadingAnalytics;
+  const isError = isErrorAnalytics;
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <Loader2 className="animate-spin h-12 w-12 text-gray-500" />
+      <div className="space-y-4 bg-white p-5 rounded-lg shadow mt-5">
+        <div className="flex items-center justify-center py-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4FB2F3] mx-auto"></div>
+            <p className="mt-2 text-sm text-muted-foreground">Loading ...</p>
+          </div>
+        </div>
       </div>
     );
   }
@@ -39,7 +48,15 @@ const DashboardOverview = () => {
 
   return (
     <div>
-      <Analytics data={analyticsData} timeFilter={timeFilter} setTimeFilter={setTimeFilter} customFrom={customFrom} setCustomFrom={setCustomFrom} customTo={customTo} setCustomTo={setCustomTo} />
+      <Analytics
+        data={analyticsData}
+        timeFilter={timeFilter}
+        setTimeFilter={setTimeFilter}
+        customFrom={customFrom}
+        setCustomFrom={setCustomFrom}
+        customTo={customTo}
+        setCustomTo={setCustomTo}
+      />
 
       <div className="mt-10">
         <SupportTracker />
