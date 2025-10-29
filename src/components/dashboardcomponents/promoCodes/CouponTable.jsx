@@ -51,7 +51,6 @@ export function CouponTable() {
 
   const [deleteCoupon] = useDeleteCouponMutation();
 
-  console.log("Coupons Data:", couponsData);
   // Extract coupons from API response or use empty array as fallback
   const coupons = couponsData?.coupons || [];
   const totalPages = couponsData?.totalPages || 1;
@@ -71,6 +70,10 @@ export function CouponTable() {
     const usageNum = parseInt(usage) || 0;
     const maxUsageNum = parseInt(maxUsage) || 1;
     return (usageNum / maxUsageNum) * 100;
+  };
+
+  const getUsageDetails = (usageCount, usageLimit) => {
+    return { usageCount, usageLimit };
   };
 
   const getStatus = (coupon) => {
@@ -220,14 +223,11 @@ export function CouponTable() {
             ) : (
               coupons.map((coupon) => {
                 const status = getStatus(coupon);
-                const usagePercentage = getUsagePercentage(
-                  coupon.usageCount,
-                  coupon.usageLimit
-                );
+                const usage = getUsageDetails(coupon.usageCount, coupon.usageLimit);
                 const maxUsageDisplay =
-                  coupon.usageLimit === "unlimited"
+                  usage.usageLimit === "unlimited"
                     ? "unlimited"
-                    : coupon.usageLimit;
+                    : usage.usageLimit;
 
                 return (
                   <TableRow key={coupon._id}>
@@ -249,7 +249,7 @@ export function CouponTable() {
                         </div>
                         {coupon.usageLimit !== "unlimited" && (
                           <Progress
-                            value={usagePercentage}
+                            value={getUsagePercentage(coupon.usageCount, coupon.usageLimit)}
                             className="h-2 [&>div]:bg-[#4FB2F3] [&>div]:hover:bg-[#4FB2F3]"
                           />
                         )}
@@ -272,7 +272,7 @@ export function CouponTable() {
                       </div>
                     </TableCell>
                     <TableCell className="text-center">
-                      {formatDate(coupon.expiry)}
+                      {formatDate(coupon.expires)}
                     </TableCell>
                     <TableCell className="text-center">
                       <div className="flex items-center justify-center gap-2">
@@ -419,6 +419,7 @@ export function CouponTable() {
                       {selectedCoupon.targetAudience}
                     </span>
                   </div>
+
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Expiry:</span>
                     <span className="font-medium">
