@@ -49,8 +49,10 @@ const DashboardOverview = () => {
         customTo={customTo}
         setCustomTo={setCustomTo}
       />
-
       <div className="mt-10">
+        <hr />
+      </div>
+      <div className="mt-8">
         <SupportTracker />
       </div>
     </div>
