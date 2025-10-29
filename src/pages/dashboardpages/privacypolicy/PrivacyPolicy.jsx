@@ -2,6 +2,7 @@ import { useGetPrivacyPolicyQuery } from "@/redux/features/settings/settingsApi"
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
+import CustomLoading from "@/components/ui/CustomLoading";
 
 const PrivacyPolicy = () => {
   const { data, isLoading, isError } = useGetPrivacyPolicyQuery();
@@ -18,7 +19,7 @@ const PrivacyPolicy = () => {
       {/* Content container */}
       <div className="relative bg-white rounded-lg p-6 max-h-[70vh] overflow-y-auto">
         {isLoading ? (
-          <p>Loading...</p>
+          <CustomLoading />
         ) : isError ? (
           <p className="text-red-500">Failed to load privacy policy.</p>
         ) : (

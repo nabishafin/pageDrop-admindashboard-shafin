@@ -18,7 +18,7 @@ import {
   useEditFaqMutation,
   useDeleteFaqMutation,
 } from "../../../redux/features/faq/faqApi";
-
+import CustomLoading from "@/components/ui/CustomLoading";
 
 export default function FaqManagement() {
   const { data, isLoading, isError } = useGetFaqsQuery();
@@ -154,9 +154,7 @@ export default function FaqManagement() {
       <Card className="rounded-lg shadow-md border-0">
         <CardContent className="p-0">
           {isLoading ? (
-            <div className="flex justify-center items-center h-64">
-              <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
-            </div>
+            <CustomLoading />
           ) : isError ? (
             <div className="text-center py-8 text-red-500">
               Error loading FAQs.

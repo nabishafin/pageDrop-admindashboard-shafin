@@ -2,6 +2,7 @@ import { useGetTermsConditionsQuery } from "@/redux/features/settings/settingsAp
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
+import CustomLoading from "@/components/ui/CustomLoading";
 
 const TermsAndConditions = () => {
   const { data, isLoading, isError } = useGetTermsConditionsQuery();
@@ -18,7 +19,7 @@ const TermsAndConditions = () => {
       {/* Content container */}
       <div className="relative bg-white rounded-lg p-6 max-h-[70vh] overflow-y-auto">
         {isLoading ? (
-          <p>Loading...</p>
+          <CustomLoading />
         ) : isError ? (
           <p className="text-red-500">Failed to load terms.</p>
         ) : (
@@ -48,11 +49,15 @@ const decodeHtmlEntities = (htmlString) => {
   const textarea = document.createElement("textarea");
 
   // Recursively decode until no more entities are found
-  while (decodedString.includes("&lt;") || decodedString.includes("&gt;") || decodedString.includes("&amp;")) {
+  while (
+    decodedString.includes("&lt;") ||
+    decodedString.includes("&gt;") ||
+    decodedString.includes("&amp;")
+  ) {
     textarea.innerHTML = decodedString;
     decodedString = textarea.value;
   }
-  
+
   return decodedString;
 };
 

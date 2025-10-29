@@ -32,6 +32,7 @@ import {
 
 // ✅ Memoized row to prevent full re-render
 import React, { memo } from "react";
+import CustomLoading from "@/components/ui/CustomLoading";
 
 const TicketRow = memo(function TicketRow({
   ticket,
@@ -306,9 +307,7 @@ export default function Support() {
       <Card className="rounded-lg">
         <CardContent className="p-0">
           {isLoading ? (
-            <div className="flex justify-center items-center h-64">
-              <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
-            </div>
+            <CustomLoading />
           ) : isError ? (
             <div className="text-center py-8 text-red-500">
               Error loading tickets.
