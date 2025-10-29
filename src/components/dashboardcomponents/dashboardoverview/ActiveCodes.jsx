@@ -7,23 +7,38 @@ import { useGetAdminActiveCouponsQuery } from "@/redux/features/adminOverview/ad
 export function ActiveCodes() {
   const { data, isLoading, isError } = useGetAdminActiveCouponsQuery();
 
+  // Console log kore dekho data structure
+  console.log("API Response:", data);
+
+  // Response structure check koro - data.data or data.coupons or data.codes hote pare
+  const activeCodes =
+    data?.data?.slice(0, 5) || data?.coupons?.slice(0, 5) || [];
+
   if (isLoading) {
     return (
-      <Card className="p-6 flex justify-center items-center">
-        <p className="text-sm text-muted-foreground">Loading coupons...</p>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between py-2 pb-1">
+          <CardTitle className="text-sm font-medium">Active Codes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-sm text-muted-foreground">Loading...</div>
+        </CardContent>
       </Card>
     );
   }
 
   if (isError) {
     return (
-      <Card className="p-6 flex justify-center items-center">
-        <p className="text-sm text-red-500">Failed to load coupons.</p>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between py-2 pb-1">
+          <CardTitle className="text-sm font-medium">Active Codes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-sm text-red-500">Failed to load coupons</div>
+        </CardContent>
       </Card>
     );
   }
-
-  const activeCodes = data?.data || []; // ✅ Adjust based on your API response structure
 
   return (
     <Card>
@@ -39,18 +54,13 @@ export function ActiveCodes() {
           </Button>
         </Link>
       </CardHeader>
-
       <CardContent>
-        {activeCodes.length === 0 ? (
-          <p className="text-xs text-muted-foreground">
-            No active codes found.
-          </p>
-        ) : (
-          <div>
-            {activeCodes.map((item, index) => (
+        <div>
+          {activeCodes.length > 0 ? (
+            activeCodes.map((item, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between px-[5px] py-[6px] rounded-md border border-gray-200 my-2"
+                className="flex items-center justify-between px-[5px] py-[6px] rounded-md border-[1px] border-gray-200 my-2"
               >
                 <div className="flex items-center gap-2">
                   <div className="w-10 h-10 bg-[#D9EFFC] rounded-full flex items-center justify-center">
@@ -70,9 +80,13 @@ export function ActiveCodes() {
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+            ))
+          ) : (
+            <div className="text-sm text-muted-foreground text-center py-4">
+              No active codes available
+            </div>
+          )}
+        </div>
       </CardContent>
     </Card>
   );
