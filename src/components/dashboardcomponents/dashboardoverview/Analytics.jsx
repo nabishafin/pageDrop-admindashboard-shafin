@@ -104,12 +104,15 @@ export default function Analytics() {
                 <DropdownMenuItem onClick={() => handleFilterChange("month")}>
                   Month
                 </DropdownMenuItem>
-                {/* <DropdownMenuSub>
+                <DropdownMenuSub>
                   <DropdownMenuSubTrigger>Custom</DropdownMenuSubTrigger>
                   <DropdownMenuSubContent className="w-64 p-4">
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <Label htmlFor="from-date" className="text-sm font-medium">
+                        <Label
+                          htmlFor="from-date"
+                          className="text-sm font-medium"
+                        >
                           From
                         </Label>
                         <Input
@@ -121,7 +124,10 @@ export default function Analytics() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="to-date" className="text-sm font-medium">
+                        <Label
+                          htmlFor="to-date"
+                          className="text-sm font-medium"
+                        >
                           To
                         </Label>
                         <Input
@@ -134,7 +140,7 @@ export default function Analytics() {
                       </div>
                     </div>
                   </DropdownMenuSubContent>
-                </DropdownMenuSub> */}
+                </DropdownMenuSub>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

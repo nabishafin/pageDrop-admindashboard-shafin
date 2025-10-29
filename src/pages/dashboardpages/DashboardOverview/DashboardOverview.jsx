@@ -1,6 +1,6 @@
 import React from "react";
 
-import RevenueChart from "../../../components/dashboardcomponents/dashboardoverview/RevenueChart";
+// import RevenueChart from "../../../components/dashboardcomponents/dashboardoverview/RevenueChart";
 import { SupportTracker } from "../../../components/dashboardcomponents/dashboardoverview/SupportTracker";
 import Analytics from "../../../components/dashboardcomponents/dashboardoverview/Analytics";
 
@@ -9,8 +9,7 @@ const DashboardOverview = () => {
     <div>
       <Analytics />
 
-      <hr />
-      <div className="mt-8">
+      <div className="mt-10">
         <SupportTracker />
       </div>
     </div>

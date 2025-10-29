@@ -11,25 +11,31 @@ import {
   AreaChart,
   Area,
 } from "recharts";
+import { useGetAdminOverviewGraphQuery } from "@/redux/features/adminOverview/adminOverviewApi";
+import { Loader2 } from "lucide-react";
 
 const RevenueChart = () => {
   const [viewType] = useState("area"); // 'line' or 'area'
 
-  // Sample data
-  const monthlyData = [
-    { month: "Jan", lastYear: 15000, thisYear: 12000 },
-    { month: "Feb", lastYear: 8000, thisYear: 9500 },
-    { month: "Mar", lastYear: 9500, thisYear: 15000 },
-    { month: "Apr", lastYear: 14000, thisYear: 15500 },
-    { month: "May", lastYear: 16000, thisYear: 25000 },
-    { month: "Jun", lastYear: 18000, thisYear: 28000 },
-    { month: "Jul", lastYear: 22000, thisYear: 24000 },
-    { month: "Aug", lastYear: 20000, thisYear: 22000 },
-    { month: "Sep", lastYear: 19000, thisYear: 18000 },
-    { month: "Oct", lastYear: 21000, thisYear: 23000 },
-    { month: "Nov", lastYear: 23000, thisYear: 25000 },
-    { month: "Dec", lastYear: 25000, thisYear: 27000 },
-  ];
+  const { data, isLoading, isError } = useGetAdminOverviewGraphQuery();
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="text-center py-8 text-red-500">
+        Error loading revenue data.
+      </div>
+    );
+  }
+
+  const monthlyData = data?.data || [];
 
   // Custom tooltip
   const CustomTooltip = ({ active, payload, label }) => {

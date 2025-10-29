@@ -1,4 +1,5 @@
 import { ActiveCodes } from "./ActiveCodes";
+import Analytics from "./Analytics";
 import RevenueChart from "./RevenueChart";
 // import { SupportTrackerChart } from "./SupportTrackerChart";
 
