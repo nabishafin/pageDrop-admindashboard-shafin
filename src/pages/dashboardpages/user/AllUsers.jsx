@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/table";
 import { Search, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useGetUsersQuery } from "@/redux/features/user/userApi";
+import CustomLoading from "@/components/ui/CustomLoading";
 
 export default function AllUsers() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -267,10 +268,7 @@ export default function AllUsers() {
       <Card className="rounded-lg">
         <CardContent className="p-0">
           {isLoading ? (
-            <div className="flex items-center justify-center py-20">
-              <Loader2 className="h-8 w-8 animate-spin text-[#4FB2F3]" />
-              <span className="ml-2">Loading users...</span>
-            </div>
+            <CustomLoading />
           ) : queryError ? (
             <div className="flex items-center justify-center py-20 text-red-500">
               Error loading users. Please try again.

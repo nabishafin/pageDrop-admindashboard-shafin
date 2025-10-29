@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/table";
 import { Search, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useGetAllPaymentsQuery } from "@/redux/features/payment/paymentApi";
+import CustomLoading from "@/components/ui/CustomLoading";
 
 export default function PaymentsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -72,7 +73,8 @@ export default function PaymentsPage() {
   };
 
   // Fetch payments with RTK Query
-  const { data, isLoading, isFetching, error } = useGetAllPaymentsQuery(queryParams);
+  const { data, isLoading, isFetching, error } =
+    useGetAllPaymentsQuery(queryParams);
 
   // Extract data from response
   const payments = data?.data || [];
@@ -265,10 +267,7 @@ export default function PaymentsPage() {
       <Card className="rounded-lg">
         <CardContent className="p-0">
           {isLoading ? (
-            <div className="flex items-center justify-center py-20">
-              <Loader2 className="h-8 w-8 animate-spin text-[#4FB2F3]" />
-              <span className="ml-2">Loading payments...</span>
-            </div>
+            <CustomLoading />
           ) : error ? (
             <div className="flex items-center justify-center py-20 text-red-500">
               Error loading payments. Please try again.
@@ -279,7 +278,7 @@ export default function PaymentsPage() {
             </div>
           ) : (
             <div className="relative">
-               {isFetching && (
+              {isFetching && (
                 <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10 rounded-lg">
                   <Loader2 className="h-6 w-6 animate-spin text-[#4FB2F3]" />
                 </div>
@@ -287,14 +286,22 @@ export default function PaymentsPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-center">Invoice Number</TableHead>
-                    <TableHead className="text-center">Transaction ID</TableHead>
+                    <TableHead className="text-center">
+                      Invoice Number
+                    </TableHead>
+                    <TableHead className="text-center">
+                      Transaction ID
+                    </TableHead>
                     <TableHead className="text-center">Payment Date</TableHead>
                     <TableHead className="text-center">Amounts</TableHead>
-                    <TableHead className="text-center">Payment Method</TableHead>
+                    <TableHead className="text-center">
+                      Payment Method
+                    </TableHead>
                     <TableHead className="text-center">User ID</TableHead>
                     <TableHead className="text-center">Subscription</TableHead>
-                    <TableHead className="text-center">Payment Status</TableHead>
+                    <TableHead className="text-center">
+                      Payment Status
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -315,7 +322,9 @@ export default function PaymentsPage() {
                       <TableCell className="text-center">
                         {payment.paymentMethod}
                       </TableCell>
-                      <TableCell className="text-center">{payment.userID}</TableCell>
+                      <TableCell className="text-center">
+                        {payment.userID}
+                      </TableCell>
                       <TableCell className="text-center">
                         <Badge
                           variant="secondary"
@@ -347,8 +356,8 @@ export default function PaymentsPage() {
         <div className="flex items-center justify-between">
           <div className="text-sm text-muted-foreground">
             Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-            {Math.min(currentPage * itemsPerPage, totalPayments)} of {totalPayments}{" "}
-            payments
+            {Math.min(currentPage * itemsPerPage, totalPayments)} of{" "}
+            {totalPayments} payments
           </div>
           <div className="flex items-center gap-2">
             <Button

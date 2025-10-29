@@ -2,6 +2,7 @@ import { useGetSubscriptionAnalyticsQuery } from "@/redux/features/suscribtation
 import { RecentSubscriptionsTable } from "./RecentSubscriptionsTable";
 import { SubscriptionGrowthChart } from "./SubscriptionGrowthChart";
 import { Loader2 } from "lucide-react";
+import CustomLoading from "@/components/ui/CustomLoading";
 
 export default function SubscriptionsTab() {
   const { data, isLoading, isError } = useGetSubscriptionAnalyticsQuery();
@@ -9,12 +10,7 @@ export default function SubscriptionsTab() {
   console.log(data);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <Loader2 className="h-8 w-8 animate-spin text-[#4FB2F3]" />
-        <span className="ml-2">Loading analytics...</span>
-      </div>
-    );
+    return <CustomLoading />;
   }
 
   if (isError) {

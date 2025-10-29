@@ -32,7 +32,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useGetAllCouponsQuery, useDeleteCouponMutation } from "@/redux/features/promocodes/promocodesApi";
+import {
+  useGetAllCouponsQuery,
+  useDeleteCouponMutation,
+} from "@/redux/features/promocodes/promocodesApi";
 
 export function CouponTable() {
   const [selectedCoupon, setSelectedCoupon] = useState(null);
@@ -42,7 +45,11 @@ export function CouponTable() {
   const [searchTerm, setSearchTerm] = useState("");
   const couponsPerPage = 10;
 
-  const { data: couponsData, isLoading, error } = useGetAllCouponsQuery({
+  const {
+    data: couponsData,
+    isLoading,
+    error,
+  } = useGetAllCouponsQuery({
     page: currentPage,
     limit: couponsPerPage,
     search: searchTerm,
@@ -223,7 +230,10 @@ export function CouponTable() {
             ) : (
               coupons.map((coupon) => {
                 const status = getStatus(coupon);
-                const usage = getUsageDetails(coupon.usageCount, coupon.usageLimit);
+                const usage = getUsageDetails(
+                  coupon.usageCount,
+                  coupon.usageLimit
+                );
                 const maxUsageDisplay =
                   usage.usageLimit === "unlimited"
                     ? "unlimited"
@@ -249,7 +259,10 @@ export function CouponTable() {
                         </div>
                         {coupon.usageLimit !== "unlimited" && (
                           <Progress
-                            value={getUsagePercentage(coupon.usageCount, coupon.usageLimit)}
+                            value={getUsagePercentage(
+                              coupon.usageCount,
+                              coupon.usageLimit
+                            )}
                             className="h-2 [&>div]:bg-[#4FB2F3] [&>div]:hover:bg-[#4FB2F3]"
                           />
                         )}
