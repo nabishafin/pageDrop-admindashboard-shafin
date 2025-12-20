@@ -54,11 +54,14 @@ export default function SubscriptionPlans({ plans, onUpdatePlan }) {
             €{plan.price?.toFixed(2) || "0.00"}
             <span className="text-sm font-normal text-gray-500">
               {" "}
-              / {plan.period}
+              / {plan.subscriptionType === "Yearly" ? "Year" : "Month"}
             </span>
           </div>
         </CardHeader>
         <CardContent className="space-y-3">
+          <div className="space-y-2 text-sm text-gray-600">
+            Duration: {plan.durationMonths} {plan.durationMonths === 1 ? "month" : "months"}
+          </div>
           <div className="space-y-2">
             {plan.features?.map((feature, index) => (
               <div key={index} className="flex items-center gap-2">
@@ -116,7 +119,12 @@ export default function SubscriptionPlans({ plans, onUpdatePlan }) {
 
     const updateEditingPlan = (field, value) => {
       if (editingPlan) {
-        setEditingPlan({ ...editingPlan, [field]: value });
+        const updates = { [field]: value };
+        if (field === "subscriptionType") {
+          if (value === "Yearly") updates.durationMonths = 12;
+          if (value === "Monthly") updates.durationMonths = 1;
+        }
+        setEditingPlan({ ...editingPlan, ...updates });
       }
     };
 
@@ -189,13 +197,38 @@ export default function SubscriptionPlans({ plans, onUpdatePlan }) {
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="period" className="text-right">
-                  Period
+                <Label htmlFor="subscriptionType" className="text-right">
+                  Type
+                </Label>
+
+                <select
+                  id="subscriptionType"
+                  value={editingPlan.subscriptionType || ""}
+                  onChange={(e) =>
+                    updateEditingPlan("subscriptionType", e.target.value)
+                  }
+                  className="col-span-3 h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
+                >
+                  <option value="">Select type</option>
+                  <option value="Monthly">Monthly</option>
+                  <option value="Yearly">Yearly</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="durationMonths" className="text-right whitespace-nowrap">
+                  Duration (Mo)
                 </Label>
                 <Input
-                  id="period"
-                  value={editingPlan.period || ""}
-                  onChange={(e) => updateEditingPlan("period", e.target.value)}
+                  id="durationMonths"
+                  type="number"
+                  value={editingPlan.durationMonths || ""}
+                  onChange={(e) =>
+                    updateEditingPlan(
+                      "durationMonths",
+                      e.target.value === "" ? "" : Number(e.target.value)
+                    )
+                  }
                   className="col-span-3"
                 />
               </div>

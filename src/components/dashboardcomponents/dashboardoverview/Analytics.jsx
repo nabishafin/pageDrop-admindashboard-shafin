@@ -71,7 +71,7 @@ export default function Analytics({ data, timeFilter, setTimeFilter, customFrom,
                 <DropdownMenuItem onClick={() => handleFilterChange("month")}>
                   Month
                 </DropdownMenuItem>
-                <DropdownMenuSub>
+                {/* <DropdownMenuSub>
                   <DropdownMenuSubTrigger>Custom</DropdownMenuSubTrigger>
                   <DropdownMenuSubContent className="w-64 p-4">
                     <div className="space-y-4">
@@ -107,7 +107,7 @@ export default function Analytics({ data, timeFilter, setTimeFilter, customFrom,
                       </div>
                     </div>
                   </DropdownMenuSubContent>
-                </DropdownMenuSub>
+                </DropdownMenuSub> */}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

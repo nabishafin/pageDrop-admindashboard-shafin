@@ -27,10 +27,7 @@ export default function SubscriptionTabs() {
   const updatePlan = async (updatedPlan) => {
     try {
       // Call the API to update the plan
-      const result = await updateSubscriptionPlan({
-        _id: updatedPlan._id, // or updatedPlan._id depending on your API
-        ...updatedPlan,
-      }).unwrap();
+      const result = await updateSubscriptionPlan(updatedPlan).unwrap();
 
       // Update local state with the response from API
       setPlans((prev) =>
