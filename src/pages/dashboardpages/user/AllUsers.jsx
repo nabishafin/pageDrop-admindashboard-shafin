@@ -29,6 +29,7 @@ export default function AllUsers() {
   const [timeFilter, setTimeFilter] = useState("all");
   const [customStartDate, setCustomStartDate] = useState("");
   const [customEndDate, setCustomEndDate] = useState("");
+  const [activeTimeRange, setActiveTimeRange] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const usersPerPage = 10;
@@ -41,6 +42,17 @@ export default function AllUsers() {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
+  // Update activeTimeRange based on filters
+  useEffect(() => {
+    if (timeFilter === "custom") {
+      if (customStartDate && customEndDate) {
+        setActiveTimeRange(`${customStartDate}_${customEndDate}`);
+      }
+    } else {
+      setActiveTimeRange(timeFilter);
+    }
+  }, [timeFilter, customStartDate, customEndDate]);
+
   // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
@@ -48,26 +60,35 @@ export default function AllUsers() {
     debouncedSearch,
     subscriptionFilter,
     statusFilter,
-    timeFilter,
-    customStartDate,
-    customEndDate,
+    activeTimeRange,
   ]);
 
-  const buildTimeRange = () => {
-    if (timeFilter === "custom" && customStartDate && customEndDate) {
-      return `${customStartDate}_${customEndDate}`;
+  const getQueryParams = () => {
+    const baseParams = {
+      page: currentPage,
+      limit: usersPerPage,
+      search: debouncedSearch,
+      status: statusFilter,
+      subscription: subscriptionFilter,
+    };
+
+    if (activeTimeRange.includes("_")) {
+      const [start, end] = activeTimeRange.split("_");
+      return {
+        ...baseParams,
+        timeRange: "custom",
+        startDate: start,
+        endDate: end,
+      };
     }
-    return timeFilter;
+
+    return {
+      ...baseParams,
+      timeRange: activeTimeRange,
+    };
   };
 
-  const queryParams = {
-    page: currentPage,
-    limit: usersPerPage,
-    search: debouncedSearch,
-    status: statusFilter,
-    subscription: subscriptionFilter,
-    timeRange: buildTimeRange(),
-  };
+  const queryParams = getQueryParams();
 
   const {
     data,
@@ -149,9 +170,8 @@ export default function AllUsers() {
           size="sm"
           onClick={() => setCurrentPage(i)}
           disabled={isFetching}
-          className={`w-8 h-8 p-0 ${
-            currentPage === i ? "bg-[#4FB2F3] hover:bg-[#4FB2F3]" : ""
-          }`}
+          className={`w-8 h-8 p-0 ${currentPage === i ? "bg-[#4FB2F3] hover:bg-[#4FB2F3]" : ""
+            }`}
         >
           {i}
         </Button>
@@ -318,13 +338,12 @@ export default function AllUsers() {
                       <TableCell className="text-center">
                         <Badge
                           variant="outline"
-                          className={`rounded-full px-3 py-1 ${
-                            user.subscriptionType === "monthly"
-                              ? "border-[#1593E5] text-[#1593E5]"
-                              : user.subscriptionType === "yearly"
+                          className={`rounded-full px-3 py-1 ${user.subscriptionType === "monthly"
+                            ? "border-[#1593E5] text-[#1593E5]"
+                            : user.subscriptionType === "yearly"
                               ? "border-[#F3934F] text-[#F3934F]"
                               : "border-gray-400 text-gray-400"
-                          }`}
+                            }`}
                         >
                           {getSubscriptionDisplay(user.subscriptionType)}
                         </Badge>
@@ -335,14 +354,13 @@ export default function AllUsers() {
                       <TableCell className="text-center">
                         <Badge
                           variant="outline"
-                          className={`rounded-full px-3 py-1 ${
-                            user.userStatus === "active"
-                              ? "border-green-500 text-green-500"
-                              : user.userStatus === "incomplete" ||
-                                user.userStatus === "Incomplete"
+                          className={`rounded-full px-3 py-1 ${user.userStatus === "active"
+                            ? "border-green-500 text-green-500"
+                            : user.userStatus === "incomplete" ||
+                              user.userStatus === "Incomplete"
                               ? "border-yellow-500 text-yellow-500"
                               : "border-red-500 text-red-500"
-                          }`}
+                            }`}
                         >
                           {getStatusDisplay(user.userStatus)}
                         </Badge>

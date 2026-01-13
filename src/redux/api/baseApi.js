@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { setLogin, logout } from "../slices/authSlice";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || "https://dimension-upper-bikini-kelkoo.trycloudflare.com/api/v1";
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://museums-organisms-seen-peterson.trycloudflare.com/api/v1";
 
 // Create a base query with automatic token refresh
 const baseQuery = fetchBaseQuery({
@@ -99,6 +99,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
       return { error: { status: 401, data: "No refresh token" } };
     }
   }
+
 
   return result;
 };

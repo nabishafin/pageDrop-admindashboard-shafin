@@ -11,6 +11,8 @@ export const userApi = baseApi.injectEndpoints({
         status = "all",
         subscription = "all",
         timeRange = "all",
+        startDate = "",
+        endDate = "",
       }) => {
         const params = new URLSearchParams();
 
@@ -24,6 +26,10 @@ export const userApi = baseApi.injectEndpoints({
           params.append("subscription", subscription);
         if (timeRange && timeRange !== "all")
           params.append("timeRange", timeRange);
+
+        // Append date range if provided
+        if (startDate) params.append("startDate", startDate);
+        if (endDate) params.append("endDate", endDate);
 
         const url = `/users/get-users-for-admin?${params.toString()}`;
         console.log("API URL:", url);

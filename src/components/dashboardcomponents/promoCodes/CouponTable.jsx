@@ -147,7 +147,7 @@ export function CouponTable() {
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
-            placeholder="Search by campaign, code, or audience..."
+            placeholder="Search by campaign, code"
             className="pl-10"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -264,11 +264,10 @@ export function CouponTable() {
                           variant={
                             status === "Active" ? "default" : "destructive"
                           }
-                          className={`rounded-full ${
-                            status === "Active"
+                          className={`rounded-full ${status === "Active"
                               ? "border-[1px] border-green-500 text-green-500 hover:bg-green-100 bg-white px-3"
                               : "border-[1px] border-red-500 text-red-500 bg-white"
-                          }`}
+                            }`}
                         >
                           {status}
                         </Badge>
@@ -338,11 +337,10 @@ export function CouponTable() {
                     variant={currentPage === pageNum ? "default" : "outline"}
                     size="sm"
                     onClick={() => setCurrentPage(pageNum)}
-                    className={`w-8 h-8 p-0 ${
-                      currentPage === pageNum
+                    className={`w-8 h-8 p-0 ${currentPage === pageNum
                         ? "bg-[#4FB2F3] hover:bg-[#4FB2F3]"
                         : ""
-                    }`}
+                      }`}
                   >
                     {pageNum}
                   </Button>
@@ -438,11 +436,10 @@ export function CouponTable() {
                             ? "default"
                             : "destructive"
                         }
-                        className={`rounded-full ${
-                          getStatus(selectedCoupon) === "Active"
+                        className={`rounded-full ${getStatus(selectedCoupon) === "Active"
                             ? "border-[1px] border-green-500 text-green-500 hover:bg-green-100 bg-white px-3"
                             : "border-[1px] border-red-500 text-red-500 bg-white"
-                        }`}
+                          }`}
                       >
                         {getStatus(selectedCoupon)}
                       </Badge>
