@@ -11,6 +11,8 @@ export const paymentApi = baseApi.injectEndpoints({
         subscription = "all",
         paymentStatus = "all",
         timeRange = "all",
+        startDate = "",
+        endDate = "",
       }) => {
         const params = new URLSearchParams();
 
@@ -24,6 +26,10 @@ export const paymentApi = baseApi.injectEndpoints({
           params.append("paymentStatus", paymentStatus);
         if (timeRange && timeRange !== "all")
           params.append("timeRange", timeRange);
+
+        // Append date range if provided
+        if (startDate) params.append("startDate", startDate);
+        if (endDate) params.append("endDate", endDate);
 
         return {
           url: `/payments?${params.toString()}`,

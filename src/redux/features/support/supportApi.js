@@ -10,6 +10,8 @@ export const supportApi = baseApi.injectEndpoints({
         search = "",
         status = "all",
         timeRange = "all",
+        from = "",
+        to = "",
       }) => {
         const params = new URLSearchParams();
 
@@ -20,6 +22,10 @@ export const supportApi = baseApi.injectEndpoints({
         if (status && status !== "all") params.append("status", status);
         if (timeRange && timeRange !== "all")
           params.append("timeRange", timeRange);
+
+        // Append date range if provided
+        if (from) params.append("from", from);
+        if (to) params.append("to", to);
 
         const url = `/support?${params.toString()}`;
         console.log("Support API URL:", url);

@@ -34,7 +34,7 @@ export const faqApi = baseApi.injectEndpoints({
     editFaq: builder.mutation({
       query: ({ id, ...data }) => ({
         url: `/faq/${id}`,
-        method: "PATCH",
+        method: "PUT",
         body: data,
       }),
       invalidatesTags: (result, error, { id }) => [{ type: "Faq", id }, "Faq"],

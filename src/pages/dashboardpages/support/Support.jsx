@@ -110,21 +110,53 @@ export default function Support() {
   const [timeFilter, setTimeFilter] = useState("all");
   const [customStartDate, setCustomStartDate] = useState("");
   const [customEndDate, setCustomEndDate] = useState("");
+  const [activeTimeRange, setActiveTimeRange] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const ticketsPerPage = 9;
 
-  const { data, isLoading, isError } = useGetSupportTicketsQuery({
-    page: currentPage,
-    limit: ticketsPerPage,
-    search: searchTerm,
-    status: statusFilter,
-    timeRange:
-      timeFilter === "custom"
-        ? `${customStartDate}_${customEndDate}`
-        : timeFilter,
-  });
+  // Update activeTimeRange based on filters
+  useEffect(() => {
+    if (timeFilter === "custom") {
+      if (customStartDate && customEndDate) {
+        setActiveTimeRange(`${customStartDate}_${customEndDate}`);
+      }
+    } else {
+      setActiveTimeRange(timeFilter);
+    }
+  }, [timeFilter, customStartDate, customEndDate]);
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [statusFilter, activeTimeRange, searchTerm]);
+
+  const getQueryParams = () => {
+    const baseParams = {
+      page: currentPage,
+      limit: ticketsPerPage,
+      search: searchTerm,
+      status: statusFilter,
+    };
+
+    if (activeTimeRange.includes("_")) {
+      const activeSplit = activeTimeRange.split("_");
+      return {
+        ...baseParams,
+        timeRange: "custom",
+        from: activeSplit[0],
+        to: activeSplit[1],
+      };
+    }
+
+    return {
+      ...baseParams,
+      timeRange: activeTimeRange,
+    };
+  };
+
+  const { data, isLoading, isError } = useGetSupportTicketsQuery(getQueryParams());
 
   const [updateSupportStatus] = useUpdateSupportStatusMutation();
 
@@ -277,27 +309,27 @@ export default function Support() {
               {(timeFilter === "custom" ||
                 customStartDate ||
                 customEndDate) && (
-                <>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-muted-foreground">From</span>
-                    <Input
-                      type="date"
-                      value={customStartDate}
-                      onChange={(e) => handleStartDateChange(e.target.value)}
-                      className="w-[150px]"
-                    />
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-muted-foreground">To</span>
-                    <Input
-                      type="date"
-                      value={customEndDate}
-                      onChange={(e) => handleEndDateChange(e.target.value)}
-                      className="w-[150px]"
-                    />
-                  </div>
-                </>
-              )}
+                  <>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-muted-foreground">From</span>
+                      <Input
+                        type="date"
+                        value={customStartDate}
+                        onChange={(e) => handleStartDateChange(e.target.value)}
+                        className="w-[150px]"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-muted-foreground">To</span>
+                      <Input
+                        type="date"
+                        value={customEndDate}
+                        onChange={(e) => handleEndDateChange(e.target.value)}
+                        className="w-[150px]"
+                      />
+                    </div>
+                  </>
+                )}
             </div>
           </div>
         </CardContent>

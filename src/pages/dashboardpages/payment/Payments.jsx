@@ -29,6 +29,7 @@ export default function PaymentsPage() {
   const [timeFilter, setTimeFilter] = useState("all");
   const [customStartDate, setCustomStartDate] = useState("");
   const [customEndDate, setCustomEndDate] = useState("");
+  const [activeTimeRange, setActiveTimeRange] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const itemsPerPage = 10;
@@ -42,6 +43,17 @@ export default function PaymentsPage() {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
+  // Update activeTimeRange based on filters
+  useEffect(() => {
+    if (timeFilter === "custom") {
+      if (customStartDate && customEndDate) {
+        setActiveTimeRange(`${customStartDate}_${customEndDate}`);
+      }
+    } else {
+      setActiveTimeRange(timeFilter);
+    }
+  }, [timeFilter, customStartDate, customEndDate]);
+
   // Reset to first page when any filter changes
   useEffect(() => {
     setCurrentPage(1);
@@ -49,28 +61,35 @@ export default function PaymentsPage() {
     debouncedSearch,
     subscriptionFilter,
     statusFilter,
-    timeFilter,
-    customStartDate,
-    customEndDate,
+    activeTimeRange,
   ]);
 
-  // Build time range parameter
-  const buildTimeRange = () => {
-    if (timeFilter === "custom" && customStartDate && customEndDate) {
-      return `${customStartDate}_${customEndDate}`;
+  const getQueryParams = () => {
+    const baseParams = {
+      page: currentPage,
+      limit: itemsPerPage,
+      search: debouncedSearch,
+      subscription: subscriptionFilter,
+      paymentStatus: statusFilter,
+    };
+
+    if (activeTimeRange.includes("_")) {
+      const activeSplit = activeTimeRange.split("_");
+      return {
+        ...baseParams,
+        timeRange: "custom",
+        startDate: activeSplit[0],
+        endDate: activeSplit[1],
+      };
     }
-    return timeFilter;
+
+    return {
+      ...baseParams,
+      timeRange: activeTimeRange,
+    };
   };
 
-  // API call parameters
-  const queryParams = {
-    page: currentPage,
-    limit: itemsPerPage,
-    search: debouncedSearch,
-    subscription: subscriptionFilter,
-    paymentStatus: statusFilter,
-    timeRange: buildTimeRange(),
-  };
+  const queryParams = getQueryParams();
 
   // Fetch payments with RTK Query
   const { data, isLoading, isFetching, error } =
@@ -149,9 +168,8 @@ export default function PaymentsPage() {
           size="sm"
           onClick={() => setCurrentPage(i)}
           disabled={isFetching}
-          className={`w-8 h-8 p-0 ${
-            currentPage === i ? "bg-[#4FB2F3] hover:bg-[#4FB2F3]" : ""
-          }`}
+          className={`w-8 h-8 p-0 ${currentPage === i ? "bg-[#4FB2F3] hover:bg-[#4FB2F3]" : ""
+            }`}
         >
           {i}
         </Button>
