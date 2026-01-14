@@ -1,13 +1,16 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { setLogin, logout } from "../slices/authSlice";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || "https://museums-organisms-seen-peterson.trycloudflare.com/api/v1";
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://grateful-zus-organizer-yamaha.trycloudflare.com/api/v1";
 
 // Create a base query with automatic token refresh
 const baseQuery = fetchBaseQuery({
   baseUrl: BASE_URL,
-  prepareHeaders: (headers) => {
-    const token = localStorage.getItem("token");
+  prepareHeaders: (headers, { getState }) => {
+    // Try to get token from Redux state first
+    const state = getState();
+    const token = state.auth?.token || localStorage.getItem("token");
+
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }

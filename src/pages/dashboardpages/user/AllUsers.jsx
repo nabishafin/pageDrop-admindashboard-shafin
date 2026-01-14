@@ -18,9 +18,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, Loader2, MoreVertical, ShieldCheck, Copy } from "lucide-react";
 import { useGetUsersQuery } from "@/redux/features/user/userApi";
 import CustomLoading from "@/components/ui/CustomLoading";
+import { useAssignSubscriptionMutation } from "@/redux/features/user/userApi";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { toast } from "sonner";
 
 export default function AllUsers() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -32,7 +47,15 @@ export default function AllUsers() {
   const [activeTimeRange, setActiveTimeRange] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [debouncedSearch, setDebouncedSearch] = useState("");
+
+
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState("");
+
   const usersPerPage = 10;
+
+  const [assignSubscription, { isLoading: isAssigning }] = useAssignSubscriptionMutation();
 
   // Debounce search term
   useEffect(() => {
@@ -315,6 +338,7 @@ export default function AllUsers() {
                     <TableHead className="text-center">Subscription</TableHead>
                     <TableHead className="text-center">End Date</TableHead>
                     <TableHead className="text-center">Status</TableHead>
+                    <TableHead className="text-center">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -349,7 +373,7 @@ export default function AllUsers() {
                         </Badge>
                       </TableCell>
                       <TableCell className="text-center">
-                        {formatDate(user.subscriptionEndDate)}
+                        {user.subscriptionType?.toLowerCase() === "free" ? "Unlimited" : formatDate(user.subscriptionEndDate)}
                       </TableCell>
                       <TableCell className="text-center">
                         <Badge
@@ -364,6 +388,30 @@ export default function AllUsers() {
                         >
                           {getStatusDisplay(user.userStatus)}
                         </Badge>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                              <span className="sr-only">Open menu</span>
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                              onSelect={(e) => {
+                                e.preventDefault(); // Prevent menu from closing effectively cancelling interaction sometimes
+                                console.log("Selected User:", user); // Debug log
+                                setSelectedUser(user);
+                                setIsSubscriptionModalOpen(true);
+                              }}
+                            >
+                              <ShieldCheck className="mr-2 h-4 w-4" />
+                              Manage Subscription
+                            </DropdownMenuItem>
+
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -409,6 +457,87 @@ export default function AllUsers() {
           </div>
         </div>
       )}
+      {/* Subscription Assignment Modal */}
+      <Dialog open={isSubscriptionModalOpen} onOpenChange={setIsSubscriptionModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Assign Subscription</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">User Name</label>
+                <Input value={selectedUser?.fullName || ""} disabled readOnly />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">User ID (Auto-filled)</label>
+                <Input value={selectedUser?.userId || ""} disabled readOnly />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="plan" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Select Plan
+              </label>
+              <Select value={selectedPlan} onValueChange={setSelectedPlan}>
+                <SelectTrigger id="plan">
+                  <SelectValue placeholder="Select a plan" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="free">Free</SelectItem>
+                  <SelectItem value="monthly">Monthly</SelectItem>
+                  <SelectItem value="yearly">Yearly</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsSubscriptionModalOpen(false)}
+              disabled={isAssigning}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={async () => {
+                const userId = selectedUser?.userId;
+
+                if (!selectedPlan) {
+                  toast.error("Please select a plan");
+                  return;
+                }
+                if (!userId) {
+                  toast.error("User ID is missing!");
+                  return;
+                }
+
+                try {
+                  await assignSubscription({
+                    userId,
+                    subscriptionType: selectedPlan,
+                  }).unwrap();
+                  toast.success("Subscription updated successfully");
+                  setIsSubscriptionModalOpen(false);
+                  setSelectedPlan("");
+                } catch (err) {
+                  toast.error(err?.data?.message || "Failed to update subscription");
+                }
+              }}
+              disabled={isAssigning || !selectedPlan}
+              className="bg-[#4FB2F3] hover:bg-[#3ba0e0]"
+            >
+              {isAssigning ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                "Update Subscription"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

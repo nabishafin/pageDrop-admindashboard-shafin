@@ -42,8 +42,18 @@ export const userApi = baseApi.injectEndpoints({
       providesTags: ["admin-users"],
       keepUnusedDataFor: 0,
     }),
+
+    // Assign subscription to user
+    assignSubscription: builder.mutation({
+      query: (data) => ({
+        url: "/users/admin/assign-subscription",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["admin-users"],
+    }),
   }),
 });
 
-export const { useGetUsersQuery } = userApi;
+export const { useGetUsersQuery, useAssignSubscriptionMutation } = userApi;
 export default userApi;
