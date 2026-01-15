@@ -52,8 +52,18 @@ export const userApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["admin-users"],
     }),
+
+    // Delete user by email
+    deleteUser: builder.mutation({
+      query: (data) => ({
+        url: "/users/delete-user-from-ui",
+        method: "DELETE",
+        body: data,
+      }),
+      invalidatesTags: ["admin-users"],
+    }),
   }),
 });
 
-export const { useGetUsersQuery, useAssignSubscriptionMutation } = userApi;
+export const { useGetUsersQuery, useAssignSubscriptionMutation, useDeleteUserMutation } = userApi;
 export default userApi;
