@@ -35,7 +35,7 @@ const formatChange = (change) => {
         <TrendingDown className="h-3 w-3 mr-1" />
       )}
       {isPositive ? "+" : ""}
-      {change.percentage}%
+      {typeof change.percentage === 'number' ? change.percentage.toFixed(2) : change.percentage}%
     </div>
   );
 };
@@ -152,7 +152,9 @@ export default function Analytics({ data, timeFilter, setTimeFilter, customFrom,
               </CardHeader>
               <CardContent className="flex justify-between">
                 <div className="text-2xl font-bold">
-                  ${overviewData?.totalRevenue?.value || 0}
+                  ${typeof overviewData?.totalRevenue?.value === 'number'
+                    ? overviewData.totalRevenue.value.toFixed(2)
+                    : (overviewData?.totalRevenue?.value || 0)}
                 </div>
                 {formatChange(overviewData?.totalRevenue?.change)}
               </CardContent>
