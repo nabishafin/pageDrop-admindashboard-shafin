@@ -18,10 +18,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, ChevronLeft, ChevronRight, Loader2, MoreVertical, ShieldCheck, Copy } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, Loader2, MoreVertical, ShieldCheck, Copy, Trash2 } from "lucide-react";
 import { useGetUsersQuery } from "@/redux/features/user/userApi";
 import CustomLoading from "@/components/ui/CustomLoading";
-import { useAssignSubscriptionMutation } from "@/redux/features/user/userApi";
+import { useAssignSubscriptionMutation, useDeleteUserMutation } from "@/redux/features/user/userApi";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -56,6 +56,9 @@ export default function AllUsers() {
   const usersPerPage = 10;
 
   const [assignSubscription, { isLoading: isAssigning }] = useAssignSubscriptionMutation();
+  const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
 
   // Debounce search term
   useEffect(() => {
@@ -409,6 +412,17 @@ export default function AllUsers() {
                               <ShieldCheck className="mr-2 h-4 w-4" />
                               Manage Subscription
                             </DropdownMenuItem>
+                            <DropdownMenuItem
+                              className="text-red-600 focus:text-red-600"
+                              onSelect={(e) => {
+                                e.preventDefault();
+                                setUserToDelete(user);
+                                setIsDeleteModalOpen(true);
+                              }}
+                            >
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              Delete User
+                            </DropdownMenuItem>
 
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -533,6 +547,57 @@ export default function AllUsers() {
                 </>
               ) : (
                 "Update Subscription"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Modal */}
+      <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Delete User</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-sm text-gray-500">
+              Are you sure you want to delete <span className="font-bold">{userToDelete?.fullName}</span>? This action cannot be undone.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteModalOpen(false)}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={async () => {
+                if (!userToDelete?.email) {
+                  toast.error("User email is missing!");
+                  return;
+                }
+
+                try {
+                  await deleteUser({ email: userToDelete.email }).unwrap();
+                  toast.success("User deleted successfully");
+                  setIsDeleteModalOpen(false);
+                  setUserToDelete(null);
+                } catch (err) {
+                  toast.error(err?.data?.message || "Failed to delete user");
+                }
+              }}
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                "Delete"
               )}
             </Button>
           </DialogFooter>
