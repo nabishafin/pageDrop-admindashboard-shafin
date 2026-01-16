@@ -103,4 +103,6 @@ export const {
   useUpdateUserAdminMutation,
   useDeleteUserMutation
 } = userApi;
+
+// export const { useGetUsersQuery, useAssignSubscriptionMutation, useDeleteUserMutation } = userApi;
 export default userApi;
