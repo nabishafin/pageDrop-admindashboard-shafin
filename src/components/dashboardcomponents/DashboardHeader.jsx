@@ -17,6 +17,7 @@ import { MobileSidebar } from "./DashboardSidebar";
 const routeNames = {
   "/dashboard": "Dashboard Overview",
   "/dashboard/users": "Users Management",
+  "/dashboard/user-management": "User Management",
   "/dashboard/notifications": "Notifications",
   "/dashboard/payments": "Payments",
   "/dashboard/subscriptions": "Subscriptions",

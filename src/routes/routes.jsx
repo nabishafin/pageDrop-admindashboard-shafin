@@ -13,6 +13,7 @@ import ResetPassword from "../pages/auth/ResetPassword";
 import DashboardOverview from "@/pages/dashboardpages/DashboardOverview/DashboardOverview";
 import AllNotifications from "@/pages/dashboardpages/notification/AllNotifications";
 import AllUsers from "@/pages/dashboardpages/user/AllUsers";
+import UserManagement from "@/pages/dashboardpages/user/UserManagement";
 import Payments from "@/pages/dashboardpages/payment/Payments";
 import Subscriptions from "@/pages/dashboardpages/suscribtation/Subscriptions";
 import PromoCodes from "@/pages/dashboardpages/promoCodes/PromoCodes";
@@ -59,6 +60,7 @@ const routes = createBrowserRouter([
           { index: true, element: <DashboardOverview /> },
           { path: "notifications", element: <AllNotifications /> },
           { path: "users", element: <AllUsers /> },
+          { path: "user-management", element: <UserManagement /> },
           { path: "payments", element: <Payments /> },
           { path: "subscriptions", element: <Subscriptions /> },
           { path: "promo-codes", element: <PromoCodes /> },

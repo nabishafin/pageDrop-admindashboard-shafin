@@ -24,8 +24,8 @@ const sidebarItems = [
     icon: LayoutDashboard,
   },
   {
-    title: "Users",
-    href: "/dashboard/users",
+    title: "User Management",
+    href: "/dashboard/user-management",
     icon: Users2,
   },
   {

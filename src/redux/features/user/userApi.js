@@ -52,8 +52,55 @@ export const userApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["admin-users"],
     }),
+
+    // Create a new user (Admin only)
+    createUser: builder.mutation({
+      query: (data) => ({
+        url: "/users/admin/create-user",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["admin-users"],
+    }),
+
+    // Block or Unblock a user
+    blockUser: builder.mutation({
+      query: ({ userId, isBlocked }) => ({
+        url: `/users/admin/block-user/${userId}`,
+        method: "PATCH",
+        body: { isBlocked },
+      }),
+      invalidatesTags: ["admin-users"],
+    }),
+
+    // Update user details
+    updateUserAdmin: builder.mutation({
+      query: ({ userId, data }) => ({
+        url: `/users/admin/update-user/${userId}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["admin-users"],
+    }),
+
+    // Delete user
+    deleteUser: builder.mutation({
+      query: ({ email }) => ({
+        url: `/users/delete-user-from-ui`,
+        method: "DELETE",
+        body: { email },
+      }),
+      invalidatesTags: ["admin-users"],
+    }),
   }),
 });
 
-export const { useGetUsersQuery, useAssignSubscriptionMutation } = userApi;
+export const {
+  useGetUsersQuery,
+  useAssignSubscriptionMutation,
+  useCreateUserMutation,
+  useBlockUserMutation,
+  useUpdateUserAdminMutation,
+  useDeleteUserMutation
+} = userApi;
 export default userApi;
